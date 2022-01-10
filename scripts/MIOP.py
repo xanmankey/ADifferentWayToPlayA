@@ -2,11 +2,9 @@ from __future__ import print_function
 import XInput
 from inputs import get_gamepad
 import inputs
-import sys
 import threading
 import vgamepad as vg
 
-initialize = [0, 0, 0, 0]
 
 # Get all controller input and map it to one gamepad using a while loop and threading
 def AllInOne(controller):
@@ -154,7 +152,7 @@ def Teams(controller):
                 Tgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_BACK)
                 Tgamepad.update()
 
-def main():
+def main(gamemode, cont_index):
     global devices
     devices = inputs.DeviceManager()
     global numControllers
@@ -168,44 +166,67 @@ def main():
     # Base case: 0 controllers
     if numControllers == 0:
         print("No controllers recognized. If the controller is plugged in, try testing it at https://gamepad-tester.com")
-        exit()
+        quit()
 
     # Initialize first controller
     global Vgamepad
     Vgamepad = vg.VX360Gamepad()
 
     # Begin sending all input to the one controller
-    if args[1] == "together":
+    if gamemode == "alltogether":
         for i in range(numControllers):
-            p = threading.Thread(target=AllInOne, args=[i])
+            p = threading.Thread(target=AllInOne, args=[i], daemon=True)
             p.start()
 
     # Assumes max of 4 controllers
     # Assign players to a controller according to GUI (or CL input)
-    elif args[1] == "teams":
+    elif gamemode == "teams":
         # Initialize second controller for teams
         # If 3 v 1, you could use your original controller, but I figured it'd only be fair if you use the virtual one
         global Tgamepad
         Tgamepad = vg.VX360Gamepad()
-        for i in range(8):
-            print("i: " + str(i))
-            if args[2][i] == "True" and i <= 3:
+        i = 0
+        for controller in cont_index:
+            if controller is True and i <= 3:
                 index = i + 1
-                p = threading.Thread(target=Teams, args=[index])
+                p = threading.Thread(target=Teams, args=[index], daemon=True)
                 p.start()
-            elif args[2][i] == "True" and i > 3:
+            elif controller == "True" and i > 3:
                 index = i - 3
-                p = threading.Thread(target=AllInOne, args=[index])
+                p = threading.Thread(target=AllInOne, args=[index], daemon=True)
                 p.start()
-
+            i += 1
 
 if __name__ == "__main__":
-    # Usage: MIOPMain.py, gamemode (together or teams), list of booleans of controllers 1-4 for teams 1 and 2 (if teams gamemode)
-    # Although I don't know why you would want to run the programs independently via CL over via GUI
-    # Specifically because you would need to use argparse or find some other solution to run the file
-    # as lists do not count as one argument unless you can define a var and pass it
-    args = sys.argv
-    if len(args) != 3:
-        print("Invalid number of arguments")
-    print("Length: " + str(len(args)))
-    main()
+    # Call main using default values from config file
+    import json
+
+    players = [False] * 8
+    i = 0
+    mode = False
+
+    # Read config settings
+    with open("configs/config.json") as f:
+        config = json.load(f)
+    miopConfig = config["MIOP"]
+
+    # Set config settings
+    for gamemode in miopConfig["gamemode"]:
+        if miopConfig["gamemode"][str(gamemode)] == str(True):
+            mode = gamemode
+    
+    for player in miopConfig["players"]:
+        players[i] = bool(miopConfig["players"][str(player)])
+        i += 1 
+
+    # Base cases
+    if mode is False:
+        print("At least one gamemode must be chosen")
+        quit()
+    
+    # Remember that True evaluates to 1
+    if sum(players) <= 1:
+        print("At least 2 players must be selected")
+
+    # Load config settings
+    main(mode, players)

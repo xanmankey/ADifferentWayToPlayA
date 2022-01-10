@@ -1,0 +1,78 @@
+{
+    "DISCORD": {
+        "textchannelid": "909075276774907947",
+        "commands": 
+        {
+            "up": "True",
+            "lightup": "True",
+            "down": "True",
+            "lightdown": "True",
+            "left": "True",
+            "lightleft": "True",
+            "right": "True",
+            "lightright": "True",
+            "lump": "False",
+            "rump": "False",
+            "start": "True",
+            "reset": "True",
+            "a": "True",
+            "holda": "True",
+            "b": "True",
+            "holdb": "True",
+            "x": "False",
+            "lthumb": "False",
+            "y": "False",
+            "select": "False",
+            "lt": "True",
+            "holdlt": "False",
+            "rt": "True",
+            "holdrt": "False",
+            "lb": "True",
+            "rb": "True"
+        },
+        "time": 
+        {
+            "lightup": 0.3,
+            "lightdown": 0.3,
+            "lightleft": 0.3,
+            "lightright": 0.3,
+            "lump": 0.3,
+            "rump": 0.3,
+            "start": 0.2,
+            "a": 0.5,
+            "releasea": 0.2,
+            "b": 0.2,
+            "releaseb": 0.2,
+            "x": 0.2,
+            "lthumb": 0.2,
+            "y": 0.2,
+            "select": 0.2,
+            "lt": 1,
+            "releaselt": 0.2,
+            "rt": 1,
+            "releasert": 0.2,
+            "lb": 0.2,
+            "rb": 0.2
+        }
+    },
+
+    "RANDOM": {
+        "randomization": {"axis": "False", "button": "False", "both": "True"},
+        "seconds": "20"
+    },
+
+    "MIOP": {
+        "gamemode": {"alltogether": "True", "teams": "False"},
+        "players": 
+        {
+            "p1-1": "True",
+            "p1-2": "True",
+            "p1-3": "False",
+            "p1-4": "False",
+            "p2-1": "False",
+            "p2-2": "False",
+            "p2-3": "True",
+            "p2-4": "True"
+        }
+    }
+}

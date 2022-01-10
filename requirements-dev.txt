@@ -1,8 +1,0 @@
-flake8==4.0.1
-autopep8==1.6.0
-pytest==6.2.5
-coverage==6.2
-pyautogui==0.9.53
-radon==5.1.0
-pylint==2.12.2
-argparse==1.4.0

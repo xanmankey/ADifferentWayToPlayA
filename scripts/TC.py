@@ -1,21 +1,15 @@
-from discord import channel
+from discord import channel, Client
 from discord.ext import commands
 import vgamepad as vg
 import os
-import sys
+import json
 from dotenv import load_dotenv
 import threading
 
-# First CL argument is main, second is text channel, third is a boolean list of commands
-# Although I don't know why you would want to run the programs independently via CL over via GUI
-args = sys.argv
-if len(args) != 3:
-    print("Invalid number of arguments")
 
 load_dotenv('.env')
 
-# client = discord.Client()
-bot = commands.Bot(command_prefix='/', description="Text Commands to Game Input")
+bot = commands.Bot(command_prefix='/', description="Text Commands to Game Input", case_insensitive=True)
 
 # Check if the bot is joined
 joined = 0
@@ -36,7 +30,7 @@ async def on_ready():
     global toggleRT
     toggleRT = 0
     # Log in to corresponding Discord text channel
-    channel = bot.get_channel(int(args[1]))
+    channel = bot.get_channel(int(id))
     await channel.send("Logged in")
 
 # Run an input cmd on discord message
@@ -82,69 +76,85 @@ async def on_message(message):
     ###################################
     # Universal 2D game profile (you may need to change the button pressed based on your game controller configurations though)
     # However, commands will still need to be figured out on a game-by-game basis
-    if Message == 'UP' and args[2][1] == "True":
+    if Message == 'UP' and commandList[1] is True:
         Vgamepad.left_joystick(0, 30000)
         Vgamepad.update()
         return
-    elif Message == 'LU' and args[2][2] == "True":
+    elif Message == 'LU' and commandList[2] is True:
         Vgamepad.left_joystick(0, 30000)
         Vgamepad.update()
-        threading.Timer(0.3, LU).start()
+        timer = threading.Timer(commandLength[0], LU)
+        timer.daemon = True
+        timer.start()
         return
-    elif Message == 'DOWN' and args[2][3] == "True":
+    elif Message == 'DOWN' and commandList[3] is True:
         Vgamepad.left_joystick(0, -30000)
         Vgamepad.update()
         return
-    elif Message == 'LD' and args[2][4] == "True":
+    elif Message == 'LD' and commandList[4] is True:
         Vgamepad.left_joystick(0, -30000)
         Vgamepad.update()
-        threading.Timer(0.3, LD).start()
+        timer = threading.Timer(commandLength[1], LD)
+        timer.daemon = True
+        timer.start()
         return
-    elif Message == 'LEFT' and args[2][5] == "True":
+    elif Message == 'LEFT' and commandList[5] is True:
         Vgamepad.left_joystick(-30000, 0)
         Vgamepad.update()
         return
-    elif Message == 'LL' and args[2][6] == "True":
+    elif Message == 'LL' and commandList[6] is True:
         Vgamepad.left_joystick(-30000, 0)
         Vgamepad.update()
-        threading.Timer(0.3, LL).start()
+        timer = threading.Timer(commandLength[2], LL)
+        timer.daemon = True
+        timer.start()
         return
-    elif Message == 'RIGHT' and args[2][7] == "True":
+    elif Message == 'RIGHT' and commandList[7] is True:
         Vgamepad.left_joystick(30000, 0)
         Vgamepad.update()
         return
-    elif Message == 'LR' and args[2][8] == "True":
+    elif Message == 'LR' and commandList[8] is True:
         Vgamepad.left_joystick(30000, 0)
         Vgamepad.update()
-        threading.Timer(0.3, LR).start()
+        timer = threading.Timer(commandLength[3], LR)
+        timer.daemon = True
+        timer.start()
         return
-    elif Message == 'LUMP' and args[2][9] == "True":
+    elif Message == 'LUMP' and commandList[9] is True:
         Vgamepad.left_joystick(-30000, 0)
         Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
         Vgamepad.update()
-        threading.Timer(0.3, LUMP).start()
+        timer = threading.Timer(commandLength[4], LUMP)
+        timer.daemon = True
+        timer.start()
         return
-    elif Message == 'RUMP' and args[2][10] == "True":
+    elif Message == 'RUMP' and commandList[10] is True:
         Vgamepad.left_joystick(30000, 0)
         Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
         Vgamepad.update()
-        threading.Timer(0.3, RUMP).start()
+        timer = threading.Timer(commandLength[5], RUMP)
+        timer.daemon = True
+        timer.start()
         return
-    elif Message == 'START' and args[2][11] == "True":
+    elif Message == 'START' and commandList[11] is True:
         Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_START)
         Vgamepad.update()
-        threading.Timer(0.2, START).start()
+        timer = threading.Timer(commandLength[6], START)
+        timer.daemon = True
+        timer.start()
         return
-    elif Message == 'STOP' and args[2][12] == "True":
+    elif Message == 'STOP' and commandList[12] is True:
         Vgamepad.reset()
         Vgamepad.update()
         return
-    elif Message == 'A' and args[2][13] == "True":
+    elif Message == 'A' and commandList[13] is True:
         Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
         Vgamepad.update()
-        threading.Timer(0.5, A).start()
+        timer = threading.Timer(commandLength[7], A)
+        timer.daemon = True
+        timer.start()
         return
-    elif Message == 'HOLDA' and args[2][14] == "True":
+    elif Message == 'HOLDA' and commandList[14] is True:
         # Making a toggle button w/ vgamepad
         global toggleA
         if toggleA == 0:
@@ -152,14 +162,18 @@ async def on_message(message):
             Vgamepad.update()
             toggleA = 1
         else:
-            threading.Timer(0.2, HOLDA).start()
+            timer = threading.Timer(commandLength[8], HOLDA)
+            timer.daemon = True
+            timer.start()
         return
-    elif Message == 'B' and args[2][15] == "True":
+    elif Message == 'B' and commandList[15] is True:
         Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_B)
         Vgamepad.update()
-        threading.Timer(0.2, B).start()
+        timer = threading.Timer(commandLength[9], B)
+        timer.daemon = True
+        timer.start()
         return
-    elif Message == 'HOLDB' and args[2][16] == "True":
+    elif Message == 'HOLDB' and commandList[16] is True:
         # Making a toggle button w/ vgamepad
         global toggleB
         if toggleB == 0:
@@ -167,34 +181,46 @@ async def on_message(message):
             Vgamepad.update()
             toggleB = 1
         else:
-            threading.Timer(0.2, HOLDB).start()
+            timer = threading.Timer(commandLength[10], HOLDB)
+            timer.daemon = True
+            timer.start()
         return
-    elif Message == 'X' and args[2][17] == "True":
+    elif Message == 'X' and commandList[17] is True:
         Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_X)
         Vgamepad.update()
-        threading.Timer(0.2, X).start()
+        timer = threading.Timer(commandLength[11], X)
+        timer.daemon = True
+        timer.start()
         return
-    elif Message == 'LTHUMB' and args[2][18] == "True":
+    elif Message == 'LTHUMB' and commandList[18] is True:
         Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_LEFT_THUMB)
         Vgamepad.update()
-        threading.Timer(0.2, LTHUMB).start()
+        timer = threading.Timer(commandLength[12], LTHUMB)
+        timer.daemon = True
+        timer.start()
         return
-    elif Message == 'Y' and args[2][19] == "True":
+    elif Message == 'Y' and commandList[19] is True:
         Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_Y)
         Vgamepad.update()
-        threading.Timer(0.2, Y).start()
+        timer = threading.Timer(commandLength[13], Y)
+        timer.daemon = True
+        timer.start()
         return
-    elif Message == 'BACK' and args[2][20] == "True":
+    elif Message == 'BACK' and commandList[20] is True:
         Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_BACK)
         Vgamepad.update()
-        threading.Timer(0.2, BACK).start()
+        timer = threading.Timer(commandLength[14], BACK)
+        timer.daemon = True
+        timer.start()
         return
-    elif Message == 'LT' and args[2][21] == "True":
+    elif Message == 'LT' and commandList[21] is True:
         Vgamepad.left_trigger(255)
         Vgamepad.update()
-        threading.Timer(1.01, LT).start()
+        timer = threading.Timer(commandLength[15], LT)
+        timer.daemon = True
+        timer.start()
         return
-    elif Message == 'HOLDLT' and args[2][22] == "True":
+    elif Message == 'HOLDLT' and commandList[22] is True:
         # Making a toggle button w/ vgamepad
         global toggleLT
         if toggleLT == 0:
@@ -202,38 +228,53 @@ async def on_message(message):
             Vgamepad.update()
             toggleLT = 1
         else:
-            threading.Timer(0.2, HOLDLT).start()
+            timer = threading.Timer(commandLength[16], HOLDLT)
+            timer.daemon = True
+            timer.start()
         return
-    elif Message == 'RT' and args[2][23] == "True":
+    elif Message == 'RT' and commandList[23] is True:
         Vgamepad.right_trigger(255)
         Vgamepad.update()
-        threading.Timer(0.2, RT).start()
+        timer = threading.Timer(commandLength[17], RT)
+        timer.daemon = True
+        timer.start()
         return
-    elif Message == 'HOLDRT' and args[2][24] == "True":
-        Vgamepad.right_trigger(255)
-        Vgamepad.update()
-        threading.Timer(0.2, HOLDRT).start()
+    elif Message == 'HOLDRT' and commandList[24] is True:
+        global toggleRT
+        if toggleRT == 0:
+            Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_RT)
+            Vgamepad.update()
+            toggleRT = 1
+        else:
+            timer = threading.Timer(commandLength[18], HOLDRT)
+            timer.daemon = True
+            timer.start()
         return
-    elif Message == 'LB' and args[2][25] == "True":
+    elif Message == 'LB' and commandList[25] is True:
         Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_LEFT_SHOULDER)
         Vgamepad.update()
-        threading.Timer(0.2, LB).start()
+        timer = threading.Timer(commandLength[19], LB)
+        timer.daemon = True
+        timer.start()
         return
-    elif Message == 'RB' and args[2][26] == "True":
+    elif Message == 'RB' and commandList[26] is True:
         Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_SHOULDER)
         Vgamepad.update()
-        threading.Timer(0.2, RB).start()
+        timer = threading.Timer(commandLength[20], RB)
+        timer.daemon = True
+        timer.start()
         return
     # If you want a screenshot cmd I left it in strings
     """
     elif Message == 'SCREENSHOT':
-        Didn't import the python module, I'll only use this to bail me out if I'm losing
+        # If '/' is your screenshot hotkey.
         keyboard.press('/')
         time.sleep(0.2)
         keyboard.release('/')
     """
     #############################################
     # I also decided to make specific cmds for certain games
+    # The code is not as updated as the universal code, it is in a prior version right now 
     # IN-PROGRESS Smash Bros Brawl Cmds
 
     # COMMANDS
@@ -596,14 +637,60 @@ def RB():
     Vgamepad.update()
     return
 
-# A message to indicate the bot is offline
-@bot.event
-async def logout():
-    channel = bot.get_channel(int(args[1]))
+
+# On script termination notify users in Discord channel
+# A cmd to logout the bot. Alternatively, you can just break out of the script
+# THIS MUST BE RUN W/ A / in front (/stop)
+@bot.command(name="stop")
+@commands.is_owner()
+async def logout(ctx):
     await channel.send("Logging off")
-    await bot.logout()
+    # This turned out to be depricated, so I just closed an instance of client
+    # await ctx.bot.logout()
+    c = Client()
+    await c.close()
 
 
-# token is the ID of the discord bot
-# One special thing about .env files are that they are only visible to you
-bot.run(os.getenv('CLIENT_TOKEN'))
+def main(textid, TC, length):
+    # Base cases
+    try: 
+        int(textid)
+    except ValueError:
+        print("Improper channel id")
+        exit()
+
+    if len(str(textid)) != 18:
+        print("Improper channel id length")
+        exit()
+
+    global id
+    id = textid
+    global commandList
+    commandList = TC
+    global commandLength
+    commandLength = length
+
+    # token is the ID of the discord bot
+    # Run the bot, indicate if the bot is offline, then exit the program (if stop is True is a GUI toggle)
+    bot.run(os.getenv('CLIENT_TOKEN'))
+
+# If standalone
+if __name__ == "__main__":
+    # Read config settings
+    with open("configs/config.json") as f:
+        config = json.load(f)
+    discordConfig = config["DISCORD"]
+
+    # Set config settings
+    id = discordConfig["textchannelid"]
+    Commands = []
+    Length = []
+
+    for command in discordConfig["commands"]:
+        Commands.append(bool(discordConfig["commands"][str(command)]))
+
+    for value in discordConfig["time"].values():
+        Length.append(value)
+    
+    # Send config settings
+    main(id, Commands, Length)

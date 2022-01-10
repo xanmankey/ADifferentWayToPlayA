@@ -6,8 +6,6 @@ import time
 import threading
 import random
 import vgamepad as vg
-import sys
-import commands
 
 # Array of the buttons (using 0 for LT and 1 for RT)
 button = [None] * 10
@@ -177,18 +175,17 @@ def randomize(controllerNum):
                 Vgamepad.update()
 
 # Timer thread, randomizes the buttons every __ seconds
-def timing():
+def timing(randomization):
     # Once this randomization occurs the length of the button inputs becomes incorrect
-    if args[1] == "button":
+    if randomization == "button":
         random.shuffle(button)
-    elif args[1] == "axis":
+    elif randomization == "axis":
         random.shuffle(axis)
-    elif args[1] == "both":
+    elif randomization == "both":
         random.shuffle(button)
         random.shuffle(axis)
 
-
-def main():
+def main(randomization, seconds):
     global devices
     devices = inputs.DeviceManager()
     global numControllers
@@ -200,20 +197,33 @@ def main():
         print("numControllers: " + str(numControllers))
 
     for i in range(numControllers):
-        p = threading.Thread(target=randomize, args=[i])
+        p = threading.Thread(target=randomize, args=[i], daemon=True)
         p.start()
     # Infinite loop for the timer and randomizer
     while True:
-        timer = threading.Timer(float(args[2]), timing)
+        timer = threading.Timer(seconds, timing(randomization))
+        timer.daemon = True
         timer.start()
-        time.sleep(float(args[2]))
-        print("randomized")
+        time.sleep(seconds)
 
 
 if __name__ == "__main__":
-    # First CL argument is main, second is axis, button, or both randomization, third arg is seconds
-    # This one kinda actually makes sense to run standalone, but I still recommend using the GUI
-    args = sys.argv
-    if len(args) != 3:
-        print("Invalid number of arguments")
-    main()
+    # Call main using default values from config file
+    import json
+
+    # Read config settings
+    with open("configs/config.json") as f:
+        config = json.load(f)
+    randomConfig = config["RANDOM"]
+
+    # Set config settings
+    for randomization in randomConfig["randomization"]:
+        if randomConfig["randomization"][str(randomization)] == str(True):
+            randomization = randomConfig["randomization"][str(randomization)]
+
+    if randomization is False:
+        print("At least one gamemode must be chosen")
+        quit()
+
+    # Load config settings
+    main(randomization, float(randomConfig['seconds']))

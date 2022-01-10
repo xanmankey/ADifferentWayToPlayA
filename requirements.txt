@@ -1,7 +1,6 @@
-requests==2.27.0
 discord.py==1.7.3
 inputs==0.5
-PySimpleGUI==4.55.1
+PySimpleGUI==4.56.0
 python-dotenv==0.19.2
 vgamepad==0.0.4
-XInput-Python==0.4.0
+XInput==0.1.3
