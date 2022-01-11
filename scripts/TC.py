@@ -687,10 +687,12 @@ if __name__ == "__main__":
     Length = []
 
     for command in discordConfig["commands"]:
-        Commands.append(bool(discordConfig["commands"][str(command)]))
+        Commands[c] = bool(discordConfig["commands"][str(command)])
+        c += 1
 
     for value in discordConfig["time"].values():
-        Length.append(value)
+        Length[l] = value
+        l += 1
     
     # Send config settings
     main(id, Commands, Length)
