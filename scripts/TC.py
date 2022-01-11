@@ -672,7 +672,7 @@ def main(textid, TC, length):
 
     # token is the ID of the discord bot
     # Run the bot, indicate if the bot is offline, then exit the program (if stop is True is a GUI toggle)
-    bot.run(os.getenv('CLIENT_TOKEN'))
+    bot.run(os.environ('CLIENT_TOKEN'))
 
 # If standalone
 if __name__ == "__main__":
