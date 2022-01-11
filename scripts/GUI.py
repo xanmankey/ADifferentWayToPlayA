@@ -23,6 +23,9 @@ import multiprocessing
 # Because multiprocessing runs recursively, and I don't want recursive variable declarations, window creations, ect.
 # The program is wrapped in a if __name__ == "__main__":
 if __name__ == "__main__":
+# To allow for pyinstaller exe creation
+    multiprocessing.freeze()
+    
     discordIMG = images.discordIMG
     arrowIMG = images.arrowIMG
     miopIMG = images.miopIMG
