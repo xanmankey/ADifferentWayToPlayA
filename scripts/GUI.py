@@ -196,6 +196,7 @@ if __name__ == "__main__":
                         if commands[j] is True:
                             numCommands += 1
                     # Initialize + base case for length of a command (seconds, config only as of rn)
+                    m = 0
                     for key in discordConfig["time"].keys():
                         if discordConfig["time"][key] <= 0:
                             sg.popup("A command must run for > 0 seconds!")
@@ -268,6 +269,7 @@ if __name__ == "__main__":
                     elif values["teams"] is True:
                         devices = inputs.DeviceManager()
                         numControllers = 0
+                        numOnTeam = 0
                         for device in devices.gamepads:
                             # Initialization of each object of class GamePad
                             devices.gamepads[numControllers] = device
