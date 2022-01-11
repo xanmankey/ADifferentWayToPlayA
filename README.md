@@ -24,6 +24,7 @@ I want to make this application more pythonic and developer-friendly, specifical
 - Implementing a system for unit-testing (probably using a mix of pyautogui, pytest, and the gamepad-tester API)
 - Find a better balance between interdependence and dependence between the programs (I feel like they may be too reliant on each other right now) 
 - Find an alternative to some of the global variables I used (either by passing variables around or creating classes)
+- Get better at the deployment process (specifically I want to improve at using Git, as well as learn how to use Github Actions to automate the build process and employ CI or CD, whatever I end up finding more useful)
 ### Other scripts
 All the source python files are provided (shown below). Python version 3.9.6 was used for this project: 
 - Demo_Base64_Image_Encoder.py: a PySimpleGUI demo file used to add button functionality to images 
