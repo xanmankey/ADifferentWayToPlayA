@@ -4,7 +4,9 @@ import vgamepad as vg
 import os
 import json
 import threading
+from dotenv inport load_dotenv
 
+load_dotenv()
 
 bot = commands.Bot(command_prefix='/', description="Text Commands to Game Input", case_insensitive=True)
 
