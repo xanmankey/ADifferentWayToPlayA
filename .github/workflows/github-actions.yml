@@ -9,7 +9,8 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      - uses: actions/checkout@v2
       - name: Set Secret
-        shell: bash
-    env: 
-        TokenVar: ${{secrets.CLIENT_TOKEN}}
+        run: echo "CLIENT_TOKEN=$(echo ${{ secrets.CLIENT_TOKEN }} | cut -c 1-6)" >> $GITHUB_ENV
+      - name: Test
+        run: echo ${{ env.GITHUB_SHA_SHORT }}
