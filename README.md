@@ -1,5 +1,5 @@
 # A Different Way To Play
-Three different programs allowing you to play video games in 100% intended ways. Discord text-channel commands, randomized controls, and mapping input from multiple controllers to one or more controllers are included. Have fun, and feel free to use this to play video games in whatever way you see fit! 
+Three different programs allowing you to play video games in 100% intended ways. Discord text-channel commands, randomized controls, and mapping input from multiple controllers to one or more controllers are included. Have fun, and feel free to use this to play video games in whatever way you see fit! Windows ONLY (due to the current nature of the vgamepad library).
 ## Usage
 Download and unzip the repository. Then, run GUI.exe (in the scripts folder), and navigate the explorer as you see fit. Click the image to run the script when you are happy with your settings! If you wish to change the default options, then edit the config.json file in the configs directory according to how you want to play!
 ### Discord Text Commands to Input
