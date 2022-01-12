@@ -7,6 +7,7 @@ import RC
 import MIOP
 import json
 import multiprocessing
+from dotenv import load_dotenv
 # LINKS
 # PySimpleGUI
 # https://pypi.org/project/PySimpleGUI/
@@ -25,6 +26,7 @@ import multiprocessing
 if __name__ == "__main__":
 # To allow for pyinstaller exe creation
     multiprocessing.freeze()
+    load_dotenv()
     
     discordIMG = images.discordIMG
     arrowIMG = images.arrowIMG
@@ -210,7 +212,12 @@ if __name__ == "__main__":
                         window['DISCORD'].update(button_color=('red'))
                         color1 = 'red'
                         error = 3
-                    # Base check that at least one cmd has been enabled
+                    if os.environ('CLIENT_TOKEN') == PASTE_YOUR_TOKEN_HERE:
+                        sg.popup("You need to create a bot and update the .env file with your token before you can use this program!")
+                        window['DISCORD'].update(button_color=('red'))
+                        color1 = 'red'
+                        error = 4
+                    # If no errors, run the program
                     if error == 0:
                         # Threading in the GUI event loop is a little precarious; I learned that the hard way
                         # I might look for a better solution, but this works for now
