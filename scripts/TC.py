@@ -3,11 +3,8 @@ from discord.ext import commands
 import vgamepad as vg
 import os
 import json
-from dotenv import load_dotenv
 import threading
 
-
-load_dotenv('.env')
 
 bot = commands.Bot(command_prefix='/', description="Text Commands to Game Input", case_insensitive=True)
 
