@@ -60,9 +60,7 @@ if __name__ == "__main__":
     def create_window1():
         layout = [[sg.Text('Discord Text to Game Input', font=('Comic Sans MS', 24), pad=(160, 0))],
                 [sg.Button('', image_data=discordIMG, size=(300, 300), pad=(
-                    200, 0), button_color=('red'), key=('DISCORD'))],
-                [sg.Text('Bot Invite Link', pad=(300, 10), font=('Comic Sans MS', 14), enable_events=True,
-                        text_color="blue", key="INVITE")],
+                    200, 20), button_color=('red'), key=('DISCORD'))],
                 [sg.Input(discordConfig['textchannelid'], key=('TCID'), pad=(220, 5))],
                 [sg.Text("COMMANDS", font=('Comic Sans MS', 18), pad=(295, 10))],
                 [sg.Checkbox("Up", pad=(25, 0), key="1", default=eval(discordConfig["commands"]["up"])), sg.Checkbox("LightUp", key="2", default=eval(discordConfig["commands"]["lightup"])), 
