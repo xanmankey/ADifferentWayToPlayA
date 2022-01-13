@@ -4,7 +4,7 @@ import vgamepad as vg
 import os
 import json
 import threading
-from dotenv inport load_dotenv
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -671,7 +671,7 @@ def main(textid, TC, length):
 
     # token is the ID of the discord bot
     # Run the bot, indicate if the bot is offline, then exit the program (if stop is True is a GUI toggle)
-    bot.run(os.environ('CLIENT_TOKEN'))
+    bot.run(os.getenv('CLIENT_TOKEN'))
 
 # If standalone
 if __name__ == "__main__":
@@ -683,7 +683,9 @@ if __name__ == "__main__":
     # Set config settings
     id = discordConfig["textchannelid"]
     Commands = []
+    c = 0
     Length = []
+    l = 0
 
     for command in discordConfig["commands"]:
         Commands[c] = bool(discordConfig["commands"][str(command)])
