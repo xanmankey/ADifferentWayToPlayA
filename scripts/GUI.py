@@ -1,5 +1,6 @@
 import webbrowser
 import PySimpleGUI as sg
+from dotenv.main import load_dotenv
 import inputs
 import images
 import TC
@@ -8,6 +9,7 @@ import MIOP
 import json
 import multiprocessing
 from dotenv import load_dotenv
+import os
 # LINKS
 # PySimpleGUI
 # https://pypi.org/project/PySimpleGUI/
@@ -24,10 +26,10 @@ from dotenv import load_dotenv
 # Because multiprocessing runs recursively, and I don't want recursive variable declarations, window creations, ect.
 # The program is wrapped in a if __name__ == "__main__":
 if __name__ == "__main__":
-# To allow for pyinstaller exe creation
-    multiprocessing.freeze()
+    # To allow for pyinstaller exe creation
+    multiprocessing.freeze_support()
     load_dotenv()
-    
+
     discordIMG = images.discordIMG
     arrowIMG = images.arrowIMG
     miopIMG = images.miopIMG
@@ -198,7 +200,6 @@ if __name__ == "__main__":
                         if commands[j] is True:
                             numCommands += 1
                     # Initialize + base case for length of a command (seconds, config only as of rn)
-                    m = 0
                     for key in discordConfig["time"].keys():
                         if discordConfig["time"][key] <= 0:
                             sg.popup("A command must run for > 0 seconds!")
@@ -207,17 +208,18 @@ if __name__ == "__main__":
                             error = 2
                         time[m] = discordConfig["time"][key]
                         m += 1
+                    m = 0
                     if numCommands == 0:
                         sg.popup("You must have more than one command enabled! Try again after enabling some commands")
                         window['DISCORD'].update(button_color=('red'))
                         color1 = 'red'
                         error = 3
-                    if os.environ('CLIENT_TOKEN') == PASTE_YOUR_TOKEN_HERE:
-                        sg.popup("You need to create a bot and update the .env file with your token before you can use this program!")
+                    if os.getenv('CLIENT_TOKEN') == 'PASTE_YOUR_TOKEN_HERE':
+                        sg.popup("You need to create a bot and paste your token into the .env file to use this script!")
                         window['DISCORD'].update(button_color=('red'))
                         color1 = 'red'
                         error = 4
-                    # If no errors, run the program
+                    # Run script if all prereqs pass
                     if error == 0:
                         # Threading in the GUI event loop is a little precarious; I learned that the hard way
                         # I might look for a better solution, but this works for now
@@ -275,8 +277,8 @@ if __name__ == "__main__":
                         gamemode = "together"
                     elif values["teams"] is True:
                         devices = inputs.DeviceManager()
-                        numControllers = 0
                         numOnTeam = 0
+                        numControllers = 0
                         for device in devices.gamepads:
                             # Initialization of each object of class GamePad
                             devices.gamepads[numControllers] = device
