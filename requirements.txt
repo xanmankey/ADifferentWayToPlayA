@@ -2,5 +2,5 @@ discord.py==1.7.3
 inputs==0.5
 PySimpleGUI==4.56.0
 python-dotenv==0.19.2
-vgamepad==0.0.6
+vgamepad==0.0.5
 XInput==0.1.3
