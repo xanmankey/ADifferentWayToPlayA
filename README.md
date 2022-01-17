@@ -30,7 +30,7 @@ I want to make this application more pythonic and developer-friendly, specifical
 ### Other scripts
 All the source python files are provided (shown below). Python version 3.9.6 was used for this project: 
 - Demo_Base64_Image_Encoder.py: a PySimpleGUI demo file used to add button functionality to images 
-- inputs.py: also in the requirements.txt file, but I made a few changes (specifically adding arguments to the get_gamepad function) under the BSD 3-Clause "New" or "Revised" License
+- inputs.py: removed from the requirements.txt file, as I made a few changes (specifically adding arguments to the get_gamepad function) under the BSD 3-Clause "New" or "Revised" License, and just found it easiest to bundle the script with the repo).
 ### Requirements
 - Requirements.txt contains the files necessary to run the project
 - Requirements-dev.txt contains testing (which I have yet to do; unit testing is a concept I was introduced to after the conclusion of this project and something I'm still trying to wrap my head around) and linting software that I used periodically during the project.
