@@ -1,6 +1,6 @@
 from discord import channel, Client
 from discord.ext import commands
-import vgamepad as vg
+from vgamepad import XUSB_BUTTON, VX360Gamepad
 import os
 import json
 import threading
@@ -18,7 +18,7 @@ joined = 0
 @bot.event
 async def on_ready():
     global Vgamepad
-    Vgamepad = vg.VX360Gamepad()
+    Vgamepad = VX360Gamepad()
     global channel
     global toggleA
     toggleA = 0
@@ -75,89 +75,89 @@ async def on_message(message):
     ###################################
     # Universal 2D game profile (you may need to change the button pressed based on your game controller configurations though)
     # However, commands will still need to be figured out on a game-by-game basis
-    if Message == 'UP' and commandList[1] is True:
+    if Message == 'UP' and commandList[1] == "True":
         Vgamepad.left_joystick(0, 30000)
         Vgamepad.update()
         return
-    elif Message == 'LU' and commandList[2] is True:
+    elif Message == 'LU' and commandList[2] == "True":
         Vgamepad.left_joystick(0, 30000)
         Vgamepad.update()
         timer = threading.Timer(commandLength[0], LU)
         timer.daemon = True
         timer.start()
         return
-    elif Message == 'DOWN' and commandList[3] is True:
+    elif Message == 'DOWN' and commandList[3] == "True":
         Vgamepad.left_joystick(0, -30000)
         Vgamepad.update()
         return
-    elif Message == 'LD' and commandList[4] is True:
+    elif Message == 'LD' and commandList[4] == "True":
         Vgamepad.left_joystick(0, -30000)
         Vgamepad.update()
         timer = threading.Timer(commandLength[1], LD)
         timer.daemon = True
         timer.start()
         return
-    elif Message == 'LEFT' and commandList[5] is True:
+    elif Message == 'LEFT' and commandList[5] == "True":
         Vgamepad.left_joystick(-30000, 0)
         Vgamepad.update()
         return
-    elif Message == 'LL' and commandList[6] is True:
+    elif Message == 'LL' and commandList[6] == "True":
         Vgamepad.left_joystick(-30000, 0)
         Vgamepad.update()
         timer = threading.Timer(commandLength[2], LL)
         timer.daemon = True
         timer.start()
         return
-    elif Message == 'RIGHT' and commandList[7] is True:
+    elif Message == 'RIGHT' and commandList[7] == "True":
         Vgamepad.left_joystick(30000, 0)
         Vgamepad.update()
         return
-    elif Message == 'LR' and commandList[8] is True:
+    elif Message == 'LR' and commandList[8] == "True":
         Vgamepad.left_joystick(30000, 0)
         Vgamepad.update()
         timer = threading.Timer(commandLength[3], LR)
         timer.daemon = True
         timer.start()
         return
-    elif Message == 'LUMP' and commandList[9] is True:
+    elif Message == 'LUMP' and commandList[9] == "True":
         Vgamepad.left_joystick(-30000, 0)
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
         Vgamepad.update()
         timer = threading.Timer(commandLength[4], LUMP)
         timer.daemon = True
         timer.start()
         return
-    elif Message == 'RUMP' and commandList[10] is True:
+    elif Message == 'RUMP' and commandList[10] == "True":
         Vgamepad.left_joystick(30000, 0)
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
         Vgamepad.update()
         timer = threading.Timer(commandLength[5], RUMP)
         timer.daemon = True
         timer.start()
         return
-    elif Message == 'START' and commandList[11] is True:
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_START)
+    elif Message == 'START' and commandList[11] == "True":
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_START)
         Vgamepad.update()
         timer = threading.Timer(commandLength[6], START)
         timer.daemon = True
         timer.start()
         return
-    elif Message == 'STOP' and commandList[12] is True:
+    elif Message == 'STOP' and commandList[12] == "True":
         Vgamepad.reset()
         Vgamepad.update()
         return
-    elif Message == 'A' and commandList[13] is True:
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+    elif Message == 'A' and commandList[13] == "True":
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
         Vgamepad.update()
         timer = threading.Timer(commandLength[7], A)
         timer.daemon = True
         timer.start()
         return
-    elif Message == 'HOLDA' and commandList[14] is True:
+    elif Message == 'HOLDA' and commandList[14] == "True":
         # Making a toggle button w/ vgamepad
         global toggleA
         if toggleA == 0:
-            Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+            Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
             Vgamepad.update()
             toggleA = 1
         else:
@@ -165,18 +165,18 @@ async def on_message(message):
             timer.daemon = True
             timer.start()
         return
-    elif Message == 'B' and commandList[15] is True:
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_B)
+    elif Message == 'B' and commandList[15] == "True":
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_B)
         Vgamepad.update()
         timer = threading.Timer(commandLength[9], B)
         timer.daemon = True
         timer.start()
         return
-    elif Message == 'HOLDB' and commandList[16] is True:
+    elif Message == 'HOLDB' and commandList[16] == "True":
         # Making a toggle button w/ vgamepad
         global toggleB
         if toggleB == 0:
-            Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_B)
+            Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_B)
             Vgamepad.update()
             toggleB = 1
         else:
@@ -184,46 +184,46 @@ async def on_message(message):
             timer.daemon = True
             timer.start()
         return
-    elif Message == 'X' and commandList[17] is True:
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_X)
+    elif Message == 'X' and commandList[17] == "True":
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_X)
         Vgamepad.update()
         timer = threading.Timer(commandLength[11], X)
         timer.daemon = True
         timer.start()
         return
-    elif Message == 'LTHUMB' and commandList[18] is True:
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_LEFT_THUMB)
+    elif Message == 'LTHUMB' and commandList[18] == "True":
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_LEFT_THUMB)
         Vgamepad.update()
         timer = threading.Timer(commandLength[12], LTHUMB)
         timer.daemon = True
         timer.start()
         return
-    elif Message == 'Y' and commandList[19] is True:
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_Y)
+    elif Message == 'Y' and commandList[19] == "True":
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_Y)
         Vgamepad.update()
         timer = threading.Timer(commandLength[13], Y)
         timer.daemon = True
         timer.start()
         return
-    elif Message == 'BACK' and commandList[20] is True:
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_BACK)
+    elif Message == 'BACK' and commandList[20] == "True":
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_BACK)
         Vgamepad.update()
         timer = threading.Timer(commandLength[14], BACK)
         timer.daemon = True
         timer.start()
         return
-    elif Message == 'LT' and commandList[21] is True:
+    elif Message == 'LT' and commandList[21] == "True":
         Vgamepad.left_trigger(255)
         Vgamepad.update()
         timer = threading.Timer(commandLength[15], LT)
         timer.daemon = True
         timer.start()
         return
-    elif Message == 'HOLDLT' and commandList[22] is True:
+    elif Message == 'HOLDLT' and commandList[22] == "True":
         # Making a toggle button w/ vgamepad
         global toggleLT
         if toggleLT == 0:
-            Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_LT)
+            Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_LT)
             Vgamepad.update()
             toggleLT = 1
         else:
@@ -231,17 +231,17 @@ async def on_message(message):
             timer.daemon = True
             timer.start()
         return
-    elif Message == 'RT' and commandList[23] is True:
+    elif Message == 'RT' and commandList[23] == "True":
         Vgamepad.right_trigger(255)
         Vgamepad.update()
         timer = threading.Timer(commandLength[17], RT)
         timer.daemon = True
         timer.start()
         return
-    elif Message == 'HOLDRT' and commandList[24] is True:
+    elif Message == 'HOLDRT' and commandList[24] == "True":
         global toggleRT
         if toggleRT == 0:
-            Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_RT)
+            Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_RT)
             Vgamepad.update()
             toggleRT = 1
         else:
@@ -249,15 +249,15 @@ async def on_message(message):
             timer.daemon = True
             timer.start()
         return
-    elif Message == 'LB' and commandList[25] is True:
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_LEFT_SHOULDER)
+    elif Message == 'LB' and commandList[25] == "True":
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_LEFT_SHOULDER)
         Vgamepad.update()
         timer = threading.Timer(commandLength[19], LB)
         timer.daemon = True
         timer.start()
         return
-    elif Message == 'RB' and commandList[26] is True:
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_SHOULDER)
+    elif Message == 'RB' and commandList[26] == "True":
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_SHOULDER)
         Vgamepad.update()
         timer = threading.Timer(commandLength[20], RB)
         timer.daemon = True
@@ -303,80 +303,80 @@ async def on_message(message):
         # Hopefully this command works for smash
         # I also removed some .update() calls
         Vgamepad.left_joystick(-30000, 0)
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
         Vgamepad.update()
         time.sleep(0.3)
-        Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+        Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
         Vgamepad.left_joystick(0, 0)
         Vgamepad.update()
         return
     elif Message.replace(" ", "") == 'LEFTJAB':
         Vgamepad.left_joystick(30000, 0)
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
         Vgamepad.update()
         time.sleep(0.3)
-        Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+        Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
         Vgamepad.left_joystick(0, 0)
         Vgamepad.update()
         return
     elif Message.replace(" ", "") == 'UPAIR':
         Vgamepad.left_joystick(0, 30000)
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
         Vgamepad.update()
         time.sleep(0.2)
-        Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+        Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
         Vgamepad.left_joystick(0, 0)
         Vgamepad.update()
         return
     elif Message.replace(" ", "") == 'DOWNAIR':
         Vgamepad.left_joystick(0, -30000)
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_X)
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_X)
         Vgamepad.update()
         time.sleep(0.2)
-        Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_X)
+        Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_X)
         Vgamepad.left_joystick(0, 0)
         Vgamepad.update()
         return
     elif Message.replace(" ", "") == 'RIGHTSPECIAL':
         Vgamepad.left_joystick(30000, 0)
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_X)
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_X)
         Vgamepad.update()
         time.sleep(0.2)
-        Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_X)
+        Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_X)
         Vgamepad.left_joystick(0, 0)
         Vgamepad.update()
         return
     elif Message.replace(" ", "") == 'LEFTSPECIAL':
         Vgamepad.left_joystick(-30000, 0)
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_X)
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_X)
         Vgamepad.update()
         time.sleep(0.2)
-        Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_X)
+        Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_X)
         Vgamepad.left_joystick(0, 0)
         Vgamepad.update()
         return
     elif Message.replace(" ", "") == 'UPSPECIAL':
         Vgamepad.left_joystick(0, 30000)
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_X)
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_X)
         Vgamepad.update()
         time.sleep(0.2)
-        Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_X)
+        Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_X)
         Vgamepad.left_joystick(0, 0)
         Vgamepad.update()
         return
     elif Message.replace(" ", "") == 'DOWNSPECIAL':
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_X)
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_X)
         Vgamepad.update()
         time.sleep(0.2)
-        Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_X)
+        Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_X)
         Vgamepad.update()
         return
     # Dunno if thumb L counts as a button in vgamepad docs
     elif Message == 'Z' or Message == 'NUNCHUCKSHAKE':
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_LEFT_THUMB)
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_LEFT_THUMB)
         Vgamepad.update()
         time.sleep(0.2)
-        Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_LEFT_THUMB)
+        Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_LEFT_THUMB)
         Vgamepad.update()
         return
     elif Message == 'UP':
@@ -394,20 +394,20 @@ async def on_message(message):
     # Left jump and right jump
     elif Message == 'LUMP':
         Vgamepad.left_joystick(-30000, 0)
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
         Vgamepad.update()
         time.sleep(0.3)
         Vgamepad.left_joystick(0, 0)
-        Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+        Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
         Vgamepad.update()
         return
     elif Message == 'RUMP':
         Vgamepad.left_joystick(30000, 0)
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
         Vgamepad.update()
         time.sleep(0.3)
         Vgamepad.left_joystick(0, 0)
-        Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+        Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
         Vgamepad.update()
         return
     # Light left and light right
@@ -434,17 +434,17 @@ async def on_message(message):
         Vgamepad.update()
         return
     elif Message == 'X' or message.content == '1':
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_Y)
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_Y)
         Vgamepad.update()
         time.sleep(0.2)
-        Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_Y)
+        Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_Y)
         Vgamepad.update()
         return
     elif Message == 'Y' or message.content == '2':
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_B)
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_B)
         Vgamepad.update()
         time.sleep(0.2)
-        Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_B)
+        Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_B)
         Vgamepad.update()
         return
     # Spot dodge code I believe
@@ -464,10 +464,10 @@ async def on_message(message):
         Vgamepad.update()
         return
     elif Message == 'START':
-        Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_START)
+        Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_START)
         Vgamepad.update()
         time.sleep(0.5)
-        Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_START)
+        Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_START)
         Vgamepad.update()
         return
     """
@@ -543,62 +543,62 @@ def LR():
 
 def LUMP():
     Vgamepad.left_joystick(0, 0)
-    Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+    Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
     Vgamepad.update()
 
 def RUMP():
     Vgamepad.left_joystick(0, 0)
-    Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+    Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
     Vgamepad.update()
 
 
 def START():
-    Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_START)
+    Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_START)
     Vgamepad.update()
     return
 
 def A():
-    Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+    Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
     Vgamepad.update()
     return
 
 # Toggle Holding A
 def HOLDA():
     global toggleA
-    Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+    Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
     Vgamepad.update()
     toggleA = 0
     return
 
 def B():
-    Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_B)
+    Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_B)
     Vgamepad.update()
     return
 
 def HOLDB():
     global toggleB
-    Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_B)
+    Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_B)
     Vgamepad.update()
     toggleB = 0
     return
 
 def X():
-    Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_X)
+    Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_X)
     Vgamepad.update()
     return
 
 def LTHUMB():
-    Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_LEFT_THUMB)
+    Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_LEFT_THUMB)
     Vgamepad.update()
     return
 
 def Y():
-    Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_Y)
+    Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_Y)
     Vgamepad.update()
     return
 
 def BACK():
-    Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_BACK)
+    Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_BACK)
     Vgamepad.update()
     return
 
@@ -627,12 +627,12 @@ def HOLDRT():
     return
 
 def LB():
-    Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_LEFT_SHOULDER)
+    Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_LEFT_SHOULDER)
     Vgamepad.update()
     return
 
 def RB():
-    Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_SHOULDER)
+    Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_SHOULDER)
     Vgamepad.update()
     return
 
@@ -670,7 +670,7 @@ def main(textid, TC, length):
     commandLength = length
 
     # token is the ID of the discord bot
-    # Run the bot, indicate if the bot is offline, then exit the program (if stop is True is a GUI toggle)
+    # Run the bot, indicate if the bot is offline, then exit the program (if stop == "True" is a GUI toggle)
     bot.run(os.getenv('CLIENT_TOKEN'))
 
 # If standalone
@@ -682,13 +682,16 @@ if __name__ == "__main__":
 
     # Set config settings
     id = discordConfig["textchannelid"]
-    Commands = []
+    NUMCOMMANDS = 0
+    for command in discordConfig["commands"]:
+        NUMCOMMANDS += 1
+    Commands = [None] * NUMCOMMANDS
     c = 0
-    Length = []
+    Length = [None] * NUMCOMMANDS
     l = 0
 
     for command in discordConfig["commands"]:
-        Commands[c] = bool(discordConfig["commands"][str(command)])
+        Commands[c] = discordConfig["commands"][str(command)]
         c += 1
 
     for value in discordConfig["time"].values():
