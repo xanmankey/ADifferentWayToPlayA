@@ -3,7 +3,7 @@ import XInput
 from inputs import get_gamepad
 import inputs
 import threading
-import vgamepad as vg
+from vgamepad import XUSB_BUTTON, VX360Gamepad
 
 
 # Get all controller input and map it to one gamepad using a while loop and threading
@@ -19,40 +19,40 @@ def AllInOne(controller):
                 Vgamepad.left_joystick(analogX, analogY)
                 Vgamepad.update()
             elif event.code == 'BTN_SOUTH' and event.state == 1:
-                Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+                Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
                 Vgamepad.update()
             elif event.code == 'BTN_SOUTH' and event.state == 0:
-                Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+                Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
                 Vgamepad.update()
             elif event.code == 'BTN_NORTH' and event.state == 1:
-                Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_Y)
+                Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_Y)
                 Vgamepad.update()
             elif event.code == 'BTN_NORTH' and event.state == 0:
-                Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_Y)
+                Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_Y)
                 Vgamepad.update()
             elif event.code == 'BTN_EAST' and event.state == 1:
-                Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_B)
+                Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_B)
                 Vgamepad.update()
             elif event.code == 'BTN_EAST' and event.state == 0:
-                Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_B)
+                Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_B)
                 Vgamepad.update()
             elif event.code == 'BTN_WEST' and event.state == 1:
-                Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_X)
+                Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_X)
                 Vgamepad.update()
             elif event.code == 'BTN_WEST' and event.state == 0:
-                Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_X)
+                Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_X)
                 Vgamepad.update()
             elif event.code == 'BTN_TL' and event.state == 1:
-                Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_LEFT_SHOULDER)
+                Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_LEFT_SHOULDER)
                 Vgamepad.update()
             elif event.code == 'BTN_TL' and event.state == 0:
-                Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_LEFT_SHOULDER)
+                Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_LEFT_SHOULDER)
                 Vgamepad.update()
             elif event.code == 'BTN_TR' and event.state == 1:
-                Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_SHOULDER)
+                Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_SHOULDER)
                 Vgamepad.update()
             elif event.code == 'BTN_TR' and event.state == 0:
-                Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_SHOULDER)
+                Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_SHOULDER)
                 Vgamepad.update()
             elif event.code == 'ABS_RZ' and event.state != 0:
                 Vgamepad.right_trigger(255)
@@ -67,16 +67,16 @@ def AllInOne(controller):
                 Vgamepad.left_trigger(0)
                 Vgamepad.update()
             elif event.code == 'BTN_START' and event.state == 1:
-                Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_START)
+                Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_START)
                 Vgamepad.update()
             elif event.code == 'BTN_START' and event.state == 0:
-                Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_START)
+                Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_START)
                 Vgamepad.update()
             elif event.code == 'BTN_SELECT' and event.state == 1:
-                Vgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_BACK)
+                Vgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_BACK)
                 Vgamepad.update()
             elif event.code == 'BTN_SELECT' and event.state == 0:
-                Vgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_BACK)
+                Vgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_BACK)
                 Vgamepad.update()
 
 # Get all controller input and map it to 2 different gamepads (divided into teams)
@@ -92,40 +92,40 @@ def Teams(controller):
                 Tgamepad.left_joystick(analogX, analogY)
                 Tgamepad.update()
             elif event.code == 'BTN_SOUTH' and event.state == 1:
-                Tgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+                Tgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
                 Tgamepad.update()
             elif event.code == 'BTN_SOUTH' and event.state == 0:
-                Tgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+                Tgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_A)
                 Tgamepad.update()
             elif event.code == 'BTN_NORTH' and event.state == 1:
-                Tgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_Y)
+                Tgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_Y)
                 Tgamepad.update()
             elif event.code == 'BTN_NORTH' and event.state == 0:
-                Tgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_Y)
+                Tgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_Y)
                 Tgamepad.update()
             elif event.code == 'BTN_EAST' and event.state == 1:
-                Tgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_B)
+                Tgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_B)
                 Tgamepad.update()
             elif event.code == 'BTN_EAST' and event.state == 0:
-                Tgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_B)
+                Tgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_B)
                 Tgamepad.update()
             elif event.code == 'BTN_WEST' and event.state == 1:
-                Tgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_X)
+                Tgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_X)
                 Tgamepad.update()
             elif event.code == 'BTN_WEST' and event.state == 0:
-                Tgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_X)
+                Tgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_X)
                 Tgamepad.update()
             elif event.code == 'BTN_TL' and event.state == 1:
-                Tgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_LEFT_SHOULDER)
+                Tgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_LEFT_SHOULDER)
                 Tgamepad.update()
             elif event.code == 'BTN_TL' and event.state == 0:
-                Tgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_LEFT_SHOULDER)
+                Tgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_LEFT_SHOULDER)
                 Tgamepad.update()
             elif event.code == 'BTN_TR' and event.state == 1:
-                Tgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_SHOULDER)
+                Tgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_SHOULDER)
                 Tgamepad.update()
             elif event.code == 'BTN_TR' and event.state == 0:
-                Tgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_SHOULDER)
+                Tgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_SHOULDER)
                 Tgamepad.update()
             elif event.code == 'ABS_RZ' and event.state != 0:
                 Tgamepad.right_trigger(255)
@@ -140,16 +140,16 @@ def Teams(controller):
                 Tgamepad.left_trigger(0)
                 Tgamepad.update()
             elif event.code == 'BTN_START' and event.state == 1:
-                Tgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_START)
+                Tgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_START)
                 Tgamepad.update()
             elif event.code == 'BTN_START' and event.state == 0:
-                Tgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_START)
+                Tgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_START)
                 Tgamepad.update()
             elif event.code == 'BTN_SELECT' and event.state == 1:
-                Tgamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_BACK)
+                Tgamepad.press_button(button=XUSB_BUTTON.XUSB_GAMEPAD_BACK)
                 Tgamepad.update()
             elif event.code == 'BTN_SELECT' and event.state == 0:
-                Tgamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_BACK)
+                Tgamepad.release_button(button=XUSB_BUTTON.XUSB_GAMEPAD_BACK)
                 Tgamepad.update()
 
 def main(gamemode, cont_index):
@@ -170,7 +170,7 @@ def main(gamemode, cont_index):
 
     # Initialize first controller
     global Vgamepad
-    Vgamepad = vg.VX360Gamepad()
+    Vgamepad = VX360Gamepad()
 
     # Begin sending all input to the one controller
     if gamemode == "alltogether":
@@ -184,7 +184,7 @@ def main(gamemode, cont_index):
         # Initialize second controller for teams
         # If 3 v 1, you could use your original controller, but I figured it'd only be fair if you use the virtual one
         global Tgamepad
-        Tgamepad = vg.VX360Gamepad()
+        Tgamepad = VX360Gamepad()
         i = 0
         for controller in cont_index:
             if controller is True and i <= 3:
@@ -196,6 +196,11 @@ def main(gamemode, cont_index):
                 p = threading.Thread(target=AllInOne, args=[index], daemon=True)
                 p.start()
             i += 1
+
+    # In order for the controller threads to continue running, the main thread must be stuck in limbo. Thus, a while True loop until termination
+    while True:
+        if not KeyboardInterrupt:
+            exit()
 
 if __name__ == "__main__":
     # Call main using default values from config file
