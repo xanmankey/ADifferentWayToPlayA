@@ -48,7 +48,7 @@ if __name__ == "__main__":
     def create_mainWindow():
         layout = [
             [sg.Text('A Different Way To Play', font=('Comic Sans MS', 48), pad=(20, 0))],
-            [sg.Text('Brought to you by ofGameImportance',font=('Comic Sans MS', 14), pad=(230, 0))],
+            [sg.Text('Brought to you by ofGameImportance', font=('Comic Sans MS', 14), pad=(230, 0))],
             [sg.Image(filename="static/BasicControllerLarger.png", size=(300, 300), pad=(240, 0))],
             [sg.Button('Discord Text to Game Input', size=(23, 5)), sg.Button('Randomized Controls', size=(23, 5)),
             sg.Button('Multiple Players One Controller', size=(23, 5)),
@@ -61,7 +61,10 @@ if __name__ == "__main__":
         layout = [[sg.Text('Discord Text to Game Input', font=('Comic Sans MS', 24), pad=(160, 0))],
                 [sg.Button('', image_data=discordIMG, size=(300, 300), pad=(
                     200, 20), button_color=('red'), key=('DISCORD'))],
+                [sg.Radio('All Together', "textRadio", pad=((250, 0), (0, 0)), key=("textTogether"), default=eval(discordConfig["textTeams"]['1']), enable_events=True), sg.Radio(
+                    'Teams', "textRadio", pad=((25, 0), (0, 0)), enable_events=True, key=("textTeams2"), default=eval(discordConfig["textTeams"]['2']))],
                 [sg.Input(discordConfig['textchannelid'], key=('TCID'), pad=(220, 5))],
+                [sg.Input(discordConfig['textchannelid2'], key=('TCID2'), pad=(220, 5), visible=False)],
                 [sg.Text("COMMANDS", font=('Comic Sans MS', 18), pad=(295, 10))],
                 [sg.Checkbox("Up", pad=(25, 0), key="1", default=eval(discordConfig["commands"]["up"])), sg.Checkbox("LightUp (lu)", key="2", default=eval(discordConfig["commands"]["lightup"])), 
                 sg.Checkbox("Down", key="3", default=eval(discordConfig["commands"]["down"])), sg.Checkbox("LightDown (ld)", key="4", default=eval(discordConfig["commands"]["lightdown"])), 
@@ -129,6 +132,7 @@ if __name__ == "__main__":
     time = [None] * len(discordConfig["time"])
     numOnTeam = 0
     error = 0
+    textTeams = 1
 
 
     # Event Loop
@@ -144,6 +148,10 @@ if __name__ == "__main__":
                 window1 = None  # Mark the window as closed
                 try:
                     textCommands.terminate()
+                except NameError:
+                    continue
+                try:
+                    textCommands2.terminate()
                 except NameError:
                     continue
             elif window == window2:
@@ -175,16 +183,17 @@ if __name__ == "__main__":
         # When the button is pressed, the corresponding script is run, passing the
         # set values of the buttons in as command line args.
         if window1:
-            # Check if link pressed, if so travel to the link
-            if event == "INVITE":
-                webbrowser.open(
-                    "https://discord.com/api/oauth2/authorize?client_id=926229517217976390&permissions=294205335552&scope=bot")
+            if event == "textTeams2":
+                window.Element('TCID2').update(visible=True)
+            if event == "textTogether":
+                window.Element('TCID2').update(visible=False)
             # Change button color and run program
             if event == 'DISCORD':
                 if color1 == 'red':
                     window['DISCORD'].update(button_color=('green'))
                     color1 = 'green'
                     textID = values["TCID"]
+                    textID2 = values["TCID2"]
                     # Discord text channel IDs are 18 digits I believe
                     if len(textID) != 18:
                         sg.popup(
@@ -217,19 +226,39 @@ if __name__ == "__main__":
                         window['DISCORD'].update(button_color=('red'))
                         color1 = 'red'
                         error = 4
+                    if values["textTeams2"] is True:
+                        textTeams = 2
+                        if os.getenv('CLIENT_TOKEN2') == 'PASTE_YOUR_TOKEN_HERE':
+                            sg.popup("If you want to play teams, you will need two bots, and thus two tokens. Don't forget to update the .env file!")
+                            window['DISCORD'].update(button_color=('red'))
+                            color1 = 'red'
+                            error = 5
+                        if len(textID2) != 18:
+                            sg.popup("Invalid second text channel ID, enable Discord developer mode and copy the ID of the text channel you want to use for the second input bot.")
+                            window['DISCORD'].update(button_color=('red'))
+                            color1 = 'red'
+                            error = 6
                     # Run script if all prereqs pass
                     if error == 0:
                         # Threading in the GUI event loop is a little precarious; I learned that the hard way
                         # I might look for a better solution, but this works for now
-                        textCommands = multiprocessing.Process(target=TC.main, args=[int(textID), commands, time])
-                        textCommands.start()
+                        if textTeams != 1:
+                            textCommands2 = multiprocessing.Process(target=TC.main, args=[int(textID), int(textID2), commands, time, textTeams])
+                            textCommands2.start()
+                        else:
+                            textCommands = multiprocessing.Process(target=TC.main, args=[int(textID), int(textID2), commands, time, textTeams])
+                            textCommands.start()
                 elif color1 == 'green':
                     # Exit the textCommands script
                     window['DISCORD'].update(button_color=('red'))
                     color1 = 'red'
-                    textCommands.terminate()
-                    # To fully close the thread once the GUI closes
-                    textCommands.join()
+                    if textTeams != 1:
+                        textCommands2.terminate()
+                        textCommands2.join()
+                    else:
+                        textCommands.terminate()
+                        # To fully close the thread once the GUI closes
+                        textCommands.join()
         elif window2:
             if event == 'RANDOM':
                 if color2 == 'red':
