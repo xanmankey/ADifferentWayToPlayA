@@ -1,6 +1,7 @@
 {
     "DISCORD": {
         "textchannelid": "(Type Text Channel ID here)",
+        "textchannelid2": "(Type Text Channel ID for team 2 here)",
         "commands": 
         {
             "up": "True",
@@ -53,7 +54,8 @@
             "releasert": 0.2,
             "lb": 0.2,
             "rb": 0.2
-        }
+        },
+        "textTeams": {"1": "True", "2": "False"}
     },
 
     "RANDOM": {
