@@ -21,7 +21,7 @@ Some current features that I might add (no guarantees though):
 ## Dev Notes
 ### Pythonic TODOs
 I want to make this application more pythonic and developer-friendly, specifically by:
-- Improving my threading (I don't think the program allocates CPU as effectively as it could, also I want to minimize dropped inputs as much as possible)
+- Improving my threading (I don't think the program allocates CPU as effectively as it could, also I want to minimize dropping inputs as much as possible)
 - Reduce unnecessary code (by dividing my programs into smaller modules and not COPY-PASTING. This would also be helpful for testing, as seen below)
 - Implementing a system for unit-testing (probably using a mix of pyautogui, pytest, and the gamepad-tester API)
 - Find a better balance between interdependence and dependence between the programs (I feel like they may be too reliant on each other right now) 
