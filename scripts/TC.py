@@ -1188,14 +1188,12 @@ def main(textid, textid2, TC, length, teams):
     commandList = TC
     global commandLength
     commandLength = length
-
-    # token is the ID of the discord bot
-    # Run the bot, indicate if the bot is offline, then exit the program (if stop == "True" is a GUI toggle)
-    # I had to create my own event loop for a 2 bot script
     
+    # Custom Event loop
     loop = asyncio.get_event_loop()
     if teams == 1:
         loop.create_task(bot.start(os.getenv('CLIENT_TOKEN')))
+    # Currently only 2 teams, but more tokens and loops can be added if desired
     elif teams != 1:
         loop.create_task(bot.start(os.getenv('CLIENT_TOKEN')))
         loop.create_task(bot2.start(os.getenv('CLIENT_TOKEN2')))
