@@ -301,7 +301,7 @@ if __name__ == "__main__":
                             # Initialization of each object of class GamePad
                             devices.gamepads[numControllers] = device
                             numControllers += 1
-                        gamemode = "together"
+                        gamemode = "alltogether"
                     elif values["teams"] is True:
                         devices = inputs.DeviceManager()
                         numOnTeam = 0
