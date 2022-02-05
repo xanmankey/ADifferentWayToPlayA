@@ -243,7 +243,7 @@ if __name__ == "__main__":
                         # Threading in the GUI event loop is a little precarious; I learned that the hard way
                         # I might look for a better solution, but this works for now
                         if textTeams != 1:
-                            textCommands2 = multiprocessing.Process(target=TC.main, args=[int(textID), int(textID2), commands, time, textTeams])
+                            textCommands2 = multiprocessing.Process(target=TC.main, args=[int(textID), 0, commands, time, textTeams])
                             textCommands2.start()
                         else:
                             textCommands = multiprocessing.Process(target=TC.main, args=[int(textID), int(textID2), commands, time, textTeams])
