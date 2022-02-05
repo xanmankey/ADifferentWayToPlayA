@@ -203,8 +203,8 @@ if __name__ == "__main__":
                         error = 1
                     # Initialize + base case for commands (uses GUI)
                     for j in range(len(discordConfig["commands"])):
-                        commands[j] = values[str(j + 1)]
-                        if commands[j] is True:
+                        commands[j] = str(values[str(j + 1)])
+                        if commands[j] == "True":
                             numCommands += 1
                     # Initialize + base case for length of a command (seconds, config only as of rn)
                     for key in discordConfig["time"].keys():
@@ -241,12 +241,12 @@ if __name__ == "__main__":
                     # Run script if all prereqs pass
                     if error == 0:
                         # Threading in the GUI event loop is a little precarious; I learned that the hard way
-                        # I might look for a better solution, but this works for now
+                        # I might eventually look for a better solution, but this works for now
                         if textTeams != 1:
-                            textCommands2 = multiprocessing.Process(target=TC.main, args=[int(textID), 0, commands, time, textTeams])
+                            textCommands2 = multiprocessing.Process(target=TC.main, args=[int(textID), int(textID2), commands, time, textTeams])
                             textCommands2.start()
                         else:
-                            textCommands = multiprocessing.Process(target=TC.main, args=[int(textID), int(textID2), commands, time, textTeams])
+                            textCommands = multiprocessing.Process(target=TC.main, args=[int(textID), 0, commands, time, textTeams])
                             textCommands.start()
                 elif color1 == 'green':
                     # Exit the textCommands script
