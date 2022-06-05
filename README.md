@@ -1,6 +1,6 @@
 # A Different Way To Play
 Three different programs allowing you to play video games in 100% intended ways. Discord text-channel commands, randomized controls, and mapping input from multiple controllers to one or more controllers are included. Have fun, and feel free to use this to play video games in whatever way you see fit! 
-##### 🛈 Windows ONLY (due to the current nature of ViGEm).
+##### :information_source: Windows ONLY (due to the current nature of ViGEm).
 ## Usage
 Download and unzip the repository. Then, run the x32 or x64 bit version of ViGEmBusSetup_xXX.msi in order to setup the required gamepad drivers (for more information, the github can be found at https://github.com/ViGEm/ViGEmBus. If you are struggling to install the drivers, try running it either in compatibility mode or as an administrator). Then, run GUI.exe (in the scripts folder), and navigate the explorer as you see fit. Click the image to run the script when you are happy with your settings! If you wish to change the default options, then edit the config.json file in the configs directory according to how you want to play!
 ### Discord Text Commands to Input
