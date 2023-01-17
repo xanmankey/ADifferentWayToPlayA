@@ -1,0 +1,25 @@
+MY THOUGHTS ON TESTING
+Test Driven Development (TDD): is a common practice seen in systems 
+and software design and development. 
+It requires constant tests to be written to cover every aspect of code.
+This can first appear to slow down the workflow, but if done correctly
+will reduce debugging time, make it easier to work with your code, 
+and protect the overall code from stupid mistakes the programmer.
+Mock frameworks to implement and stub class methods can help to 
+increase the efficiency of your tests if you work with/have a data api, 
+unit tests can help to ensure that code is effectively isolated, 
+and system tests can help to verify the overall integrity of the codebase.
+Ultimately, testing is a pretty powerful thing that saves a lot of time in the 
+long run but causes inconvenience in the short run. This means it ultimately 
+comes down to discipline (or, as I prefer to call it, self-independence).
+Also, one more final thought that needs to be acknowledged and accepted: 
+there will ALWAYS be more tests to write (the testing process never ends),
+but the more tests you write, the more code you cover and the better you internalize
+and cement your understanding of the code base
+SOME SYNTAX STUFF/OTHER NOTES
+- If running tests w/ flutter, you can just use inline breakpoints
+- I run my tests with flutter (test info) rather than dart because there's 
+less console output
+- If you have no flutter debug errors, you can actually interact w/ tests 
+directly in the text editor portion of the editor 
+- You can use the isA<T>() convenience function to check typing
