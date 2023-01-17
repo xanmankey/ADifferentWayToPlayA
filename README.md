@@ -1,5 +1,5 @@
 # Another Different Way To Play
-> I'll rewrite this once I'm done w/ the whole refactoring, this is just a temporary placeholder
+> I'll rewrite this once I'm done w/ the whole refactoring, this is just a temporary placeholder, so take it with a grain of salt
 ## Why another?
 Well, my original code was a bit of a mess, and I had been trying to learn flutter so I figured a refactoring was in order. 
 ## What was changed?
