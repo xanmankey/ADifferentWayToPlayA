@@ -7,6 +7,7 @@ class Pages {
   static String TC = '/TC';
   static String FC = '/FC';
   static String RC = '/RC';
+  static String DC = '/DC';
   static String playerSelection = '/playerSelection';
   static String tournamentSelection = '/tournamentSelection';
   static String tournamentBracket = '/tournamentBracket';

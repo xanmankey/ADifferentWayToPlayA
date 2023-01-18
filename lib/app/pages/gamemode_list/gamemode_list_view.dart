@@ -1,19 +1,37 @@
 import 'package:adifferentwaytoplay/app/widgets/custom_appbar.dart';
+import 'package:adifferentwaytoplay/app/widgets/gamemode/gamemode_entry.dart';
+import 'package:adifferentwaytoplay/data/utils/utils.dart';
+import 'package:adifferentwaytoplay/domain/entities/gamemode.dart';
 import 'package:flutter/material.dart';
+import 'package:isar/isar.dart';
 
-class Gamemode extends StatefulWidget {
-  const Gamemode({super.key});
+class GamemodeList extends StatefulWidget {
+  const GamemodeList({super.key});
 
   @override
-  State<Gamemode> createState() => _GamemodeState();
+  State<GamemodeList> createState() => _GamemodeListState();
 }
 
-class _GamemodeState extends State<Gamemode> {
+class _GamemodeListState extends State<GamemodeList> {
+  late List<Gamemode> gamemodes;
+  Storage storage = Storage();
+  @override
+  void initState() async {
+    gamemodes = await storage.getGamemodeList([
+      {"name": Sort.asc}
+    ]);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(),
-      body: PageView(),
+      body: PageView(
+        children: [
+          for (Gamemode gamemode in gamemodes) GamemodeEntry(gamemode: gamemode)
+        ],
+      ),
     );
   }
 }

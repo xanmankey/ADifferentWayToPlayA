@@ -1,7 +1,6 @@
 // A widget for structuring entries in the character gallery
 import 'dart:io';
 
-import 'package:adifferentwaytoplay/app/widgets/custom_text_input.dart';
 import 'package:adifferentwaytoplay/domain/entities/team.dart';
 import 'package:adifferentwaytoplay/app/widgets/text.dart';
 import 'package:flutter/material.dart';

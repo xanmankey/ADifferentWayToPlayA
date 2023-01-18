@@ -16,10 +16,10 @@ class GamemodeEntry extends StatefulWidget {
 class _GamemodeEntryState extends State<GamemodeEntry> {
   final TextEditingController titleController = TextEditingController();
   late bool creation;
-  List<Widget> buttonWidgets = [];
-  List<Widget> triggerWidgets = [];
-  List<Widget> stickWidgets = [];
-  List<Widget> otherWidgets = [];
+  late List<Widget> buttonWidgets;
+  late List<Widget> triggerWidgets;
+  late List<Widget> stickWidgets;
+  late List<Widget> otherWidgets;
 
   @override
   void initState() async {
@@ -32,10 +32,10 @@ class _GamemodeEntryState extends State<GamemodeEntry> {
     }
     Map<String, List<Widget>> settingsWidgets =
         sortByInputType(widget.gamemode!.settings.toList());
-    List<Widget> buttonWidgets = settingsWidgets['button'] ?? [];
-    List<Widget> triggerWidgets = settingsWidgets['trigger'] ?? [];
-    List<Widget> stickWidgets = settingsWidgets['stick'] ?? [];
-    List<Widget> otherWidgets = settingsWidgets['other'] ?? [];
+    buttonWidgets = settingsWidgets['button'] ?? [];
+    triggerWidgets = settingsWidgets['trigger'] ?? [];
+    stickWidgets = settingsWidgets['stick'] ?? [];
+    otherWidgets = settingsWidgets['other'] ?? [];
     super.initState();
   }
 

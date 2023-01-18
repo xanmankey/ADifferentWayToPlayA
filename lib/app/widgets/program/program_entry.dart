@@ -1,18 +1,12 @@
 // A widget for structuring entries in the character gallery
 import 'dart:io';
 
-import 'package:adifferentwaytoplay/app/utils/utils.dart';
-import 'package:adifferentwaytoplay/app/widgets/custom_text_input.dart';
 import 'package:adifferentwaytoplay/domain/entities/program.dart';
-import 'package:adifferentwaytoplay/app/widgets/text.dart';
-import 'package:adifferentwaytoplay/domain/entities/settings.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:file_picker/file_picker.dart';
 
 class ProgramEntry extends StatefulWidget {
-  // Becomes a character creator if a character isn't specified
   Program? program;
   ProgramEntry({super.key, this.program});
 
@@ -25,10 +19,10 @@ class _ProgramEntryState extends State<ProgramEntry> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController scriptController = TextEditingController();
   late bool creation;
-  List<Widget> buttonWidgets = [];
-  List<Widget> triggerWidgets = [];
-  List<Widget> stickWidgets = [];
-  List<Widget> otherWidgets = [];
+  late List<Widget> buttonWidgets;
+  late List<Widget> triggerWidgets;
+  late List<Widget> stickWidgets;
+  late List<Widget> otherWidgets;
 
   @override
   void initState() async {
@@ -45,10 +39,10 @@ class _ProgramEntryState extends State<ProgramEntry> {
     }
     Map<String, List<Widget>> settingsWidgets =
         sortByInputType(widget.program!.settings.toList());
-    List<Widget> buttonWidgets = settingsWidgets['button'] ?? [];
-    List<Widget> triggerWidgets = settingsWidgets['trigger'] ?? [];
-    List<Widget> stickWidgets = settingsWidgets['stick'] ?? [];
-    List<Widget> otherWidgets = settingsWidgets['other'] ?? [];
+    buttonWidgets = settingsWidgets['button'] ?? [];
+    triggerWidgets = settingsWidgets['trigger'] ?? [];
+    stickWidgets = settingsWidgets['stick'] ?? [];
+    otherWidgets = settingsWidgets['other'] ?? [];
     super.initState();
   }
 

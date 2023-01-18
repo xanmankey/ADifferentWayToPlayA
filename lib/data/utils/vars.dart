@@ -79,22 +79,26 @@ class ProgramData {
     ..image = "assets/images/TC.png"
     ..description = "'Couldn't have said it better myself'"
     ..name = "Text Commands (TC)"
-    ..abbreviation = "TC";
+    ..abbreviation = "TC"
+    ..settings.addAll(TCsettings);
   static Program RC = Program()
     ..image = "assets/images/RC.png"
     ..description = "'For when up feels like down'"
     ..name = "Randomized Controls (RC)"
-    ..abbreviation = "RC";
+    ..abbreviation = "RC"
+    ..settings.addAll(RCsettings);
   static Program FC = Program()
     ..image = "assets/images/FC.png"
     ..description = "'I've always been a one-press kind of guy'"
     ..name = "Filtered Controls (FC)"
-    ..abbreviation = "FC";
+    ..abbreviation = "FC"
+    ..settings.addAll(FCsettings);
   static Program DC = Program()
     ..image = "assets/images/DC.png"
-    ..description = "'Who says I have to spend \$60 on a controller?'"
+    ..description = "'Who says you have to spend \$60 on a controller?'"
     ..name = "Different Controllers (DC)"
-    ..abbreviation = "DC";
+    ..abbreviation = "DC"
+    ..settings.addAll(DCsettings);
   static Program TESTProgram = Program()
     ..image = "assets/images/noTestImage.png"
     ..description = "'I've always been a testing kind of guy'"
@@ -112,6 +116,7 @@ List<Program> programs = [
   ProgramData.TC,
   ProgramData.RC,
   ProgramData.FC,
+  ProgramData.DC,
 ];
 
 /// One var is defined of each type for testing purposes
@@ -1599,6 +1604,536 @@ List<Setting> FCsettings = [
   FCSettingsData.downSetting,
   FCSettingsData.leftSetting,
   FCSettingsData.rightSetting,
+];
+
+class DCSettingsData {
+  static Setting aSetting = Setting()
+    ..title = Inputs.a.toString()
+    ..enabled = true
+    ..description =
+        "Number of alloted A presses until the desired effect occurs"
+    ..group = [
+      aSetting.id,
+      createSettings(
+        [SettingsWidgets.numField],
+        title: "filter",
+        description:
+            "The number of inputs that you can take before the desired effect",
+        enabled: aSetting.enabled,
+        mapValues: {"presses": 15},
+      )[SettingsWidgets.numField]!
+          .id,
+      createSettings(
+        [SettingsWidgets.checkbox],
+        title: "presses",
+        description: "The type of filter that happens after the desired effect",
+        enabled: aSetting.enabled,
+        mapValues: {"filter": Filters.stop},
+      )[SettingsWidgets.checkbox]!
+          .id,
+      createSettings(
+        [SettingsWidgets.inputsDropdown],
+        title: "input",
+        enabled: aSetting.enabled,
+        mapValues: {"input": Inputs.a},
+      )[SettingsWidgets.inputsDropdown]!
+          .id,
+    ]
+    ..inputType = InputTypes.button;
+
+  static Setting bSetting = Setting()
+    ..title = Inputs.b.toString()
+    ..enabled = true
+    ..description =
+        "Number of alloted B presses until the desired effect occurs"
+    ..group = [
+      bSetting.id,
+      createSettings(
+        [SettingsWidgets.numField],
+        title: "filter",
+        description:
+            "The number of inputs that you can take before the desired effect",
+        enabled: bSetting.enabled,
+        mapValues: {"presses": 10},
+      )[SettingsWidgets.numField]!
+          .id,
+      createSettings(
+        [SettingsWidgets.checkbox],
+        title: "presses",
+        description: "The type of filter that happens after the desired effect",
+        enabled: bSetting.enabled,
+        mapValues: {"filter": Filters.stop},
+      )[SettingsWidgets.checkbox]!
+          .id,
+      createSettings(
+        [SettingsWidgets.inputsDropdown],
+        title: "input",
+        enabled: bSetting.enabled,
+        mapValues: {"input": Inputs.b},
+      )[SettingsWidgets.inputsDropdown]!
+          .id,
+    ]
+    ..inputType = InputTypes.button;
+
+  static Setting xSetting = Setting()
+    ..title = Inputs.x.toString()
+    ..enabled = true
+    ..description =
+        "Number of alloted X presses until the desired effect occurs"
+    ..group = [
+      xSetting.id,
+      createSettings(
+        [SettingsWidgets.numField],
+        title: "filter",
+        description:
+            "The number of inputs that you can take before the desired effect",
+        enabled: xSetting.enabled,
+        mapValues: {"presses": 8},
+      )[SettingsWidgets.numField]!
+          .id,
+      createSettings(
+        [SettingsWidgets.checkbox],
+        title: "presses",
+        description: "The type of filter that happens after the desired effect",
+        enabled: xSetting.enabled,
+        mapValues: {"filter": Filters.stop},
+      )[SettingsWidgets.checkbox]!
+          .id,
+      createSettings(
+        [SettingsWidgets.inputsDropdown],
+        title: "input",
+        enabled: xSetting.enabled,
+        mapValues: {"input": Inputs.x},
+      )[SettingsWidgets.inputsDropdown]!
+          .id,
+    ]
+    ..inputType = InputTypes.button;
+
+  static Setting ySetting = Setting()
+    ..title = Inputs.y.toString()
+    ..enabled = true
+    ..description =
+        "Number of alloted Y presses until the desired effect occurs"
+    ..group = [
+      ySetting.id,
+      createSettings(
+        [SettingsWidgets.numField],
+        title: "filter",
+        description:
+            "The number of inputs that you can take before the desired effect",
+        enabled: ySetting.enabled,
+        mapValues: {"presses": 8},
+      )[SettingsWidgets.numField]!
+          .id,
+      createSettings(
+        [SettingsWidgets.checkbox],
+        title: "presses",
+        description: "The type of filter that happens after the desired effect",
+        enabled: ySetting.enabled,
+        mapValues: {"filter": Filters.stop},
+      )[SettingsWidgets.checkbox]!
+          .id,
+      createSettings(
+        [SettingsWidgets.inputsDropdown],
+        title: "input",
+        enabled: ySetting.enabled,
+        mapValues: {"input": Inputs.y},
+      )[SettingsWidgets.inputsDropdown]!
+          .id,
+    ]
+    ..inputType = InputTypes.button;
+
+  static Setting rbSetting = Setting()
+    ..title = Inputs.rb.toString()
+    ..enabled = true
+    ..description =
+        "Number of alloted RB presses until the desired effect occurs"
+    ..group = [
+      rbSetting.id,
+      createSettings(
+        [SettingsWidgets.numField],
+        title: "filter",
+        description:
+            "The number of inputs that you can take before the desired effect",
+        enabled: rbSetting.enabled,
+        mapValues: {"presses": 7},
+      )[SettingsWidgets.numField]!
+          .id,
+      createSettings(
+        [SettingsWidgets.checkbox],
+        title: "presses",
+        description: "The type of filter that happens after the desired effect",
+        enabled: rbSetting.enabled,
+        mapValues: {"filter": Filters.stop},
+      )[SettingsWidgets.checkbox]!
+          .id,
+      createSettings(
+        [SettingsWidgets.inputsDropdown],
+        title: "input",
+        enabled: rbSetting.enabled,
+        mapValues: {"input": Inputs.rb},
+      )[SettingsWidgets.inputsDropdown]!
+          .id,
+    ]
+    ..inputType = InputTypes.button;
+
+  static Setting lbSetting = Setting()
+    ..title = Inputs.lb.toString()
+    ..enabled = true
+    ..description =
+        "Number of alloted LB presses until the desired effect occurs"
+    ..group = [
+      lbSetting.id,
+      createSettings(
+        [SettingsWidgets.numField],
+        title: "filter",
+        description:
+            "The number of inputs that you can take before the desired effect",
+        enabled: lbSetting.enabled,
+        mapValues: {"presses": 7},
+      )[SettingsWidgets.numField]!
+          .id,
+      createSettings(
+        [SettingsWidgets.checkbox],
+        title: "presses",
+        description: "The type of filter that happens after the desired effect",
+        enabled: lbSetting.enabled,
+        mapValues: {"filter": Filters.stop},
+      )[SettingsWidgets.checkbox]!
+          .id,
+      createSettings(
+        [SettingsWidgets.inputsDropdown],
+        title: "input",
+        enabled: lbSetting.enabled,
+        mapValues: {"input": Inputs.lb},
+      )[SettingsWidgets.inputsDropdown]!
+          .id,
+    ]
+    ..inputType = InputTypes.button;
+
+  static Setting start = Setting()
+    ..title = Inputs.start.toString()
+    ..enabled = true
+    ..description =
+        "Number of alloted start presses until the desired effect occurs"
+    ..group = [
+      start.id,
+      createSettings(
+        [SettingsWidgets.numField],
+        title: "filter",
+        description:
+            "The number of inputs that you can take before the desired effect",
+        enabled: start.enabled,
+        mapValues: {"presses": 5},
+      )[SettingsWidgets.numField]!
+          .id,
+      createSettings(
+        [SettingsWidgets.checkbox],
+        title: "presses",
+        description: "The type of filter that happens after the desired effect",
+        enabled: start.enabled,
+        mapValues: {"filter": Filters.stop},
+      )[SettingsWidgets.checkbox]!
+          .id,
+      createSettings(
+        [SettingsWidgets.inputsDropdown],
+        title: "input",
+        enabled: start.enabled,
+        mapValues: {"input": Inputs.start},
+      )[SettingsWidgets.inputsDropdown]!
+          .id,
+    ]
+    ..inputType = InputTypes.button;
+
+  static Setting select = Setting()
+    ..title = Inputs.select.toString()
+    ..enabled = true
+    ..description =
+        "Number of alloted A presses until the desired effect occurs"
+    ..group = [
+      select.id,
+      createSettings(
+        [SettingsWidgets.numField],
+        title: "filter",
+        description:
+            "The number of inputs that you can take before the desired effect",
+        enabled: select.enabled,
+        mapValues: {"presses": 5},
+      )[SettingsWidgets.numField]!
+          .id,
+      createSettings(
+        [SettingsWidgets.checkbox],
+        title: "presses",
+        description: "The type of filter that happens after the desired effect",
+        enabled: select.enabled,
+        mapValues: {"filter": Filters.stop},
+      )[SettingsWidgets.checkbox]!
+          .id,
+      createSettings(
+        [SettingsWidgets.inputsDropdown],
+        title: "input",
+        enabled: select.enabled,
+        mapValues: {"input": Inputs.a},
+      )[SettingsWidgets.inputsDropdown]!
+          .id,
+    ]
+    ..inputType = InputTypes.button;
+
+  static Setting lthumbSetting = Setting()
+    ..title = Inputs.lThumb.toString()
+    ..enabled = true
+    ..description =
+        "Number of alloted left thumb presses until the desired effect occurs"
+    ..group = [
+      lthumbSetting.id,
+      createSettings(
+        [SettingsWidgets.numField],
+        title: "filter",
+        description:
+            "The number of inputs that you can take before the desired effect",
+        enabled: lthumbSetting.enabled,
+        mapValues: {"presses": 5},
+      )[SettingsWidgets.numField]!
+          .id,
+      createSettings(
+        [SettingsWidgets.checkbox],
+        title: "presses",
+        description: "The type of filter that happens after the desired effect",
+        enabled: lthumbSetting.enabled,
+        mapValues: {"filter": Filters.stop},
+      )[SettingsWidgets.checkbox]!
+          .id,
+      createSettings(
+        [SettingsWidgets.inputsDropdown],
+        title: "input",
+        enabled: lthumbSetting.enabled,
+        mapValues: {"input": Inputs.a},
+      )[SettingsWidgets.inputsDropdown]!
+          .id,
+    ]
+    ..inputType = InputTypes.button;
+
+  static Setting ltSetting = Setting()
+    ..title = Inputs.lt.toString()
+    ..enabled = true
+    ..description =
+        "Number of alloted left trigger presses until the desired effect occurs"
+    ..group = [
+      ltSetting.id,
+      createSettings(
+        [SettingsWidgets.numField],
+        title: "filter",
+        description:
+            "The number of inputs that you can take before the desired effect",
+        enabled: ltSetting.enabled,
+        mapValues: {"presses": 8},
+      )[SettingsWidgets.numField]!
+          .id,
+      createSettings(
+        [SettingsWidgets.checkbox],
+        title: "presses",
+        description: "The type of filter that happens after the desired effect",
+        enabled: ltSetting.enabled,
+        mapValues: {"filter": Filters.stop},
+      )[SettingsWidgets.checkbox]!
+          .id,
+      createSettings(
+        [SettingsWidgets.inputsDropdown],
+        title: "input",
+        enabled: ltSetting.enabled,
+        mapValues: {"input": Inputs.lt},
+      )[SettingsWidgets.inputsDropdown]!
+          .id,
+    ]
+    ..inputType = InputTypes.trigger;
+
+  static Setting rtSetting = Setting()
+    ..title = Inputs.rt.toString()
+    ..enabled = true
+    ..description =
+        "Number of alloted right trigger presses until the desired effect occurs"
+    ..group = [
+      ltSetting.id,
+      createSettings(
+        [SettingsWidgets.numField],
+        title: "filter",
+        description:
+            "The number of inputs that you can take before the desired effect",
+        enabled: rtSetting.enabled,
+        mapValues: {"presses": 8},
+      )[SettingsWidgets.numField]!
+          .id,
+      createSettings(
+        [SettingsWidgets.checkbox],
+        title: "presses",
+        description: "The type of filter that happens after the desired effect",
+        enabled: rtSetting.enabled,
+        mapValues: {"filter": Filters.stop},
+      )[SettingsWidgets.checkbox]!
+          .id,
+      createSettings(
+        [SettingsWidgets.inputsDropdown],
+        title: "input",
+        enabled: rtSetting.enabled,
+        mapValues: {"input": Inputs.rt},
+      )[SettingsWidgets.inputsDropdown]!
+          .id,
+    ]
+    ..inputType = InputTypes.trigger;
+
+  static Setting upSetting = Setting()
+    ..title = Inputs.lUp.toString()
+    ..enabled = true
+    ..description =
+        "Number of alloted up directional changes until the desired effect occurs"
+    ..group = [
+      ltSetting.id,
+      createSettings(
+        [SettingsWidgets.numField],
+        title: "filter",
+        description:
+            "The number of inputs that you can take before the desired effect",
+        enabled: upSetting.enabled,
+        mapValues: {"presses": 15},
+      )[SettingsWidgets.numField]!
+          .id,
+      createSettings(
+        [SettingsWidgets.checkbox],
+        title: "presses",
+        description: "The type of filter that happens after the desired effect",
+        enabled: upSetting.enabled,
+        mapValues: {"filter": Filters.stop},
+      )[SettingsWidgets.checkbox]!
+          .id,
+      createSettings(
+        [SettingsWidgets.inputsDropdown],
+        title: "input",
+        enabled: upSetting.enabled,
+        mapValues: {"input": Inputs.lUp},
+      )[SettingsWidgets.inputsDropdown]!
+          .id,
+    ]
+    ..inputType = InputTypes.stick;
+
+  static Setting downSetting = Setting()
+    ..title = Inputs.lDown.toString()
+    ..enabled = true
+    ..description =
+        "Number of alloted down directional changes until the desired effect occurs"
+    ..group = [
+      downSetting.id,
+      createSettings(
+        [SettingsWidgets.numField],
+        title: "filter",
+        description:
+            "The number of inputs that you can take before the desired effect",
+        enabled: downSetting.enabled,
+        mapValues: {"presses": 15},
+      )[SettingsWidgets.numField]!
+          .id,
+      createSettings(
+        [SettingsWidgets.checkbox],
+        title: "presses",
+        description: "The type of filter that happens after the desired effect",
+        enabled: downSetting.enabled,
+        mapValues: {"filter": Filters.stop},
+      )[SettingsWidgets.checkbox]!
+          .id,
+      createSettings(
+        [SettingsWidgets.inputsDropdown],
+        title: "input",
+        enabled: downSetting.enabled,
+        mapValues: {"input": Inputs.lDown},
+      )[SettingsWidgets.inputsDropdown]!
+          .id,
+    ]
+    ..inputType = InputTypes.stick;
+
+  static Setting leftSetting = Setting()
+    ..title = Inputs.lLeft.toString()
+    ..enabled = true
+    ..description =
+        "Number of alloted left directional changes until the desired effect occurs"
+    ..group = [
+      leftSetting.id,
+      createSettings(
+        [SettingsWidgets.numField],
+        title: "filter",
+        description:
+            "The number of inputs that you can take before the desired effect",
+        enabled: leftSetting.enabled,
+        mapValues: {"presses": 15},
+      )[SettingsWidgets.numField]!
+          .id,
+      createSettings(
+        [SettingsWidgets.checkbox],
+        title: "presses",
+        description: "The type of filter that happens after the desired effect",
+        enabled: leftSetting.enabled,
+        mapValues: {"filter": Filters.stop},
+      )[SettingsWidgets.checkbox]!
+          .id,
+      createSettings(
+        [SettingsWidgets.inputsDropdown],
+        title: "input",
+        enabled: leftSetting.enabled,
+        mapValues: {"input": Inputs.lLeft},
+      )[SettingsWidgets.inputsDropdown]!
+          .id,
+    ]
+    ..inputType = InputTypes.stick;
+
+  static Setting rightSetting = Setting()
+    ..title = Inputs.lRight.toString()
+    ..enabled = true
+    ..description =
+        "Number of alloted right directional changes until the desired effect occurs"
+    ..group = [
+      rightSetting.id,
+      createSettings(
+        [SettingsWidgets.numField],
+        title: "filter",
+        description:
+            "The number of inputs that you can take before the desired effect",
+        enabled: rightSetting.enabled,
+        mapValues: {"presses": 15},
+      )[SettingsWidgets.numField]!
+          .id,
+      createSettings(
+        [SettingsWidgets.checkbox],
+        title: "presses",
+        description: "The type of filter that happens after the desired effect",
+        enabled: rightSetting.enabled,
+        mapValues: {"filter": Filters.stop},
+      )[SettingsWidgets.checkbox]!
+          .id,
+      createSettings(
+        [SettingsWidgets.inputsDropdown],
+        title: "input",
+        enabled: rightSetting.enabled,
+        mapValues: {"input": Inputs.lDown},
+      )[SettingsWidgets.inputsDropdown]!
+          .id,
+    ]
+    ..inputType = InputTypes.stick;
+}
+
+List<Setting> DCsettings = [
+  DCSettingsData.aSetting,
+  DCSettingsData.bSetting,
+  DCSettingsData.xSetting,
+  DCSettingsData.ySetting,
+  DCSettingsData.rbSetting,
+  DCSettingsData.lbSetting,
+  DCSettingsData.start,
+  DCSettingsData.select,
+  DCSettingsData.lthumbSetting,
+  DCSettingsData.ltSetting,
+  DCSettingsData.rtSetting,
+  DCSettingsData.upSetting,
+  DCSettingsData.downSetting,
+  DCSettingsData.leftSetting,
+  DCSettingsData.rightSetting,
 ];
 
 class CharacterData {
