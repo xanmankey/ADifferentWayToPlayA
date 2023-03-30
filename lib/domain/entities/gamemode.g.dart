@@ -17,15 +17,31 @@ const GamemodeSchema = CollectionSchema(
   name: r'Gamemode',
   id: -743387943824840136,
   properties: {
-    r'name': PropertySchema(
+    r'gamemodeOptions': PropertySchema(
       id: 0,
+      name: r'gamemodeOptions',
+      type: IsarType.byte,
+      enumMap: _GamemodegamemodeOptionsEnumValueMap,
+    ),
+    r'name': PropertySchema(
+      id: 1,
       name: r'name',
       type: IsarType.string,
     ),
+    r'teams': PropertySchema(
+      id: 2,
+      name: r'teams',
+      type: IsarType.bool,
+    ),
     r'timesPlayed': PropertySchema(
-      id: 1,
+      id: 3,
       name: r'timesPlayed',
       type: IsarType.long,
+    ),
+    r'values': PropertySchema(
+      id: 4,
+      name: r'values',
+      type: IsarType.string,
     )
   },
   estimateSize: _gamemodeEstimateSize,
@@ -59,6 +75,19 @@ const GamemodeSchema = CollectionSchema(
           caseSensitive: false,
         )
       ],
+    ),
+    r'teams': IndexSchema(
+      id: -1291517212919527017,
+      name: r'teams',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'teams',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
     )
   },
   links: {
@@ -66,12 +95,6 @@ const GamemodeSchema = CollectionSchema(
       id: -7430248874211053004,
       name: r'players',
       target: r'Player',
-      single: false,
-    ),
-    r'settings': LinkSchema(
-      id: 9012956140367106906,
-      name: r'settings',
-      target: r'Setting',
       single: false,
     )
   },
@@ -89,6 +112,7 @@ int _gamemodeEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.name.length * 3;
+  bytesCount += 3 + object.values.length * 3;
   return bytesCount;
 }
 
@@ -98,8 +122,11 @@ void _gamemodeSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.name);
-  writer.writeLong(offsets[1], object.timesPlayed);
+  writer.writeByte(offsets[0], object.gamemodeOptions.index);
+  writer.writeString(offsets[1], object.name);
+  writer.writeBool(offsets[2], object.teams);
+  writer.writeLong(offsets[3], object.timesPlayed);
+  writer.writeString(offsets[4], object.values);
 }
 
 Gamemode _gamemodeDeserialize(
@@ -109,9 +136,14 @@ Gamemode _gamemodeDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Gamemode();
+  object.gamemodeOptions =
+      _GamemodegamemodeOptionsValueEnumMap[reader.readByteOrNull(offsets[0])] ??
+          GamemodeOptions.freeForAllOptions;
   object.id = id;
-  object.name = reader.readString(offsets[0]);
-  object.timesPlayed = reader.readLong(offsets[1]);
+  object.name = reader.readString(offsets[1]);
+  object.teams = reader.readBool(offsets[2]);
+  object.timesPlayed = reader.readLong(offsets[3]);
+  object.values = reader.readString(offsets[4]);
   return object;
 }
 
@@ -123,26 +155,46 @@ P _gamemodeDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readString(offset)) as P;
+      return (_GamemodegamemodeOptionsValueEnumMap[
+              reader.readByteOrNull(offset)] ??
+          GamemodeOptions.freeForAllOptions) as P;
     case 1:
+      return (reader.readString(offset)) as P;
+    case 2:
+      return (reader.readBool(offset)) as P;
+    case 3:
       return (reader.readLong(offset)) as P;
+    case 4:
+      return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
+
+const _GamemodegamemodeOptionsEnumValueMap = {
+  'freeForAllOptions': 0,
+  'teamCompetitionOptions': 1,
+  'randomChaosOptions': 2,
+  'customGameOptions': 3,
+};
+const _GamemodegamemodeOptionsValueEnumMap = {
+  0: GamemodeOptions.freeForAllOptions,
+  1: GamemodeOptions.teamCompetitionOptions,
+  2: GamemodeOptions.randomChaosOptions,
+  3: GamemodeOptions.customGameOptions,
+};
 
 Id _gamemodeGetId(Gamemode object) {
   return object.id;
 }
 
 List<IsarLinkBase<dynamic>> _gamemodeGetLinks(Gamemode object) {
-  return [object.players, object.settings];
+  return [object.players];
 }
 
 void _gamemodeAttach(IsarCollection<dynamic> col, Id id, Gamemode object) {
   object.id = id;
   object.players.attach(col, col.isar.collection<Player>(), r'players', id);
-  object.settings.attach(col, col.isar.collection<Setting>(), r'settings', id);
 }
 
 extension GamemodeByIndex on IsarCollection<Gamemode> {
@@ -210,6 +262,14 @@ extension GamemodeQueryWhereSort on QueryBuilder<Gamemode, Gamemode, QWhere> {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         const IndexWhereClause.any(indexName: r'timesPlayed'),
+      );
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterWhere> anyTeams() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'teams'),
       );
     });
   }
@@ -414,10 +474,110 @@ extension GamemodeQueryWhere on QueryBuilder<Gamemode, Gamemode, QWhereClause> {
       ));
     });
   }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterWhereClause> teamsEqualTo(bool teams) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'teams',
+        value: [teams],
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterWhereClause> teamsNotEqualTo(
+      bool teams) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'teams',
+              lower: [],
+              upper: [teams],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'teams',
+              lower: [teams],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'teams',
+              lower: [teams],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'teams',
+              lower: [],
+              upper: [teams],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
 }
 
 extension GamemodeQueryFilter
     on QueryBuilder<Gamemode, Gamemode, QFilterCondition> {
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition>
+      gamemodeOptionsEqualTo(GamemodeOptions value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'gamemodeOptions',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition>
+      gamemodeOptionsGreaterThan(
+    GamemodeOptions value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'gamemodeOptions',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition>
+      gamemodeOptionsLessThan(
+    GamemodeOptions value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'gamemodeOptions',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition>
+      gamemodeOptionsBetween(
+    GamemodeOptions lower,
+    GamemodeOptions upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'gamemodeOptions',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -600,6 +760,16 @@ extension GamemodeQueryFilter
     });
   }
 
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> teamsEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'teams',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> timesPlayedEqualTo(
       int value) {
     return QueryBuilder.apply(this, (query) {
@@ -650,6 +820,136 @@ extension GamemodeQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> valuesEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'values',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> valuesGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'values',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> valuesLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'values',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> valuesBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'values',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> valuesStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'values',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> valuesEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'values',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> valuesContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'values',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> valuesMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'values',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> valuesIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'values',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> valuesIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'values',
+        value: '',
       ));
     });
   }
@@ -716,67 +1016,21 @@ extension GamemodeQueryLinks
           r'players', lower, includeLower, upper, includeUpper);
     });
   }
-
-  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> settings(
-      FilterQuery<Setting> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'settings');
-    });
-  }
-
-  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> settingsLengthEqualTo(
-      int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'settings', length, true, length, true);
-    });
-  }
-
-  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> settingsIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'settings', 0, true, 0, true);
-    });
-  }
-
-  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> settingsIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'settings', 0, false, 999999, true);
-    });
-  }
-
-  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition>
-      settingsLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'settings', 0, true, length, include);
-    });
-  }
-
-  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition>
-      settingsLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'settings', length, include, 999999, true);
-    });
-  }
-
-  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> settingsLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(
-          r'settings', lower, includeLower, upper, includeUpper);
-    });
-  }
 }
 
 extension GamemodeQuerySortBy on QueryBuilder<Gamemode, Gamemode, QSortBy> {
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> sortByGamemodeOptions() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'gamemodeOptions', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> sortByGamemodeOptionsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'gamemodeOptions', Sort.desc);
+    });
+  }
+
   QueryBuilder<Gamemode, Gamemode, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -786,6 +1040,18 @@ extension GamemodeQuerySortBy on QueryBuilder<Gamemode, Gamemode, QSortBy> {
   QueryBuilder<Gamemode, Gamemode, QAfterSortBy> sortByNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> sortByTeams() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'teams', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> sortByTeamsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'teams', Sort.desc);
     });
   }
 
@@ -800,10 +1066,34 @@ extension GamemodeQuerySortBy on QueryBuilder<Gamemode, Gamemode, QSortBy> {
       return query.addSortBy(r'timesPlayed', Sort.desc);
     });
   }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> sortByValues() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'values', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> sortByValuesDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'values', Sort.desc);
+    });
+  }
 }
 
 extension GamemodeQuerySortThenBy
     on QueryBuilder<Gamemode, Gamemode, QSortThenBy> {
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> thenByGamemodeOptions() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'gamemodeOptions', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> thenByGamemodeOptionsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'gamemodeOptions', Sort.desc);
+    });
+  }
+
   QueryBuilder<Gamemode, Gamemode, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -828,6 +1118,18 @@ extension GamemodeQuerySortThenBy
     });
   }
 
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> thenByTeams() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'teams', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> thenByTeamsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'teams', Sort.desc);
+    });
+  }
+
   QueryBuilder<Gamemode, Gamemode, QAfterSortBy> thenByTimesPlayed() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'timesPlayed', Sort.asc);
@@ -839,10 +1141,28 @@ extension GamemodeQuerySortThenBy
       return query.addSortBy(r'timesPlayed', Sort.desc);
     });
   }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> thenByValues() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'values', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> thenByValuesDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'values', Sort.desc);
+    });
+  }
 }
 
 extension GamemodeQueryWhereDistinct
     on QueryBuilder<Gamemode, Gamemode, QDistinct> {
+  QueryBuilder<Gamemode, Gamemode, QDistinct> distinctByGamemodeOptions() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'gamemodeOptions');
+    });
+  }
+
   QueryBuilder<Gamemode, Gamemode, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -850,9 +1170,22 @@ extension GamemodeQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Gamemode, Gamemode, QDistinct> distinctByTeams() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'teams');
+    });
+  }
+
   QueryBuilder<Gamemode, Gamemode, QDistinct> distinctByTimesPlayed() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'timesPlayed');
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QDistinct> distinctByValues(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'values', caseSensitive: caseSensitive);
     });
   }
 }
@@ -865,15 +1198,34 @@ extension GamemodeQueryProperty
     });
   }
 
+  QueryBuilder<Gamemode, GamemodeOptions, QQueryOperations>
+      gamemodeOptionsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'gamemodeOptions');
+    });
+  }
+
   QueryBuilder<Gamemode, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
     });
   }
 
+  QueryBuilder<Gamemode, bool, QQueryOperations> teamsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'teams');
+    });
+  }
+
   QueryBuilder<Gamemode, int, QQueryOperations> timesPlayedProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'timesPlayed');
+    });
+  }
+
+  QueryBuilder<Gamemode, String, QQueryOperations> valuesProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'values');
     });
   }
 }

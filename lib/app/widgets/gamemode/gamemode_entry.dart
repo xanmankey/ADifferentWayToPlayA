@@ -1,13 +1,19 @@
-// A widget for structuring entries in the character gallery
+import 'package:adifferentwaytoplay/data/utils/utils.dart';
+import 'package:adifferentwaytoplay/data/utils/vars.dart';
+import 'package:flutter/material.dart';
+
 import 'package:adifferentwaytoplay/domain/entities/gamemode.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
-import 'package:flutter/material.dart';
 import 'package:adifferentwaytoplay/app/utils/utils.dart';
 
+/// A stateful widget for displaying a gamemode in PageView format as
+/// specified by DWTP_view.dart. Doubles as a gamemode editor via the UI.
+/// ```
+///
+/// ```
 class GamemodeEntry extends StatefulWidget {
-  // Becomes a character creator if a character isn't specified
-  Gamemode? gamemode;
-  GamemodeEntry({super.key, this.gamemode});
+  Gamemode gamemode;
+  GamemodeEntry({super.key, required this.gamemode});
 
   @override
   State<GamemodeEntry> createState() => _GamemodeEntryState();
@@ -15,27 +21,10 @@ class GamemodeEntry extends StatefulWidget {
 
 class _GamemodeEntryState extends State<GamemodeEntry> {
   final TextEditingController titleController = TextEditingController();
-  late bool creation;
-  late List<Widget> buttonWidgets;
-  late List<Widget> triggerWidgets;
-  late List<Widget> stickWidgets;
-  late List<Widget> otherWidgets;
 
   @override
-  void initState() async {
-    if (widget.gamemode != null) {
-      titleController.text = widget.gamemode!.name;
-      creation = false;
-    } else {
-      creation = true;
-      widget.gamemode = Gamemode();
-    }
-    Map<String, List<Widget>> settingsWidgets =
-        sortByInputType(widget.gamemode!.settings.toList());
-    buttonWidgets = settingsWidgets['button'] ?? [];
-    triggerWidgets = settingsWidgets['trigger'] ?? [];
-    stickWidgets = settingsWidgets['stick'] ?? [];
-    otherWidgets = settingsWidgets['other'] ?? [];
+  void initState() {
+    titleController.text = widget.gamemode.name;
     super.initState();
   }
 
@@ -51,23 +40,12 @@ class _GamemodeEntryState extends State<GamemodeEntry> {
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
           ),
+          onEditingComplete: () async {
+            widget.gamemode.name = titleController.text;
+            await storage.updateGamemodes([widget.gamemode]);
+          },
         ),
-        Row(
-          children: [
-            ListView(
-              children: [for (Widget widget in buttonWidgets) widget],
-            ),
-            ListView(
-              children: [for (Widget widget in triggerWidgets) widget],
-            ),
-            ListView(
-              children: [for (Widget widget in stickWidgets) widget],
-            ),
-            ListView(
-              children: [for (Widget widget in otherWidgets) widget],
-            )
-          ],
-        ),
+        widget.gamemode.gamemodeOptions.toWidget(),
       ],
     );
   }

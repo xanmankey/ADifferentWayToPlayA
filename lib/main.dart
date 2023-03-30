@@ -6,10 +6,7 @@ import 'package:logging/logging.dart';
 
 // Package imports
 import 'package:adifferentwaytoplay/app/pages/home_view.dart';
-import 'package:adifferentwaytoplay/app/pages/program_list/program_list_view.dart';
-import 'package:adifferentwaytoplay/app/pages/character_list/character_list_view.dart';
-import 'package:adifferentwaytoplay/app/pages/team_list/team_list_view.dart';
-import 'package:adifferentwaytoplay/app/pages/DWTP/DWTP_view.dart';
+import 'package:adifferentwaytoplay/app/pages/DWTP_view.dart';
 import 'package:adifferentwaytoplay/app/pages/exception_view.dart';
 import 'package:adifferentwaytoplay/app/pages/victory_view.dart';
 
@@ -84,7 +81,7 @@ class DWTP extends StatelessWidget {
       routes: {
         "/home": (context) => const Home(),
         // "/victory": (context) => Victory(),
-        "/exception": (context) => const Exception(),
+        // "/exception": (context) => const ExceptionWidget(),
         // '/DWTP': (context) => const GamemodeView(),
         // '/programs': (context) => ProgramListPage(),
         // '/program': (context) => const ProgramView(),

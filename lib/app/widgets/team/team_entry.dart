@@ -1,12 +1,19 @@
 // A widget for structuring entries in the character gallery
 import 'dart:io';
 
+import 'package:adifferentwaytoplay/data/utils/utils.dart';
 import 'package:adifferentwaytoplay/domain/entities/team.dart';
 import 'package:adifferentwaytoplay/app/widgets/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:file_picker/file_picker.dart';
 
+/// Outlines the structure for what an entry in the
+/// Gallery of Teams will look like
+/// Can also be used as a team creator or editor
+/// ```
+///
+/// ```
 class TeamEntry extends StatefulWidget {
   Team? team;
   TeamEntry({super.key, this.team});
@@ -48,6 +55,10 @@ class _TeamEntryState extends State<TeamEntry> {
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
           ),
+          onEditingComplete: () async {
+            widget.team!.name = titleController.text;
+            await storage.updateTeams([widget.team!]);
+          },
         ),
         (creation)
             ? GestureDetector(
@@ -59,6 +70,7 @@ class _TeamEntryState extends State<TeamEntry> {
                     setState(() {
                       widget.team!.logo = result.files.single.path!;
                     });
+                    await storage.updateTeams([widget.team!]);
                   }
                 },
               )
@@ -73,6 +85,7 @@ class _TeamEntryState extends State<TeamEntry> {
                         widget.team!.logo = result.files.single.path!;
                       },
                     );
+                    await storage.updateTeams([widget.team!]);
                   }
                 },
               ),
@@ -95,8 +108,10 @@ class _TeamEntryState extends State<TeamEntry> {
                       pickerColor: (creation)
                           ? Color(widget.team!.color)
                           : const Color(0x00FFFFFF),
-                      onColorChanged: ((color) =>
-                          (() => widget.team!.color = color.value)),
+                      onColorChanged: ((color) => (() async {
+                            widget.team!.color = color.value;
+                            await storage.updateTeams([widget.team!]);
+                          })),
                     ),
                   ),
                   actions: <Widget>[
@@ -128,6 +143,10 @@ class _TeamEntryState extends State<TeamEntry> {
                 disabledBorder: InputBorder.none,
                 hintText: "Description",
               ),
+              onEditingComplete: () async {
+                widget.team!.description = descriptionController.text;
+                await storage.updateTeams([widget.team!]);
+              },
             ),
           ],
         ),

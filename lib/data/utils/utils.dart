@@ -1,11 +1,12 @@
 import 'package:adifferentwaytoplay/data/utils/vars.dart';
+import 'package:adifferentwaytoplay/domain/utils/utils.dart';
+import 'package:flython/flython.dart';
 import 'package:isar/isar.dart';
 import 'dart:io';
 import 'package:adifferentwaytoplay/domain/entities/gamepad.dart';
 import 'package:adifferentwaytoplay/domain/entities/player.dart';
 import 'package:adifferentwaytoplay/domain/entities/character.dart';
 import 'package:adifferentwaytoplay/domain/entities/program.dart';
-import 'package:adifferentwaytoplay/domain/entities/settings.dart';
 import 'package:adifferentwaytoplay/domain/entities/gamemode.dart';
 import 'package:adifferentwaytoplay/domain/entities/team.dart';
 import 'package:logging/logging.dart';
@@ -32,7 +33,6 @@ class Storage {
             GamepadSchema,
             PlayerSchema,
             ProgramSchema,
-            SettingSchema,
             TeamSchema,
           ],
           name: "test",
@@ -48,24 +48,8 @@ class Storage {
           for (Gamepad gamepad in testGamepads) {
             isarDB.gamepads.put(gamepad);
           }
-          // Write Settings and Programs in tandem
-          // TC settings and program
-          for (Setting setting in TCsettings) {
-            isarDB.settings.put(setting);
-            ProgramData.TC.settings.add(setting);
-          }
           isarDB.programs.put(ProgramData.TC);
-          // RC settings and program
-          for (Setting setting in RCsettings) {
-            isarDB.settings.put(setting);
-            ProgramData.RC.settings.add(setting);
-          }
           isarDB.programs.put(ProgramData.RC);
-          // FC settings and program
-          for (Setting setting in FCsettings) {
-            isarDB.settings.put(setting);
-            ProgramData.FC.settings.add(setting);
-          }
           isarDB.programs.put(ProgramData.FC);
           // MIOP program (no settings)
           isarDB.programs.put(ProgramData.MIOP);
@@ -106,7 +90,6 @@ class Storage {
             GamepadSchema,
             PlayerSchema,
             ProgramSchema,
-            SettingSchema,
             TeamSchema,
           ],
           name: "real",
@@ -131,24 +114,8 @@ class Storage {
 
         print('progress');
         await isarDB.writeTxn(() async {
-          // Write Settings and Programs in tandem
-          // TC settings and program
-          for (Setting setting in TCsettings) {
-            await isarDB.settings.put(setting);
-            ProgramData.TC.settings.add(setting);
-          }
           await isarDB.programs.put(ProgramData.TC);
-          // RC settings and program
-          for (Setting setting in RCsettings) {
-            await isarDB.settings.put(setting);
-            ProgramData.RC.settings.add(setting);
-          }
           await isarDB.programs.put(ProgramData.RC);
-          // FC settings and program
-          for (Setting setting in FCsettings) {
-            await isarDB.settings.put(setting);
-            ProgramData.FC.settings.add(setting);
-          }
           await isarDB.programs.put(ProgramData.FC);
           // MIOP program (no settings)
           await isarDB.programs.put(ProgramData.MIOP);
@@ -171,7 +138,7 @@ class Storage {
   /// Retrieve character by name, age, or color
   ///
   /// Each gallery has a 'by name' search bar w/ dropdown character selection
-  Future<List<Character?>> getCharacter(Map<String, dynamic> index) async {
+  Future<List<Character>> getCharacter(Map<String, dynamic> index) async {
     try {
       Isar db = await isarDB;
       switch (index.entries.first.key) {
@@ -276,7 +243,7 @@ class Storage {
 
   /// Retrieve gamemode by name index (maintains same structure
   /// to make it easy to add new indexes)
-  Future<List<Gamemode?>> getGamemode(Map<String, dynamic> index) async {
+  Future<List<Gamemode>> getGamemode(Map<String, dynamic> index) async {
     try {
       Isar db = await isarDB;
       switch (index.entries.first.key) {
@@ -353,7 +320,7 @@ class Storage {
   }
 
   /// Retrieve gamepads by connected or color index
-  Future<List<Gamepad?>> getGamepad(Map<String, dynamic> index) async {
+  Future<List<Gamepad>> getGamepad(Map<String, dynamic> index) async {
     try {
       Isar db = await isarDB;
       switch (index.entries.first.key) {
@@ -434,7 +401,7 @@ class Storage {
 
   /// Retrieve player by gamepad index, character name, program abbreviation,
   /// team name, color, or score
-  Future<List<Player?>> getPlayer(Map<String, dynamic> index) async {
+  Future<List<Player>> getPlayer(Map<String, dynamic> index) async {
     try {
       Isar db = await isarDB;
       switch (index.entries.first.key) {
@@ -550,7 +517,7 @@ class Storage {
   }
 
   /// Retrieve program by abbreviation index
-  Future<List<Program?>> getProgram(Map<String, dynamic> index) async {
+  Future<List<Program>> getProgram(Map<String, dynamic> index) async {
     try {
       Isar db = await isarDB;
       switch (index.entries.first.key) {
@@ -625,139 +592,9 @@ class Storage {
     }
   }
 
-  /// Retrieve settings by title and program or gamemode
-  Future<List<Setting?>> getSetting(Map<String, dynamic> index) async {
-    try {
-      Isar db = await isarDB;
-      if (index.entries.length != 2) {
-        return [];
-      }
-      List<FilterCondition> filterConditions = [];
-      for (MapEntry<String, dynamic> entry in index.entries) {
-        switch (entry.key) {
-          case "program":
-            // TODO: as always, not sure how to access properties of THE linked value
-            filterConditions.add(
-              FilterCondition(
-                type: FilterConditionType.contains,
-                property: 'program.value.abbreviation',
-                value1: entry.value,
-                include1: true,
-                include2: false,
-                caseSensitive: false,
-              ),
-            );
-            break;
-          case "gamemode":
-            filterConditions.add(
-              FilterCondition(
-                type: FilterConditionType.contains,
-                property: 'gamemode.value.title',
-                value1: entry.value,
-                include1: true,
-                include2: false,
-                caseSensitive: false,
-              ),
-            );
-            break;
-          case "title":
-            filterConditions.add(
-              FilterCondition(
-                type: FilterConditionType.contains,
-                property: 'title',
-                value1: entry.value,
-                include1: true,
-                include2: false,
-                caseSensitive: false,
-              ),
-            );
-            break;
-          default:
-            return [];
-        }
-      }
-      return await db.settings
-          .buildQuery<Setting>(
-            filter: FilterGroup(
-                filters: filterConditions, type: FilterGroupType.and),
-          )
-          .findAll();
-    } catch (e, stacktrace) {
-      logger.warning("Whoops, that's an error! \n $e \n $stacktrace");
-      return [];
-    }
-  }
-
-  /// Returns a sorted list based on specified setting indexes
-  Future<List<Setting>> getSettingList(List<Map<String, Sort>> indexes) async {
-    try {
-      Isar db = await isarDB;
-      // Default case; sort by id
-      if (indexes.isEmpty) {
-        List<Setting> settings = await db.settings.where().findAll();
-        return settings;
-      }
-      // Building a dynamic query to execute based on the user sorting preferences
-      List<SortProperty> sortProperties = [];
-      for (Map<String, Sort> index in indexes) {
-        switch (index.entries.first.key) {
-          case "program":
-            sortProperties.add(SortProperty(
-                property: 'program.value.abbreviation',
-                sort: index.entries.first.value));
-            break;
-          case "title":
-            sortProperties.add(SortProperty(
-                property: 'title.name', sort: index.entries.first.value));
-            break;
-          case "gamemode":
-            sortProperties.add(SortProperty(
-                property: 'gamemode.value.title',
-                sort: index.entries.first.value));
-            break;
-          case "enabled":
-            sortProperties.add(SortProperty(
-                property: 'enabled', sort: index.entries.first.value));
-            break;
-        }
-      }
-      List<Setting> settings = await db.settings
-          .buildQuery<Setting>(sortBy: sortProperties)
-          .findAll();
-      return settings;
-    } catch (e, stacktrace) {
-      logger.warning("Whoops, that's an error! \n $e \n $stacktrace");
-      return [];
-    }
-  }
-
-  /// Update all given programs
-  Future<List<Setting?>?> updateSettings(List<Setting> settings) async {
-    try {
-      Isar db = await isarDB;
-      List<int> ids = await db.settings.putAll(settings);
-      return await db.settings.getAll(ids);
-    } catch (e, stacktrace) {
-      logger.warning("Whoops, that's an error! \n $e \n $stacktrace");
-      return null;
-    }
-  }
-
-  /// Deletes all programs with the selected ids
-  Future<int?> deleteSettings(List<int> settingIds) async {
-    try {
-      Isar db = await isarDB;
-      int numDeletedSettings = await db.settings.deleteAll(settingIds);
-      return numDeletedSettings;
-    } catch (e, stacktrace) {
-      logger.warning("Whoops, that's an error! \n $e \n $stacktrace");
-      return null;
-    }
-  }
-
   /// Retrieve team by name, color, or score
   /// The score index is primarily for determining a winner
-  Future<List<Team?>> getTeam(Map<String, dynamic> index) async {
+  Future<List<Team>> getTeam(Map<String, dynamic> index) async {
     try {
       Isar db = await isarDB;
       switch (index.entries.first.key) {
@@ -853,3 +690,61 @@ class Storage {
     }
   }
 }
+
+Storage storage = Storage();
+
+/*
+class ProgramRunner extends Flython {
+  List<Player>? players;
+  ProgramRunner({this.players});
+
+  // Runs the DWTP script with the player parameters
+  // TODO: change ```true``` to false once done debugging
+  Flython flython = Flython()
+    ..initialize('python.exe', 'assets/scripts/DWTP.py', true);
+
+  Future<dynamic> runPrograms() async {
+    if (players == null) {
+      throw Exception("players cannot be null when running the program");
+    }
+    List<Map<String, dynamic>> command = [];
+    for (Player player in players!) {
+      command.add(player.toMap());
+    }
+    dynamic output = await runCommand(command);
+  }
+
+  Future<bool> checkToken(id) async {
+    // Verify if the token is a valid text channel id
+    List<Map<String, dynamic>> command = [];
+    command.add({'program': 'utils.py', 'function': 'checkToken', 'id': id});
+    bool output = await runCommand(command);
+    return output;
+  }
+}
+
+
+/// An abstract class for determining the layout of the settings associated
+/// with a particular gamemode or program
+/// 
+abstract class Layout {
+  // Unimplemented methods
+  List<> columnLayout(SortType sort);
+
+  List<> rowLayout(SortType sort);
+
+  List<> gamepadLayout(); 
+}
+*/
+
+/// A LayoutType is selected for a graphic.
+/// Based on that layout type, a specific layout is implemented
+/// for the GUI
+enum LayoutTypes {
+  columns,
+  rows,
+  gamepad;
+}
+
+// THESE SEEM LIKE AN UNNECESSARY LIMITATION ON ISAR
+// ISAR SUPPORTS SO MANY SORTING OPTIONS; WHY WOULD I KNOWINGLY LIMIT THEM?

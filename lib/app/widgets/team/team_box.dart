@@ -4,7 +4,11 @@ import 'package:adifferentwaytoplay/domain/entities/team.dart';
 import 'package:flutter/material.dart';
 import 'package:adifferentwaytoplay/app/widgets/text.dart';
 
-// This goes inside a horizontal ListView
+/// A selector for choosing a player's team affiliation;
+/// goes inside a horizontal ListView
+/// ```
+///
+/// ```
 class TeamBox extends StatelessWidget {
   Team team;
   TeamBox({super.key, required this.team});

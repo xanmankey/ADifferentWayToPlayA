@@ -1,10 +1,11 @@
-import 'package:adifferentwaytoplay/app/widgets/settings/settings_checkbox.dart';
-import 'package:adifferentwaytoplay/app/widgets/settings/settings_dropdown.dart';
-import 'package:adifferentwaytoplay/app/widgets/settings/settings_field.dart';
-import 'package:adifferentwaytoplay/domain/entities/settings.dart';
-import 'package:adifferentwaytoplay/domain/utils/utils.dart';
 import 'package:flutter/material.dart';
 
+import 'package:adifferentwaytoplay/app/widgets/utility/DWTP_dropdown.dart';
+import 'package:adifferentwaytoplay/app/widgets/utility/DWTP_field.dart';
+import 'package:adifferentwaytoplay/domain/utils/utils.dart';
+
+/// A function for returning a Color associated with the type of input;
+/// uses the xbox controller colorscheme
 Color inputTypeColor(InputTypes? type) {
   switch (type) {
     case InputTypes.button:

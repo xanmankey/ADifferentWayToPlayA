@@ -1,7 +1,9 @@
 // import 'dart:convert';
+import 'dart:convert';
+
+import 'package:adifferentwaytoplay/app/utils/constants.dart';
 import 'package:adifferentwaytoplay/domain/entities/player.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
-import 'package:adifferentwaytoplay/domain/entities/settings.dart';
 import 'package:isar/isar.dart';
 
 part 'program.g.dart';
@@ -29,6 +31,9 @@ class Program {
   @Index(unique: true, caseSensitive: false)
   late String abbreviation;
 
+  @Index()
+  late bool enabled;
+
   @Index(unique: true)
   late String name;
 
@@ -39,9 +44,22 @@ class Program {
   // which will then add it to DWTP.py
   late String script;
 
+  late int score;
+
   String? description;
 
-  var settings = IsarLinks<Setting>();
+  @enumerated
+  late ProgramOptions programOptions;
+
+  /// mapValues is a {key:value} dict. for writing dynamic data
+  /// Object is used (at the cost of the safety of static typing)
+  /// so the value can potentially be anything and can
+  /// be cast by the user accordingly
+  @Ignore()
+  Map<String, Setting> mapValues = {};
+
+  String get values => jsonEncode(mapValues);
+  set values(String json) => mapValues = jsonDecode(json);
 
   @Backlink(to: 'program')
   var player = IsarLink<Player>();
@@ -49,7 +67,7 @@ class Program {
   @override
   String toString() {
     return '''$id: {name: $name, image: $image, abbreviation: $abbreviation,
-    description: $description}''';
+    description: $description, mapValues: ${mapValues.toString()}}''';
   }
 
   /*

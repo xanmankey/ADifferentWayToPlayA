@@ -1,4 +1,6 @@
 // import 'dart:convert';
+import 'dart:convert';
+
 import 'package:adifferentwaytoplay/domain/entities/character.dart';
 import 'package:adifferentwaytoplay/domain/entities/gamemode.dart';
 import 'package:adifferentwaytoplay/domain/entities/gamepad.dart';
@@ -42,6 +44,9 @@ class Player {
   @Index()
   int score = 0;
 
+  @Index()
+  late bool ready;
+
   // Getters
   // Not really necessary because you can access these properties via isar links
   // int get index => gamepad.index;
@@ -52,6 +57,16 @@ class Player {
   @override
   String toString() {
     return '''$id: {score: $score, color: $color}''';
+  }
+
+  // Converting to a map for running the python script
+  Map<String, Object?> toMap() {
+    return {
+      "index": gamepad.value?.index,
+      "program": program.value?.abbreviation,
+      "programValues": program.value?.mapValues,
+      "team": team.value?.name,
+    };
   }
 
   /*

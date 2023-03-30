@@ -9,7 +9,6 @@ import 'package:test/test.dart';
 // and root out any errors early on in the process (TDD)
 void main() async {
   // Initialize storage (which will initialize data)
-  Storage storage = Storage();
   // Character tests
   group("Retrieve character by index: ", () {
     test('name', (() async {

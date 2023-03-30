@@ -1,14 +1,17 @@
 // A widget for structuring entries in the character gallery
 import 'dart:io';
 
+import 'package:adifferentwaytoplay/app/pages/exception_view.dart';
+import 'package:adifferentwaytoplay/app/widgets/text.dart';
+import 'package:adifferentwaytoplay/data/utils/utils.dart';
 import 'package:adifferentwaytoplay/domain/entities/program.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
 class ProgramEntry extends StatefulWidget {
-  Program? program;
-  ProgramEntry({super.key, this.program});
+  Program program;
+  ProgramEntry({super.key, required this.program});
 
   @override
   State<ProgramEntry> createState() => _ProgramEntryState();
@@ -17,38 +20,29 @@ class ProgramEntry extends StatefulWidget {
 class _ProgramEntryState extends State<ProgramEntry> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+  // The script must be a valid path
   final TextEditingController scriptController = TextEditingController();
-  late bool creation;
-  late List<Widget> buttonWidgets;
-  late List<Widget> triggerWidgets;
-  late List<Widget> stickWidgets;
-  late List<Widget> otherWidgets;
+  final TextEditingController scoreController = TextEditingController();
+  late Future<List<Program?>?>? programFuture;
 
   @override
-  void initState() async {
-    if (widget.program != null) {
-      titleController.text = widget.program!.name;
-      descriptionController.text = widget.program!.description ?? '';
-      if (await Directory(widget.program!.script).exists()) {
-        scriptController.text = widget.program!.script;
-      }
-      creation = false;
+  void initState() {
+    titleController.text = widget.program.name;
+    descriptionController.text = widget.program.description ?? '';
+    // The script must exist; if it does not, the program is disabled by default
+    if ((Directory(widget.program.script).existsSync()) &&
+        (widget.program.script.contains(".py"))) {
+      scriptController.text = widget.program.script;
     } else {
-      creation = true;
-      widget.program = Program();
+      widget.program.enabled = false;
+      programFuture = storage.updatePrograms([widget.program]);
     }
-    Map<String, List<Widget>> settingsWidgets =
-        sortByInputType(widget.program!.settings.toList());
-    buttonWidgets = settingsWidgets['button'] ?? [];
-    triggerWidgets = settingsWidgets['trigger'] ?? [];
-    stickWidgets = settingsWidgets['stick'] ?? [];
-    otherWidgets = settingsWidgets['other'] ?? [];
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    Widget programEntryBuildCode = Column(
       children: [
         TextField(
           controller: titleController,
@@ -58,6 +52,10 @@ class _ProgramEntryState extends State<ProgramEntry> {
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
           ),
+          onEditingComplete: () async {
+            widget.program.name = titleController.text;
+            await storage.updatePrograms([widget.program]);
+          },
         ),
         TextField(
           controller: descriptionController,
@@ -69,49 +67,54 @@ class _ProgramEntryState extends State<ProgramEntry> {
             disabledBorder: InputBorder.none,
             hintText: "Description",
           ),
+          onEditingComplete: () async {
+            widget.program.description = descriptionController.text;
+            await storage.updatePrograms([widget.program]);
+          },
         ),
-        (creation)
-            ? GestureDetector(
-                child: Image(image: FileImage(File(widget.program!.image))),
-                onTap: () async {
-                  FilePickerResult? result =
-                      await FilePicker.platform.pickFiles(type: FileType.image);
-                  if (result != null) {
-                    setState(() {
-                      widget.program!.image = result.files.single.path!;
-                    });
-                  }
-                },
-              )
-            : GestureDetector(
-                child: const Icon(Icons.image),
-                onTap: () async {
-                  FilePickerResult? result =
-                      await FilePicker.platform.pickFiles(type: FileType.image);
-                  if (result != null) {
-                    setState(() {
-                      widget.program!.image = result.files.single.path!;
-                    });
-                  }
-                },
-              ),
+        GestureDetector(
+          child: const Icon(Icons.image),
+          onTap: () async {
+            FilePickerResult? result =
+                await FilePicker.platform.pickFiles(type: FileType.image);
+            if (result != null) {
+              setState(() {
+                widget.program.image = result.files.single.path!;
+              });
+              await storage.updatePrograms([widget.program]);
+            }
+          },
+        ),
         Row(
           children: [
-            ListView(
-              children: [for (Widget widget in buttonWidgets) widget],
+            GestureDetector(
+              child: TextWidget(text: widget.program.script),
+              onTap: () async {
+                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                    type: FileType.custom, allowedExtensions: ['.py']);
+                if (result != null) {
+                  setState(() {
+                    widget.program.script = result.files.single.path!;
+                  });
+                  await storage.updatePrograms([widget.program]);
+                }
+              },
             ),
-            ListView(
-              children: [for (Widget widget in triggerWidgets) widget],
-            ),
-            ListView(
-              children: [for (Widget widget in stickWidgets) widget],
-            ),
-            ListView(
-              children: [for (Widget widget in otherWidgets) widget],
-            )
           ],
         ),
+        widget.program.programOptions.toWidget(),
       ],
     );
+
+    return (programFuture != null)
+        ? FutureBuilder(
+            future: programFuture,
+            builder: (context, snapshot) => (snapshot.hasData)
+                ? programEntryBuildCode
+                : (snapshot.hasError)
+                    ? ExceptionWidget(error: snapshot.error.toString())
+                    : const CircularProgressIndicator(),
+          )
+        : programEntryBuildCode;
   }
 }

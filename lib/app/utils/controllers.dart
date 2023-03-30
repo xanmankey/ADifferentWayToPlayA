@@ -1,3 +1,4 @@
+/*
 // A file that I'm experimenting with to handle device input
 import 'dart:ffi';
 // For time purposes
@@ -41,3 +42,4 @@ final inputSize = allocate<Uint32>();
 inputSize.value = sizeOf<RAWINPUT>();
 
 final result = getRawInputData(input, RID_INPUT, input, inputSize);
+*/

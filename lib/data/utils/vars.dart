@@ -6,7 +6,6 @@ import 'package:adifferentwaytoplay/domain/entities/gamemode.dart';
 import 'package:adifferentwaytoplay/domain/entities/gamepad.dart';
 import 'package:adifferentwaytoplay/domain/entities/player.dart';
 import 'package:adifferentwaytoplay/domain/entities/program.dart';
-import 'package:adifferentwaytoplay/domain/entities/settings.dart';
 import 'package:adifferentwaytoplay/domain/entities/team.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
 
@@ -63,6 +62,8 @@ class ColorVars {
   static int white = 0xFFFFFFFF;
 }
 
+// ProgramRunner programRunner = ProgramRunner();
+
 /// ALL objects (including the ones in lists) are also variables
 /// for testing convenience (I want to sort manually)
 // Initial collection data
@@ -74,31 +75,36 @@ class ProgramData {
     ..description =
         "Bringing the principles of democracy to video games in an all new way!"
     ..name = "Multiple Inputs One Port (MIOP)"
-    ..abbreviation = "MIOP";
+    ..abbreviation = "MIOP"
+    ..score = 6;
   static Program TC = Program()
     ..image = "assets/images/TC.png"
     ..description = "'Couldn't have said it better myself'"
     ..name = "Text Commands (TC)"
     ..abbreviation = "TC"
-    ..settings.addAll(TCsettings);
+    ..mapValues.addAll(TCsettings)
+    ..score = 8;
   static Program RC = Program()
     ..image = "assets/images/RC.png"
     ..description = "'For when up feels like down'"
     ..name = "Randomized Controls (RC)"
     ..abbreviation = "RC"
-    ..settings.addAll(RCsettings);
+    ..mapValues.addAll(RCsettings)
+    ..score = 4;
   static Program FC = Program()
     ..image = "assets/images/FC.png"
     ..description = "'I've always been a one-press kind of guy'"
     ..name = "Filtered Controls (FC)"
     ..abbreviation = "FC"
-    ..settings.addAll(FCsettings);
+    ..mapValues.addAll(FCsettings)
+    ..score = 7;
   static Program DC = Program()
     ..image = "assets/images/DC.png"
     ..description = "'Who says you have to spend \$60 on a controller?'"
     ..name = "Different Controllers (DC)"
     ..abbreviation = "DC"
-    ..settings.addAll(DCsettings);
+    ..mapValues.addAll(DCsettings)
+    ..score = 5;
   static Program TESTProgram = Program()
     ..image = "assets/images/noTestImage.png"
     ..description = "'I've always been a testing kind of guy'"
@@ -125,7 +131,30 @@ List<Program> programs = [
 /// Get all the settings not part of a group that have that program. Display them.
 /// Display the settings that ARE part of a group by displaying the card
 /// and then retrieving the other settings as a dialog on press
+/// (note that loading the token happens in the python script)
+/// How to handle exceptions?
 class TCSettingsData {
+  static Setting channelID = Setting()
+    ..title = "Discord text channel ID"
+    ..description =
+        "The Discord text channel ID from which commands should be read"
+    ..enabled = true
+    ..individual = true
+    ..widget = SettingsWidgets.textField
+    ..ready = false
+    ..validation = ((value) {
+      if (value as int != 19) {
+        return 'Not a valid text channel id length';
+      }
+      // TODO: I wanted to validate in here, but unfortunately async validators
+      // require some extra work, and it'd probably easier to just validate in python
+      // bool isId = programRunner.checkToken(value);
+      // if (isId != true) {
+      //   return "Not a valid text channel id";
+      // }
+      return null;
+    });
+
   static Setting aSetting = Setting()
     ..title = Inputs.a.toString()
     ..description = "Presses the A button"
@@ -157,7 +186,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting bSetting = Setting()
     ..title = Inputs.b.toString()
@@ -190,7 +220,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting xSetting = Setting()
     ..title = Inputs.x.toString()
@@ -223,7 +254,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting ySetting = Setting()
     ..title = Inputs.y.toString()
@@ -256,7 +288,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting rbSetting = Setting()
     ..title = Inputs.rb.toString()
@@ -289,7 +322,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting lbSetting = Setting()
     ..title = Inputs.lb.toString()
@@ -322,7 +356,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting startSetting = Setting()
     ..title = Inputs.start.toString()
@@ -355,7 +390,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting selectSetting = Setting()
     ..title = Inputs.select.toString()
@@ -388,7 +424,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting lThumbSetting = Setting()
     ..title = "lThumb"
@@ -421,7 +458,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting toggleASetting = Setting()
     ..title = "toggleA"
@@ -454,7 +492,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting toggleBSetting = Setting()
     ..title = "toggleB"
@@ -487,7 +526,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting toggleXSetting = Setting()
     ..title = "toggleX"
@@ -520,7 +560,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting toggleYSetting = Setting()
     ..title = "toggleY"
@@ -553,7 +594,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting ltSetting = Setting()
     ..title = "LT"
@@ -586,7 +628,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.trigger;
+    ..inputType = InputTypes.trigger
+    ..widget = SettingsWidgets.card;
 
   static Setting rtSetting = Setting()
     ..title = "RT"
@@ -619,7 +662,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.trigger;
+    ..inputType = InputTypes.trigger
+    ..widget = SettingsWidgets.card;
 
   static Setting toggleLTSetting = Setting()
     ..title = "toggleLT"
@@ -652,7 +696,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.trigger;
+    ..inputType = InputTypes.trigger
+    ..widget = SettingsWidgets.card;
 
   static Setting toggleRTSetting = Setting()
     ..title = "toggleRT"
@@ -685,7 +730,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.trigger;
+    ..inputType = InputTypes.trigger
+    ..widget = SettingsWidgets.card;
 
   static Setting lightUpSetting = Setting()
     ..title = "lightUp"
@@ -718,7 +764,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.stick;
+    ..inputType = InputTypes.stick
+    ..widget = SettingsWidgets.card;
 
   static Setting lightDownSetting = Setting()
     ..title = "lightDown"
@@ -751,7 +798,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.stick;
+    ..inputType = InputTypes.stick
+    ..widget = SettingsWidgets.card;
 
   static Setting lightLeftSetting = Setting()
     ..title = "lightLeft"
@@ -784,7 +832,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.stick;
+    ..inputType = InputTypes.stick
+    ..widget = SettingsWidgets.card;
 
   static Setting lightRightSetting = Setting()
     ..title = "lightRight"
@@ -817,7 +866,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.stick;
+    ..inputType = InputTypes.stick
+    ..widget = SettingsWidgets.card;
 
   static Setting upSetting = Setting()
     ..title = "up"
@@ -850,7 +900,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.stick;
+    ..inputType = InputTypes.stick
+    ..widget = SettingsWidgets.card;
 
   static Setting downSetting = Setting()
     ..title = "down"
@@ -884,7 +935,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.stick;
+    ..inputType = InputTypes.stick
+    ..widget = SettingsWidgets.card;
 
   static Setting leftSetting = Setting()
     ..title = "left"
@@ -918,7 +970,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.stick;
+    ..inputType = InputTypes.stick
+    ..widget = SettingsWidgets.card;
 
   static Setting rightSetting = Setting()
     ..title = "right"
@@ -952,7 +1005,8 @@ class TCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.stick;
+    ..inputType = InputTypes.stick
+    ..widget = SettingsWidgets.card;
 }
 
 Setting TESTSetting = Setting()
@@ -986,7 +1040,8 @@ Setting TESTSetting = Setting()
     )[SettingsWidgets.inputsDropdown]!
         .id,
   ]
-  ..inputType = InputTypes.stick;
+  ..inputType = InputTypes.stick
+  ..widget = SettingsWidgets.card;
 
 Setting TESTSetting2 = Setting()
   ..title = "test2"
@@ -1019,7 +1074,8 @@ Setting TESTSetting2 = Setting()
     )[SettingsWidgets.inputsDropdown]!
         .id,
   ]
-  ..inputType = InputTypes.stick;
+  ..inputType = InputTypes.stick
+  ..widget = SettingsWidgets.card;
 
 List<Setting> TCsettings = [
   TCSettingsData.aSetting,
@@ -1055,19 +1111,22 @@ class RCSettingsData {
     ..description = "Randomizes buttons"
     ..enabled = true
     ..widget = SettingsWidgets.checkbox
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..individual = true;
   static Setting triggerSetting = Setting()
     ..title = "Randomize triggers?"
     ..description = "Randomizes triggers"
     ..enabled = true
     ..widget = SettingsWidgets.checkbox
-    ..inputType = InputTypes.trigger;
+    ..inputType = InputTypes.trigger
+    ..individual = true;
   static Setting stickSetting = Setting()
     ..title = "Randomize direction?"
     ..description = "Randomizes direction"
     ..enabled = false
     ..widget = SettingsWidgets.checkbox
-    ..inputType = InputTypes.stick;
+    ..inputType = InputTypes.stick
+    ..individual = true;
 }
 
 List<Setting> RCsettings = [
@@ -1077,6 +1136,16 @@ List<Setting> RCsettings = [
 ];
 
 class FCSettingsData {
+  static Setting filter = Setting()
+    ..title = "filter type"
+    ..description =
+        "Type of filter that occurs after you exhaust all your inputs"
+    ..enabled = true
+    ..individual = true
+    ..ready = false
+    ..widget = SettingsWidgets.filtersDropdown
+    ..mapValues = {"filter": Filters.stop};
+
   static Setting aSetting = Setting()
     ..title = Inputs.a.toString()
     ..enabled = true
@@ -1094,14 +1163,6 @@ class FCSettingsData {
       )[SettingsWidgets.numField]!
           .id,
       createSettings(
-        [SettingsWidgets.checkbox],
-        title: "presses",
-        description: "The type of filter that happens after the desired effect",
-        enabled: aSetting.enabled,
-        mapValues: {"filter": Filters.stop},
-      )[SettingsWidgets.checkbox]!
-          .id,
-      createSettings(
         [SettingsWidgets.inputsDropdown],
         title: "input",
         enabled: aSetting.enabled,
@@ -1109,7 +1170,8 @@ class FCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting bSetting = Setting()
     ..title = Inputs.b.toString()
@@ -1128,14 +1190,6 @@ class FCSettingsData {
       )[SettingsWidgets.numField]!
           .id,
       createSettings(
-        [SettingsWidgets.checkbox],
-        title: "presses",
-        description: "The type of filter that happens after the desired effect",
-        enabled: bSetting.enabled,
-        mapValues: {"filter": Filters.stop},
-      )[SettingsWidgets.checkbox]!
-          .id,
-      createSettings(
         [SettingsWidgets.inputsDropdown],
         title: "input",
         enabled: bSetting.enabled,
@@ -1143,7 +1197,8 @@ class FCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting xSetting = Setting()
     ..title = Inputs.x.toString()
@@ -1162,14 +1217,6 @@ class FCSettingsData {
       )[SettingsWidgets.numField]!
           .id,
       createSettings(
-        [SettingsWidgets.checkbox],
-        title: "presses",
-        description: "The type of filter that happens after the desired effect",
-        enabled: xSetting.enabled,
-        mapValues: {"filter": Filters.stop},
-      )[SettingsWidgets.checkbox]!
-          .id,
-      createSettings(
         [SettingsWidgets.inputsDropdown],
         title: "input",
         enabled: xSetting.enabled,
@@ -1177,7 +1224,8 @@ class FCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting ySetting = Setting()
     ..title = Inputs.y.toString()
@@ -1196,14 +1244,6 @@ class FCSettingsData {
       )[SettingsWidgets.numField]!
           .id,
       createSettings(
-        [SettingsWidgets.checkbox],
-        title: "presses",
-        description: "The type of filter that happens after the desired effect",
-        enabled: ySetting.enabled,
-        mapValues: {"filter": Filters.stop},
-      )[SettingsWidgets.checkbox]!
-          .id,
-      createSettings(
         [SettingsWidgets.inputsDropdown],
         title: "input",
         enabled: ySetting.enabled,
@@ -1211,7 +1251,8 @@ class FCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting rbSetting = Setting()
     ..title = Inputs.rb.toString()
@@ -1230,14 +1271,6 @@ class FCSettingsData {
       )[SettingsWidgets.numField]!
           .id,
       createSettings(
-        [SettingsWidgets.checkbox],
-        title: "presses",
-        description: "The type of filter that happens after the desired effect",
-        enabled: rbSetting.enabled,
-        mapValues: {"filter": Filters.stop},
-      )[SettingsWidgets.checkbox]!
-          .id,
-      createSettings(
         [SettingsWidgets.inputsDropdown],
         title: "input",
         enabled: rbSetting.enabled,
@@ -1245,7 +1278,8 @@ class FCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting lbSetting = Setting()
     ..title = Inputs.lb.toString()
@@ -1264,14 +1298,6 @@ class FCSettingsData {
       )[SettingsWidgets.numField]!
           .id,
       createSettings(
-        [SettingsWidgets.checkbox],
-        title: "presses",
-        description: "The type of filter that happens after the desired effect",
-        enabled: lbSetting.enabled,
-        mapValues: {"filter": Filters.stop},
-      )[SettingsWidgets.checkbox]!
-          .id,
-      createSettings(
         [SettingsWidgets.inputsDropdown],
         title: "input",
         enabled: lbSetting.enabled,
@@ -1279,7 +1305,8 @@ class FCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting start = Setting()
     ..title = Inputs.start.toString()
@@ -1298,14 +1325,6 @@ class FCSettingsData {
       )[SettingsWidgets.numField]!
           .id,
       createSettings(
-        [SettingsWidgets.checkbox],
-        title: "presses",
-        description: "The type of filter that happens after the desired effect",
-        enabled: start.enabled,
-        mapValues: {"filter": Filters.stop},
-      )[SettingsWidgets.checkbox]!
-          .id,
-      createSettings(
         [SettingsWidgets.inputsDropdown],
         title: "input",
         enabled: start.enabled,
@@ -1313,7 +1332,8 @@ class FCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting select = Setting()
     ..title = Inputs.select.toString()
@@ -1332,14 +1352,6 @@ class FCSettingsData {
       )[SettingsWidgets.numField]!
           .id,
       createSettings(
-        [SettingsWidgets.checkbox],
-        title: "presses",
-        description: "The type of filter that happens after the desired effect",
-        enabled: select.enabled,
-        mapValues: {"filter": Filters.stop},
-      )[SettingsWidgets.checkbox]!
-          .id,
-      createSettings(
         [SettingsWidgets.inputsDropdown],
         title: "input",
         enabled: select.enabled,
@@ -1347,7 +1359,8 @@ class FCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting lthumbSetting = Setting()
     ..title = Inputs.lThumb.toString()
@@ -1366,14 +1379,6 @@ class FCSettingsData {
       )[SettingsWidgets.numField]!
           .id,
       createSettings(
-        [SettingsWidgets.checkbox],
-        title: "presses",
-        description: "The type of filter that happens after the desired effect",
-        enabled: lthumbSetting.enabled,
-        mapValues: {"filter": Filters.stop},
-      )[SettingsWidgets.checkbox]!
-          .id,
-      createSettings(
         [SettingsWidgets.inputsDropdown],
         title: "input",
         enabled: lthumbSetting.enabled,
@@ -1381,7 +1386,8 @@ class FCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting ltSetting = Setting()
     ..title = Inputs.lt.toString()
@@ -1400,14 +1406,6 @@ class FCSettingsData {
       )[SettingsWidgets.numField]!
           .id,
       createSettings(
-        [SettingsWidgets.checkbox],
-        title: "presses",
-        description: "The type of filter that happens after the desired effect",
-        enabled: ltSetting.enabled,
-        mapValues: {"filter": Filters.stop},
-      )[SettingsWidgets.checkbox]!
-          .id,
-      createSettings(
         [SettingsWidgets.inputsDropdown],
         title: "input",
         enabled: ltSetting.enabled,
@@ -1415,7 +1413,8 @@ class FCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.trigger;
+    ..inputType = InputTypes.trigger
+    ..widget = SettingsWidgets.card;
 
   static Setting rtSetting = Setting()
     ..title = Inputs.rt.toString()
@@ -1434,14 +1433,6 @@ class FCSettingsData {
       )[SettingsWidgets.numField]!
           .id,
       createSettings(
-        [SettingsWidgets.checkbox],
-        title: "presses",
-        description: "The type of filter that happens after the desired effect",
-        enabled: rtSetting.enabled,
-        mapValues: {"filter": Filters.stop},
-      )[SettingsWidgets.checkbox]!
-          .id,
-      createSettings(
         [SettingsWidgets.inputsDropdown],
         title: "input",
         enabled: rtSetting.enabled,
@@ -1449,7 +1440,8 @@ class FCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.trigger;
+    ..inputType = InputTypes.trigger
+    ..widget = SettingsWidgets.card;
 
   static Setting upSetting = Setting()
     ..title = Inputs.lUp.toString()
@@ -1468,14 +1460,6 @@ class FCSettingsData {
       )[SettingsWidgets.numField]!
           .id,
       createSettings(
-        [SettingsWidgets.checkbox],
-        title: "presses",
-        description: "The type of filter that happens after the desired effect",
-        enabled: upSetting.enabled,
-        mapValues: {"filter": Filters.stop},
-      )[SettingsWidgets.checkbox]!
-          .id,
-      createSettings(
         [SettingsWidgets.inputsDropdown],
         title: "input",
         enabled: upSetting.enabled,
@@ -1483,7 +1467,8 @@ class FCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.stick;
+    ..inputType = InputTypes.stick
+    ..widget = SettingsWidgets.card;
 
   static Setting downSetting = Setting()
     ..title = Inputs.lDown.toString()
@@ -1502,14 +1487,6 @@ class FCSettingsData {
       )[SettingsWidgets.numField]!
           .id,
       createSettings(
-        [SettingsWidgets.checkbox],
-        title: "presses",
-        description: "The type of filter that happens after the desired effect",
-        enabled: downSetting.enabled,
-        mapValues: {"filter": Filters.stop},
-      )[SettingsWidgets.checkbox]!
-          .id,
-      createSettings(
         [SettingsWidgets.inputsDropdown],
         title: "input",
         enabled: downSetting.enabled,
@@ -1517,7 +1494,8 @@ class FCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.stick;
+    ..inputType = InputTypes.stick
+    ..widget = SettingsWidgets.card;
 
   static Setting leftSetting = Setting()
     ..title = Inputs.lLeft.toString()
@@ -1536,14 +1514,6 @@ class FCSettingsData {
       )[SettingsWidgets.numField]!
           .id,
       createSettings(
-        [SettingsWidgets.checkbox],
-        title: "presses",
-        description: "The type of filter that happens after the desired effect",
-        enabled: leftSetting.enabled,
-        mapValues: {"filter": Filters.stop},
-      )[SettingsWidgets.checkbox]!
-          .id,
-      createSettings(
         [SettingsWidgets.inputsDropdown],
         title: "input",
         enabled: leftSetting.enabled,
@@ -1551,7 +1521,8 @@ class FCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.stick;
+    ..inputType = InputTypes.stick
+    ..widget = SettingsWidgets.card;
 
   static Setting rightSetting = Setting()
     ..title = Inputs.lRight.toString()
@@ -1570,14 +1541,6 @@ class FCSettingsData {
       )[SettingsWidgets.numField]!
           .id,
       createSettings(
-        [SettingsWidgets.checkbox],
-        title: "presses",
-        description: "The type of filter that happens after the desired effect",
-        enabled: rightSetting.enabled,
-        mapValues: {"filter": Filters.stop},
-      )[SettingsWidgets.checkbox]!
-          .id,
-      createSettings(
         [SettingsWidgets.inputsDropdown],
         title: "input",
         enabled: rightSetting.enabled,
@@ -1585,7 +1548,8 @@ class FCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.stick;
+    ..inputType = InputTypes.stick
+    ..widget = SettingsWidgets.card;
 }
 
 List<Setting> FCsettings = [
@@ -1607,39 +1571,28 @@ List<Setting> FCsettings = [
 ];
 
 class DCSettingsData {
+  static Setting deviceOption = Setting()
+    ..title = "Input device"
+    ..enabled = true
+    ..description = "The input device you want to use"
+    ..individual = true
+    ..ready = false
+    ..widget = SettingsWidgets.devicesDropdown;
+
+  static Setting controlLayoutFile = Setting()
+    ..title = "Control layout"
+    ..enabled = true
+    ..description = "For loading DC controller layouts"
+    ..widget = SettingsWidgets.layoutDropdown
+    ..mapValues = {"input": Inputs.a};
+
   static Setting aSetting = Setting()
     ..title = Inputs.a.toString()
     ..enabled = true
-    ..description =
-        "Number of alloted A presses until the desired effect occurs"
-    ..group = [
-      aSetting.id,
-      createSettings(
-        [SettingsWidgets.numField],
-        title: "filter",
-        description:
-            "The number of inputs that you can take before the desired effect",
-        enabled: aSetting.enabled,
-        mapValues: {"presses": 15},
-      )[SettingsWidgets.numField]!
-          .id,
-      createSettings(
-        [SettingsWidgets.checkbox],
-        title: "presses",
-        description: "The type of filter that happens after the desired effect",
-        enabled: aSetting.enabled,
-        mapValues: {"filter": Filters.stop},
-      )[SettingsWidgets.checkbox]!
-          .id,
-      createSettings(
-        [SettingsWidgets.inputsDropdown],
-        title: "input",
-        enabled: aSetting.enabled,
-        mapValues: {"input": Inputs.a},
-      )[SettingsWidgets.inputsDropdown]!
-          .id,
-    ]
-    ..inputType = InputTypes.button;
+    ..description = "Input for pressing the A button"
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.textField
+    ..mapValues = {"input": Inputs.a};
 
   static Setting bSetting = Setting()
     ..title = Inputs.b.toString()
@@ -1673,7 +1626,8 @@ class DCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting xSetting = Setting()
     ..title = Inputs.x.toString()
@@ -1707,7 +1661,8 @@ class DCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting ySetting = Setting()
     ..title = Inputs.y.toString()
@@ -1741,7 +1696,8 @@ class DCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting rbSetting = Setting()
     ..title = Inputs.rb.toString()
@@ -1775,7 +1731,8 @@ class DCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting lbSetting = Setting()
     ..title = Inputs.lb.toString()
@@ -1809,7 +1766,8 @@ class DCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting start = Setting()
     ..title = Inputs.start.toString()
@@ -1843,7 +1801,8 @@ class DCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting select = Setting()
     ..title = Inputs.select.toString()
@@ -1877,7 +1836,8 @@ class DCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting lthumbSetting = Setting()
     ..title = Inputs.lThumb.toString()
@@ -1911,7 +1871,8 @@ class DCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.button;
+    ..inputType = InputTypes.button
+    ..widget = SettingsWidgets.card;
 
   static Setting ltSetting = Setting()
     ..title = Inputs.lt.toString()
@@ -1945,7 +1906,8 @@ class DCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.trigger;
+    ..inputType = InputTypes.trigger
+    ..widget = SettingsWidgets.card;
 
   static Setting rtSetting = Setting()
     ..title = Inputs.rt.toString()
@@ -1979,7 +1941,8 @@ class DCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.trigger;
+    ..inputType = InputTypes.trigger
+    ..widget = SettingsWidgets.card;
 
   static Setting upSetting = Setting()
     ..title = Inputs.lUp.toString()
@@ -2013,7 +1976,8 @@ class DCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.stick;
+    ..inputType = InputTypes.stick
+    ..widget = SettingsWidgets.card;
 
   static Setting downSetting = Setting()
     ..title = Inputs.lDown.toString()
@@ -2047,7 +2011,8 @@ class DCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.stick;
+    ..inputType = InputTypes.stick
+    ..widget = SettingsWidgets.card;
 
   static Setting leftSetting = Setting()
     ..title = Inputs.lLeft.toString()
@@ -2081,7 +2046,8 @@ class DCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.stick;
+    ..inputType = InputTypes.stick
+    ..widget = SettingsWidgets.card;
 
   static Setting rightSetting = Setting()
     ..title = Inputs.lRight.toString()
@@ -2115,7 +2081,8 @@ class DCSettingsData {
       )[SettingsWidgets.inputsDropdown]!
           .id,
     ]
-    ..inputType = InputTypes.stick;
+    ..inputType = InputTypes.stick
+    ..widget = SettingsWidgets.card;
 }
 
 List<Setting> DCsettings = [

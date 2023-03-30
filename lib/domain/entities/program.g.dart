@@ -27,19 +27,40 @@ const ProgramSchema = CollectionSchema(
       name: r'description',
       type: IsarType.string,
     ),
-    r'image': PropertySchema(
+    r'enabled': PropertySchema(
       id: 2,
+      name: r'enabled',
+      type: IsarType.bool,
+    ),
+    r'image': PropertySchema(
+      id: 3,
       name: r'image',
       type: IsarType.string,
     ),
     r'name': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'name',
       type: IsarType.string,
     ),
+    r'programOptions': PropertySchema(
+      id: 5,
+      name: r'programOptions',
+      type: IsarType.byte,
+      enumMap: _ProgramprogramOptionsEnumValueMap,
+    ),
+    r'score': PropertySchema(
+      id: 6,
+      name: r'score',
+      type: IsarType.long,
+    ),
     r'script': PropertySchema(
-      id: 4,
+      id: 7,
       name: r'script',
+      type: IsarType.string,
+    ),
+    r'values': PropertySchema(
+      id: 8,
+      name: r'values',
       type: IsarType.string,
     )
   },
@@ -62,6 +83,19 @@ const ProgramSchema = CollectionSchema(
         )
       ],
     ),
+    r'enabled': IndexSchema(
+      id: -4605800638041043998,
+      name: r'enabled',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'enabled',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
+    ),
     r'name': IndexSchema(
       id: 879695947855722453,
       name: r'name',
@@ -77,12 +111,6 @@ const ProgramSchema = CollectionSchema(
     )
   },
   links: {
-    r'settings': LinkSchema(
-      id: -764559007759410233,
-      name: r'settings',
-      target: r'Setting',
-      single: false,
-    ),
     r'player': LinkSchema(
       id: -3048473050562855308,
       name: r'player',
@@ -114,6 +142,7 @@ int _programEstimateSize(
   bytesCount += 3 + object.image.length * 3;
   bytesCount += 3 + object.name.length * 3;
   bytesCount += 3 + object.script.length * 3;
+  bytesCount += 3 + object.values.length * 3;
   return bytesCount;
 }
 
@@ -125,9 +154,13 @@ void _programSerialize(
 ) {
   writer.writeString(offsets[0], object.abbreviation);
   writer.writeString(offsets[1], object.description);
-  writer.writeString(offsets[2], object.image);
-  writer.writeString(offsets[3], object.name);
-  writer.writeString(offsets[4], object.script);
+  writer.writeBool(offsets[2], object.enabled);
+  writer.writeString(offsets[3], object.image);
+  writer.writeString(offsets[4], object.name);
+  writer.writeByte(offsets[5], object.programOptions.index);
+  writer.writeLong(offsets[6], object.score);
+  writer.writeString(offsets[7], object.script);
+  writer.writeString(offsets[8], object.values);
 }
 
 Program _programDeserialize(
@@ -139,10 +172,16 @@ Program _programDeserialize(
   final object = Program();
   object.abbreviation = reader.readString(offsets[0]);
   object.description = reader.readStringOrNull(offsets[1]);
+  object.enabled = reader.readBool(offsets[2]);
   object.id = id;
-  object.image = reader.readString(offsets[2]);
-  object.name = reader.readString(offsets[3]);
-  object.script = reader.readString(offsets[4]);
+  object.image = reader.readString(offsets[3]);
+  object.name = reader.readString(offsets[4]);
+  object.programOptions =
+      _ProgramprogramOptionsValueEnumMap[reader.readByteOrNull(offsets[5])] ??
+          ProgramOptions.dcOptions;
+  object.score = reader.readLong(offsets[6]);
+  object.script = reader.readString(offsets[7]);
+  object.values = reader.readString(offsets[8]);
   return object;
 }
 
@@ -158,27 +197,51 @@ P _programDeserializeProp<P>(
     case 1:
       return (reader.readStringOrNull(offset)) as P;
     case 2:
-      return (reader.readString(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 3:
       return (reader.readString(offset)) as P;
     case 4:
+      return (reader.readString(offset)) as P;
+    case 5:
+      return (_ProgramprogramOptionsValueEnumMap[
+              reader.readByteOrNull(offset)] ??
+          ProgramOptions.dcOptions) as P;
+    case 6:
+      return (reader.readLong(offset)) as P;
+    case 7:
+      return (reader.readString(offset)) as P;
+    case 8:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
+const _ProgramprogramOptionsEnumValueMap = {
+  'dcOptions': 0,
+  'tcOptions': 1,
+  'fcOptions': 2,
+  'rcOptions': 3,
+  'miopOptions': 4,
+};
+const _ProgramprogramOptionsValueEnumMap = {
+  0: ProgramOptions.dcOptions,
+  1: ProgramOptions.tcOptions,
+  2: ProgramOptions.fcOptions,
+  3: ProgramOptions.rcOptions,
+  4: ProgramOptions.miopOptions,
+};
+
 Id _programGetId(Program object) {
   return object.id;
 }
 
 List<IsarLinkBase<dynamic>> _programGetLinks(Program object) {
-  return [object.settings, object.player];
+  return [object.player];
 }
 
 void _programAttach(IsarCollection<dynamic> col, Id id, Program object) {
   object.id = id;
-  object.settings.attach(col, col.isar.collection<Setting>(), r'settings', id);
   object.player.attach(col, col.isar.collection<Player>(), r'player', id);
 }
 
@@ -295,6 +358,14 @@ extension ProgramQueryWhereSort on QueryBuilder<Program, Program, QWhere> {
       return query.addWhereClause(const IdWhereClause.any());
     });
   }
+
+  QueryBuilder<Program, Program, QAfterWhere> anyEnabled() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'enabled'),
+      );
+    });
+  }
 }
 
 extension ProgramQueryWhere on QueryBuilder<Program, Program, QWhereClause> {
@@ -402,6 +473,51 @@ extension ProgramQueryWhere on QueryBuilder<Program, Program, QWhereClause> {
               indexName: r'abbreviation',
               lower: [],
               upper: [abbreviation],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterWhereClause> enabledEqualTo(
+      bool enabled) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'enabled',
+        value: [enabled],
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterWhereClause> enabledNotEqualTo(
+      bool enabled) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'enabled',
+              lower: [],
+              upper: [enabled],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'enabled',
+              lower: [enabled],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'enabled',
+              lower: [enabled],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'enabled',
+              lower: [],
+              upper: [enabled],
               includeUpper: false,
             ));
       }
@@ -733,6 +849,16 @@ extension ProgramQueryFilter
     });
   }
 
+  QueryBuilder<Program, Program, QAfterFilterCondition> enabledEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'enabled',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<Program, Program, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1045,6 +1171,113 @@ extension ProgramQueryFilter
     });
   }
 
+  QueryBuilder<Program, Program, QAfterFilterCondition> programOptionsEqualTo(
+      ProgramOptions value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'programOptions',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition>
+      programOptionsGreaterThan(
+    ProgramOptions value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'programOptions',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition> programOptionsLessThan(
+    ProgramOptions value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'programOptions',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition> programOptionsBetween(
+    ProgramOptions lower,
+    ProgramOptions upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'programOptions',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition> scoreEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'score',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition> scoreGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'score',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition> scoreLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'score',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition> scoreBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'score',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Program, Program, QAfterFilterCondition> scriptEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -1174,6 +1407,136 @@ extension ProgramQueryFilter
       ));
     });
   }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition> valuesEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'values',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition> valuesGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'values',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition> valuesLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'values',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition> valuesBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'values',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition> valuesStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'values',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition> valuesEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'values',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition> valuesContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'values',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition> valuesMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'values',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition> valuesIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'values',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition> valuesIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'values',
+        value: '',
+      ));
+    });
+  }
 }
 
 extension ProgramQueryObject
@@ -1181,63 +1544,6 @@ extension ProgramQueryObject
 
 extension ProgramQueryLinks
     on QueryBuilder<Program, Program, QFilterCondition> {
-  QueryBuilder<Program, Program, QAfterFilterCondition> settings(
-      FilterQuery<Setting> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'settings');
-    });
-  }
-
-  QueryBuilder<Program, Program, QAfterFilterCondition> settingsLengthEqualTo(
-      int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'settings', length, true, length, true);
-    });
-  }
-
-  QueryBuilder<Program, Program, QAfterFilterCondition> settingsIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'settings', 0, true, 0, true);
-    });
-  }
-
-  QueryBuilder<Program, Program, QAfterFilterCondition> settingsIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'settings', 0, false, 999999, true);
-    });
-  }
-
-  QueryBuilder<Program, Program, QAfterFilterCondition> settingsLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'settings', 0, true, length, include);
-    });
-  }
-
-  QueryBuilder<Program, Program, QAfterFilterCondition>
-      settingsLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'settings', length, include, 999999, true);
-    });
-  }
-
-  QueryBuilder<Program, Program, QAfterFilterCondition> settingsLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(
-          r'settings', lower, includeLower, upper, includeUpper);
-    });
-  }
-
   QueryBuilder<Program, Program, QAfterFilterCondition> player(
       FilterQuery<Player> q) {
     return QueryBuilder.apply(this, (query) {
@@ -1277,6 +1583,18 @@ extension ProgramQuerySortBy on QueryBuilder<Program, Program, QSortBy> {
     });
   }
 
+  QueryBuilder<Program, Program, QAfterSortBy> sortByEnabled() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'enabled', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterSortBy> sortByEnabledDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'enabled', Sort.desc);
+    });
+  }
+
   QueryBuilder<Program, Program, QAfterSortBy> sortByImage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'image', Sort.asc);
@@ -1301,6 +1619,30 @@ extension ProgramQuerySortBy on QueryBuilder<Program, Program, QSortBy> {
     });
   }
 
+  QueryBuilder<Program, Program, QAfterSortBy> sortByProgramOptions() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'programOptions', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterSortBy> sortByProgramOptionsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'programOptions', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterSortBy> sortByScore() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'score', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterSortBy> sortByScoreDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'score', Sort.desc);
+    });
+  }
+
   QueryBuilder<Program, Program, QAfterSortBy> sortByScript() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'script', Sort.asc);
@@ -1310,6 +1652,18 @@ extension ProgramQuerySortBy on QueryBuilder<Program, Program, QSortBy> {
   QueryBuilder<Program, Program, QAfterSortBy> sortByScriptDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'script', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterSortBy> sortByValues() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'values', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterSortBy> sortByValuesDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'values', Sort.desc);
     });
   }
 }
@@ -1337,6 +1691,18 @@ extension ProgramQuerySortThenBy
   QueryBuilder<Program, Program, QAfterSortBy> thenByDescriptionDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterSortBy> thenByEnabled() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'enabled', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterSortBy> thenByEnabledDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'enabled', Sort.desc);
     });
   }
 
@@ -1376,6 +1742,30 @@ extension ProgramQuerySortThenBy
     });
   }
 
+  QueryBuilder<Program, Program, QAfterSortBy> thenByProgramOptions() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'programOptions', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterSortBy> thenByProgramOptionsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'programOptions', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterSortBy> thenByScore() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'score', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterSortBy> thenByScoreDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'score', Sort.desc);
+    });
+  }
+
   QueryBuilder<Program, Program, QAfterSortBy> thenByScript() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'script', Sort.asc);
@@ -1385,6 +1775,18 @@ extension ProgramQuerySortThenBy
   QueryBuilder<Program, Program, QAfterSortBy> thenByScriptDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'script', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterSortBy> thenByValues() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'values', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterSortBy> thenByValuesDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'values', Sort.desc);
     });
   }
 }
@@ -1405,6 +1807,12 @@ extension ProgramQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Program, Program, QDistinct> distinctByEnabled() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'enabled');
+    });
+  }
+
   QueryBuilder<Program, Program, QDistinct> distinctByImage(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1419,10 +1827,29 @@ extension ProgramQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Program, Program, QDistinct> distinctByProgramOptions() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'programOptions');
+    });
+  }
+
+  QueryBuilder<Program, Program, QDistinct> distinctByScore() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'score');
+    });
+  }
+
   QueryBuilder<Program, Program, QDistinct> distinctByScript(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'script', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Program, Program, QDistinct> distinctByValues(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'values', caseSensitive: caseSensitive);
     });
   }
 }
@@ -1447,6 +1874,12 @@ extension ProgramQueryProperty
     });
   }
 
+  QueryBuilder<Program, bool, QQueryOperations> enabledProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'enabled');
+    });
+  }
+
   QueryBuilder<Program, String, QQueryOperations> imageProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'image');
@@ -1459,9 +1892,28 @@ extension ProgramQueryProperty
     });
   }
 
+  QueryBuilder<Program, ProgramOptions, QQueryOperations>
+      programOptionsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'programOptions');
+    });
+  }
+
+  QueryBuilder<Program, int, QQueryOperations> scoreProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'score');
+    });
+  }
+
   QueryBuilder<Program, String, QQueryOperations> scriptProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'script');
+    });
+  }
+
+  QueryBuilder<Program, String, QQueryOperations> valuesProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'values');
     });
   }
 }

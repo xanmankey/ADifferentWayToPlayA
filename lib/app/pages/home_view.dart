@@ -1,11 +1,12 @@
-// The home page is just a navigator/selector; it doesn't contain any data
 import 'dart:io';
-
-import 'package:adifferentwaytoplay/app/widgets/custom_appbar.dart';
+import 'package:adifferentwaytoplay/app/widgets/utility/custom_appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:adifferentwaytoplay/app/widgets/card_selector.dart';
-import 'package:adifferentwaytoplay/app/widgets/text.dart';
+import 'package:adifferentwaytoplay/app/widgets/utility/card_selector.dart';
+import 'package:adifferentwaytoplay/app/widgets/utility/text.dart';
 
+/// The current structure of the Home Screen;
+/// shaped like the 4 buttons on an xbox controller.
+/// Does not contain any variation, but can be adapted if desired
 class Home extends StatelessWidget {
   const Home({super.key});
 

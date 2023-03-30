@@ -1,22 +1,82 @@
 // A static class for easy-access scripts by abbreviation
 import 'package:adifferentwaytoplay/app/utils/utils.dart';
-import 'package:adifferentwaytoplay/domain/entities/settings.dart';
 import 'dart:math';
-
+import 'package:dartusbhid/enumerate.dart';
+import 'package:dartusbhid/usb_device.dart';
 import 'package:flutter/material.dart';
 
-class Scripts {
-  static String MIOP = "assets/scripts/MIOP.py";
-  static String TC = "assets/scripts/TC.py";
-  static String RC = "assets/scripts/RC.py";
-  static String FC = "assets/scripts/FC.py";
+/// An object with data for each custom setting
+/// Handy for initializing widget data
+/// ```
+///
+/// ```
+class Setting {
+  String name;
+  Object value;
+  String? description;
+
+  Setting({required this.name, required this.value, this.description = ''});
+}
+
+/// An enum of all the initial scripts in DWTP for easy access
+/// If a new program is added, it's script information can be retrieved
+/// from the isar database accordingly, but cannot be directly added to the
+/// constant enum
+/// ```
+///
+/// ```
+enum Scripts {
+  miop,
+  tc,
+  rc,
+  fc;
+
+  String toPath() {
+    switch (this) {
+      case Scripts.miop:
+        return "assets/scripts/MIOP.py";
+      case Scripts.tc:
+        return "assets/scripts/TC.py";
+      case Scripts.rc:
+        return "assets/scripts/RC.py";
+      case Scripts.fc:
+        return "assets/scripts/FC.py";
+      default:
+        return "";
+    }
+  }
+
+  @override
+  String toString() {
+    switch (this) {
+      case Scripts.miop:
+        return "MIOP";
+      case Scripts.tc:
+        return "TC";
+      case Scripts.rc:
+        return "RC";
+      case Scripts.fc:
+        return "FC";
+      default:
+        return "";
+    }
+  }
 }
 
 // Characters, Teams, and Gamepads ALL need colors
 // To determine the color of the player (gamepad -> character -> team)
 
-// A utility function for converting database values to
-// boolean type
+/// A utility function for converting database values to
+/// boolean type
+/// ```
+/// bool intToBool(int num) {
+///   if (num == 1) {
+///     return true;
+///   } else {
+///     return false;
+///   }
+/// }
+/// ```
 bool intToBool(int num) {
   if (num == 1) {
     return true;
@@ -27,6 +87,22 @@ bool intToBool(int num) {
 
 // A hash function for handling string indeces
 /// FNV-1a 64bit hash algorithm optimized for Dart Strings
+/// ```
+/// int fastHash(String string) {
+///   var hash = 0xcbf29ce484222325;
+///
+///   var i = 0;
+///   while (i < string.length) {
+///     final codeUnit = string.codeUnitAt(i++);
+///     hash ^= codeUnit >> 8;
+///     hash *= 0x100000001b3;
+///     hash ^= codeUnit & 0xFF;
+///     hash *= 0x100000001b3;
+///   }
+///
+///   return hash;
+/// }
+/// ```
 int fastHash(String string) {
   var hash = 0xcbf29ce484222325;
 
@@ -66,6 +142,8 @@ int fastHash(String string) {
 ///         return 'inputTypesDropdown';
 ///       case SettingsWidgets.inputsDropdown:
 ///         return 'inputsDropdown';
+///       case SettingsWidgets.devicesDropdown:
+///         return 'devicesDropdown';
 ///       case SettingsWidgets.checkbox:
 ///         return 'checkbox';
 ///       case SettingsWidgets.card:
@@ -89,6 +167,8 @@ enum SettingsWidgets {
   inputsDropdown,
   inputTypesDropdown,
   filtersDropdown,
+  devicesDropdown,
+  layoutDropdown,
   textField;
 
   @override
@@ -98,6 +178,10 @@ enum SettingsWidgets {
         return 'inputTypesDropdown';
       case SettingsWidgets.inputsDropdown:
         return 'inputsDropdown';
+      case SettingsWidgets.devicesDropdown:
+        return 'devicesDropdown';
+      case SettingsWidgets.layoutDropdown:
+        return 'layoutDropdown';
       case SettingsWidgets.checkbox:
         return 'checkbox';
       case SettingsWidgets.card:
@@ -171,6 +255,18 @@ enum InputTypes {
   }
 
   static Iterable<Inputs> get iterator => Iterable.castFrom(Inputs.values);
+}
+
+/// A list of connected devices
+/// Uses the dartusbhid package (https://pub.dev/packages/dartusbhid/install)
+/// to interface and work with HID devices
+/// It can also handle device inputs, so I will likely use it to create layouts
+/// ```
+///
+/// ```
+Future<List<USBDeviceInfo>> retrieveDevices() async {
+  List<USBDeviceInfo> devices = await enumerateDevices(0, 0);
+  return devices;
 }
 
 /// The Filter class; a convenience class for specifying the consequences
@@ -380,6 +476,8 @@ enum Inputs {
 }
 
 /// An enum for enums. For dropdown utility
+/// 'Devices' is not added to the enum, as devices are not
+/// compile-time constants, but rather are retrieved at runtime
 ///
 /// ```dart
 /// enum Items {
@@ -402,6 +500,10 @@ enum Items {
   final Iterable filtersIterable = Filters.iterator;
 }
 
+/// A function for generating a random 'quazi-unique' string
+/// ```
+///
+/// ```
 String generateRandomString(int stringLength) {
   final random = Random();
   const allChars =
@@ -411,11 +513,20 @@ String generateRandomString(int stringLength) {
       .join();
 }
 
+/// The following functions are depricated,
+/// as the idea of a user-built UI has been abandoned
+/// (at least for the forseeable future)
+/*
 /// A function for creating the creator bar settings objects
+/// ```
+///
+/// ```
 Map<SettingsWidgets, Setting> createSettings(List<SettingsWidgets> widgets,
     {String? title,
     String? description,
     bool? enabled,
+    bool? individual,
+    bool? ready,
     Map<String, dynamic>? mapValues}) {
   Map<SettingsWidgets, Setting> items = {};
   for (SettingsWidgets widget in widgets) {
@@ -424,6 +535,8 @@ Map<SettingsWidgets, Setting> createSettings(List<SettingsWidgets> widgets,
         ..title = title ?? generateRandomString(10)
         ..description = description
         ..enabled = enabled ?? true
+        ..individual = individual ?? false
+        ..ready = ready ?? true
         ..mapValues = mapValues ?? {}
         ..widget = widget
     });
@@ -431,6 +544,12 @@ Map<SettingsWidgets, Setting> createSettings(List<SettingsWidgets> widgets,
   return items;
 }
 
+/// A function for retrieving lists of widgets
+/// based on the inputType (button, trigger, stick, or other)
+/// of a widget. This can be handy for sorting by an input type property
+/// ```
+///
+/// ```
 Map<String, List<Widget>> sortByInputType(List<Setting> settings) {
   List<Widget> buttonWidgets = [];
   List<Widget> triggerWidgets = [];
@@ -456,6 +575,7 @@ Map<String, List<Widget>> sortByInputType(List<Setting> settings) {
     'button': buttonWidgets,
     'trigger': triggerWidgets,
     'stick': stickWidgets,
-    'other': otherWidgets
+    'other': otherWidgets,
   };
 }
+*/

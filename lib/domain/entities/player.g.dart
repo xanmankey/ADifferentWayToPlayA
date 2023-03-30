@@ -22,8 +22,13 @@ const PlayerSchema = CollectionSchema(
       name: r'color',
       type: IsarType.long,
     ),
-    r'score': PropertySchema(
+    r'ready': PropertySchema(
       id: 1,
+      name: r'ready',
+      type: IsarType.bool,
+    ),
+    r'score': PropertySchema(
+      id: 2,
       name: r'score',
       type: IsarType.long,
     )
@@ -55,6 +60,19 @@ const PlayerSchema = CollectionSchema(
       properties: [
         IndexPropertySchema(
           name: r'score',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
+    ),
+    r'ready': IndexSchema(
+      id: 4199397826300349067,
+      name: r'ready',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'ready',
           type: IndexType.value,
           caseSensitive: false,
         )
@@ -117,7 +135,8 @@ void _playerSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeLong(offsets[0], object.color);
-  writer.writeLong(offsets[1], object.score);
+  writer.writeBool(offsets[1], object.ready);
+  writer.writeLong(offsets[2], object.score);
 }
 
 Player _playerDeserialize(
@@ -129,7 +148,8 @@ Player _playerDeserialize(
   final object = Player();
   object.color = reader.readLong(offsets[0]);
   object.id = id;
-  object.score = reader.readLong(offsets[1]);
+  object.ready = reader.readBool(offsets[1]);
+  object.score = reader.readLong(offsets[2]);
   return object;
 }
 
@@ -143,6 +163,8 @@ P _playerDeserializeProp<P>(
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
+      return (reader.readBool(offset)) as P;
+    case 2:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -192,6 +214,14 @@ extension PlayerQueryWhereSort on QueryBuilder<Player, Player, QWhere> {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         const IndexWhereClause.any(indexName: r'score'),
+      );
+    });
+  }
+
+  QueryBuilder<Player, Player, QAfterWhere> anyReady() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'ready'),
       );
     });
   }
@@ -438,6 +468,49 @@ extension PlayerQueryWhere on QueryBuilder<Player, Player, QWhereClause> {
       ));
     });
   }
+
+  QueryBuilder<Player, Player, QAfterWhereClause> readyEqualTo(bool ready) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'ready',
+        value: [ready],
+      ));
+    });
+  }
+
+  QueryBuilder<Player, Player, QAfterWhereClause> readyNotEqualTo(bool ready) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'ready',
+              lower: [],
+              upper: [ready],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'ready',
+              lower: [ready],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'ready',
+              lower: [ready],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'ready',
+              lower: [],
+              upper: [ready],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
 }
 
 extension PlayerQueryFilter on QueryBuilder<Player, Player, QFilterCondition> {
@@ -541,6 +614,15 @@ extension PlayerQueryFilter on QueryBuilder<Player, Player, QFilterCondition> {
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Player, Player, QAfterFilterCondition> readyEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'ready',
+        value: value,
       ));
     });
   }
@@ -723,6 +805,18 @@ extension PlayerQuerySortBy on QueryBuilder<Player, Player, QSortBy> {
     });
   }
 
+  QueryBuilder<Player, Player, QAfterSortBy> sortByReady() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'ready', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Player, Player, QAfterSortBy> sortByReadyDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'ready', Sort.desc);
+    });
+  }
+
   QueryBuilder<Player, Player, QAfterSortBy> sortByScore() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'score', Sort.asc);
@@ -761,6 +855,18 @@ extension PlayerQuerySortThenBy on QueryBuilder<Player, Player, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Player, Player, QAfterSortBy> thenByReady() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'ready', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Player, Player, QAfterSortBy> thenByReadyDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'ready', Sort.desc);
+    });
+  }
+
   QueryBuilder<Player, Player, QAfterSortBy> thenByScore() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'score', Sort.asc);
@@ -781,6 +887,12 @@ extension PlayerQueryWhereDistinct on QueryBuilder<Player, Player, QDistinct> {
     });
   }
 
+  QueryBuilder<Player, Player, QDistinct> distinctByReady() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'ready');
+    });
+  }
+
   QueryBuilder<Player, Player, QDistinct> distinctByScore() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'score');
@@ -798,6 +910,12 @@ extension PlayerQueryProperty on QueryBuilder<Player, Player, QQueryProperty> {
   QueryBuilder<Player, int, QQueryOperations> colorProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'color');
+    });
+  }
+
+  QueryBuilder<Player, bool, QQueryOperations> readyProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'ready');
     });
   }
 

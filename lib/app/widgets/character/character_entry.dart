@@ -1,14 +1,20 @@
 // A widget for structuring entries in the character gallery
 import 'dart:io';
-
-import 'package:adifferentwaytoplay/domain/entities/character.dart';
-import 'package:adifferentwaytoplay/app/widgets/text.dart';
+import 'package:adifferentwaytoplay/data/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:file_picker/file_picker.dart';
 
+import 'package:adifferentwaytoplay/domain/entities/character.dart';
+import 'package:adifferentwaytoplay/app/widgets/text.dart';
+
+/// A stateful widget for displaying a character in PageView format as
+/// specified by DWTP_view.dart. Doubles as a character creator if one
+/// isn't specified or a character editor via the UI.
+/// ```
+///
+/// ```
 class CharacterEntry extends StatefulWidget {
-  // Becomes a character creator if a character isn't specified
   Character? character;
   CharacterEntry({super.key, this.character});
 
@@ -52,6 +58,10 @@ class _CharacterEntryState extends State<CharacterEntry> {
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
           ),
+          onEditingComplete: () async {
+            widget.character!.name = titleController.text;
+            await storage.updateCharacters([widget.character!]);
+          },
         ),
         (creation)
             ? GestureDetector(
@@ -63,6 +73,7 @@ class _CharacterEntryState extends State<CharacterEntry> {
                     setState(() {
                       widget.character!.image = result.files.single.path!;
                     });
+                    await storage.updateCharacters([widget.character!]);
                   }
                 },
               )
@@ -75,6 +86,7 @@ class _CharacterEntryState extends State<CharacterEntry> {
                     setState(() {
                       widget.character!.image = result.files.single.path!;
                     });
+                    await storage.updateCharacters([widget.character!]);
                   }
                 },
               ),
@@ -89,6 +101,10 @@ class _CharacterEntryState extends State<CharacterEntry> {
                 disabledBorder: InputBorder.none,
                 hintText: "Hit",
               ),
+              onEditingComplete: () async {
+                widget.character!.hit = hitController.text;
+                await storage.updateCharacters([widget.character!]);
+              },
             ),
             TextField(
               controller: missController,
@@ -99,6 +115,10 @@ class _CharacterEntryState extends State<CharacterEntry> {
                 disabledBorder: InputBorder.none,
                 hintText: "Miss",
               ),
+              onEditingComplete: () async {
+                widget.character!.miss = missController.text;
+                await storage.updateCharacters([widget.character!]);
+              },
             ),
           ],
         ),
@@ -121,8 +141,10 @@ class _CharacterEntryState extends State<CharacterEntry> {
                       pickerColor: (creation)
                           ? Color(widget.character!.color ?? 0x00FFFFFF)
                           : const Color(0x00FFFFFF),
-                      onColorChanged: ((color) =>
-                          (() => widget.character!.color = color.value)),
+                      onColorChanged: ((color) => (() async {
+                            widget.character!.color = color.value;
+                            await storage.updateCharacters([widget.character!]);
+                          })),
                     ),
                   ),
                   actions: <Widget>[
@@ -146,6 +168,10 @@ class _CharacterEntryState extends State<CharacterEntry> {
                 disabledBorder: InputBorder.none,
                 hintText: "Age",
               ),
+              onEditingComplete: () async {
+                widget.character!.age = int.parse(ageController.text);
+                await storage.updateCharacters([widget.character!]);
+              },
             ),
             TextWidget(
               text: '${widget.character!.matchesPlayed}',
@@ -163,6 +189,10 @@ class _CharacterEntryState extends State<CharacterEntry> {
             disabledBorder: InputBorder.none,
             hintText: "Description",
           ),
+          onEditingComplete: () async {
+            widget.character!.description = descriptionController.text;
+            await storage.updateCharacters([widget.character!]);
+          },
         ),
       ],
     );
