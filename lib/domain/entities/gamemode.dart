@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:adifferentwaytoplay/app/utils/constants.dart';
 import 'package:adifferentwaytoplay/domain/entities/player.dart';
-import 'package:adifferentwaytoplay/domain/utils/utils.dart';
+import 'package:adifferentwaytoplay/domain/entities/setting.dart';
 import 'package:isar/isar.dart';
 
 part 'gamemode.g.dart';
@@ -30,24 +29,18 @@ class Gamemode {
   int timesPlayed = 0;
 
   @Index()
-  late bool teams;
+  late bool? teams;
 
-  @enumerated
-  late GamemodeOptions gamemodeOptions;
+  // @enumerated
+  // late GamemodeOptions gamemodeOptions;
 
-  /// mapValues is a {key:value} dict. for writing dynamic data
-  /// Object is used (at the cost of the safety of static typing)
-  /// so the value can potentially be anything and can
-  /// be cast by the user accordingly
-  @Ignore()
-  Map<String, Setting> mapValues = {};
+  var settings = IsarLinks<Setting>();
 
-  String get values => jsonEncode(mapValues);
-  set values(String json) => mapValues = jsonDecode(json);
+  // Gamemodes have no map values because of the IsarLink to setting
 
   @override
   String toString() {
-    return '''$id: {name: $name, timesPlayed: $timesPlayed, values: ${mapValues.toString()}}''';
+    return '''$id: {name: $name, timesPlayed: $timesPlayed, settings: ${settings.toString()}}''';
   }
 
   /* 

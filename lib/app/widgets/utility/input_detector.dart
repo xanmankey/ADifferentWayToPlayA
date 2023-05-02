@@ -1,11 +1,12 @@
 // For DC.py; used to detect inputs
 // An extension of SettingsWidgets.TextField where the text is
 // set on click by the input value of a specified device
-import 'package:adifferentwaytoplay/app/widgets/utility/DWTP_field.dart';
+import 'package:adifferentwaytoplay/app/widgets/utility/settings_field.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 // Note that some of this is psuedocode
+/*
 class InputDetector extends StatefulWidget {
   Setting setting;
   Device device;
@@ -34,3 +35,4 @@ class _InputDetectorState extends State<InputDetector> {
     );
   }
 }
+*/

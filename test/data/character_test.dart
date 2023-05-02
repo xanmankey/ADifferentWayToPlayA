@@ -1,5 +1,5 @@
 import 'package:adifferentwaytoplay/data/utils/utils.dart';
-import 'package:adifferentwaytoplay/data/utils/vars.dart';
+import 'package:adifferentwaytoplay/data/utils/initial_vars.dart';
 import 'package:adifferentwaytoplay/domain/entities/character.dart';
 import 'package:isar/isar.dart';
 

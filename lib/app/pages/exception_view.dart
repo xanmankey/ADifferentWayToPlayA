@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:adifferentwaytoplay/app/widgets/custom_appbar.dart';
-import 'package:adifferentwaytoplay/app/widgets/text.dart';
-import 'package:adifferentwaytoplay/app/utils/constants.dart';
+import 'package:adifferentwaytoplay/app/widgets/utility/custom_appbar.dart';
+import 'package:adifferentwaytoplay/app/widgets/utility/text.dart';
+import 'package:adifferentwaytoplay/app/constants.dart';
 
 /// A screen for notifying and handling exceptions
 /// ```

@@ -1,24 +1,29 @@
 // A context menu for right-clicking SettingsWidgets
-import 'package:adifferentwaytoplay/app/widgets/text.dart';
+import 'package:adifferentwaytoplay/app/widgets/utility/text.dart';
+import 'package:adifferentwaytoplay/domain/constants.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
 import 'package:native_context_menu/native_context_menu.dart' as NCM;
 import 'package:flutter/material.dart';
 import 'package:adifferentwaytoplay/data/utils/utils.dart';
 
-// I'll need to make specific menus for each widget
-// But I CAN make a template to make that process easier
-
 class SettingsContextMenu extends StatefulWidget {
   Setting setting;
   Widget settingsWidget;
-  // Not sure if setState will propogate down to the settingsWidget
-  // Function(void Function()) setState;
+  void Function({
+    String? title,
+    String? description,
+    bool enabled,
+    String? sortType,
+  }) updateSettingValue;
+  void Function(Setting setting) deleteSetting;
 
   SettingsContextMenu({
     super.key,
     required this.setting,
     required this.settingsWidget,
+    required this.updateSettingValue,
+    required this.deleteSetting,
   });
 
   @override
@@ -31,7 +36,7 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
 
   @override
   void initState() {
-    titleController.text = widget.setting.title;
+    titleController.text = widget.setting.name;
     descriptionController.text = widget.setting.description ?? '';
     super.initState();
   }
@@ -50,8 +55,9 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
                     )),
               );
               setState(() {
-                widget.setting.title = titleController.text;
+                widget.setting.name = titleController.text;
               });
+              widget.updateSettingValue(title: titleController.text);
             }),
         NCM.MenuItem(
             title: "Description",
@@ -63,8 +69,10 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
                     )),
               );
               setState(() {
-                widget.setting.title = descriptionController.text;
+                widget.setting.name = descriptionController.text;
               });
+              widget.updateSettingValue(
+                  description: descriptionController.text);
             }),
         NCM.MenuItem(
           title: "Disable/Enable",
@@ -75,6 +83,7 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
                 setState(() {
                   widget.setting.enabled = true;
                 });
+                widget.updateSettingValue(enabled: true);
               },
             ),
             NCM.MenuItem(
@@ -82,6 +91,44 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
               onSelected: () {
                 setState(() {
                   widget.setting.enabled = false;
+                });
+                widget.updateSettingValue(enabled: false);
+              },
+            ),
+          ],
+        ),
+        NCM.MenuItem(
+          title: "Sort Property",
+          items: [
+            NCM.MenuItem(
+              title: InputTypes.button.toString(),
+              onSelected: () {
+                setState(() {
+                  widget.setting.sortProperty = InputTypes.button.toString();
+                });
+              },
+            ),
+            NCM.MenuItem(
+              title: InputTypes.trigger.toString(),
+              onSelected: () {
+                setState(() {
+                  widget.setting.sortProperty = InputTypes.trigger.toString();
+                });
+              },
+            ),
+            NCM.MenuItem(
+              title: InputTypes.stick.toString(),
+              onSelected: () {
+                setState(() {
+                  widget.setting.sortProperty = InputTypes.stick.toString();
+                });
+              },
+            ),
+            NCM.MenuItem(
+              title: 'none',
+              onSelected: () {
+                setState(() {
+                  widget.setting.sortProperty = null;
                 });
               },
             ),
@@ -96,73 +143,14 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
                     title: const TextWidget(
                         text: "Are you sure you want to delete this setting?"),
                     content: IconButton(
-                      onPressed: () async {
-                        await storage.deleteSettings(
-                            widget.setting.group ?? [widget.setting.id]);
+                      onPressed: () {
+                        widget.deleteSetting(widget.setting);
+                        Navigator.pop(context);
                       },
                       icon: const Icon(Icons.delete),
                     ),
                   )),
             );
-            setState(() {
-              widget.setting.title = descriptionController.text;
-            });
-          },
-        ),
-        NCM.MenuItem(
-          title: "Input type",
-          items: [
-            NCM.MenuItem(
-              title: InputTypes.button.toString(),
-              onSelected: () {
-                setState(() {
-                  widget.setting.inputType = InputTypes.button;
-                });
-              },
-            ),
-            NCM.MenuItem(
-              title: InputTypes.trigger.toString(),
-              onSelected: () {
-                setState(() {
-                  widget.setting.inputType = InputTypes.trigger;
-                });
-              },
-            ),
-            NCM.MenuItem(
-              title: InputTypes.stick.toString(),
-              onSelected: () {
-                setState(() {
-                  widget.setting.inputType = InputTypes.stick;
-                });
-              },
-            ),
-            NCM.MenuItem(
-              title: 'none',
-              onSelected: () {
-                setState(() {
-                  widget.setting.inputType = null;
-                });
-              },
-            ),
-          ],
-          onSelected: () async {
-            await showDialog(
-              context: context,
-              builder: ((context) => AlertDialog(
-                    title: const TextWidget(
-                        text: "Are you sure you want to delete this setting?"),
-                    content: IconButton(
-                      onPressed: () async {
-                        await storage.deleteSettings(
-                            widget.setting.group ?? [widget.setting.id]);
-                      },
-                      icon: const Icon(Icons.delete),
-                    ),
-                  )),
-            );
-            setState(() {
-              widget.setting.title = descriptionController.text;
-            });
           },
         ),
       ],

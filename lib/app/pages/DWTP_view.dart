@@ -1,4 +1,4 @@
-import 'package:adifferentwaytoplay/app/widgets/custom_appbar.dart';
+import 'package:adifferentwaytoplay/app/widgets/utility/custom_appbar.dart';
 import 'package:adifferentwaytoplay/app/widgets/player_column.dart';
 import 'package:flutter/material.dart';
 

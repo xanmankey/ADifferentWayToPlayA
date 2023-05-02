@@ -1,14 +1,12 @@
 # Roadmap and TODOs
 > If I approach this, code that I haven't examined in a while, without a plan, it's like trying to find a friend when you only know the city they live in. I have to approach this carefully and intelligently, with psuedocode and planning playing pivotal roles in the development process!
 
-FIRST TODO (before continuing review)
-- [ ] Implement a doc_generator (@generated_docs; generates a doc string 
-above a notated widget or class of the notated widget or class)
-(if I can't finish this in time but I can finish the doc generator, I'll use that as my CSP submission)
+GOAL
+- Save the project through simplification and organization
+- What this project really needs is testing and usage; for that a first version needs to be finished and usable, and it can be refactored from there
 
-ORDER
-The most logical order to review and work on my app is to start by reviewing 
-the whole thing before doing anything, then to work from the entities (core) upward
+PRIORITY TODO
+- [ ] How can I move forward without a solid plan for controller-style navigation? GitHub seems to suggest a plugin for the WinRT API, but I can't find information about this...
 
 KEY
 ℹ️: to be implemented at a later date
@@ -22,7 +20,7 @@ DOMAIN
 - [x] player.dart
 - [x] program.dart
 - [x] team.dart
-- [ ] test whether Object type is a suitable replacement for prior SettingsSchema
+- [ ] test whether Object type is a suitable replacement for prior SettingsSchema (right now I'm assuming it is; that could be a dangerous assumption)
 
 /utils
 - [x] utils.dart
@@ -31,7 +29,8 @@ DOMAIN
 
 DATA
 - [ ] utils.dart is technically functional, but the implementation I currently have feels a bit choppy/rough, as it limits a lot of isar's functionality and goes against recommended dev practices
-- [ ] vars.dart needs A LOT of renaming and refactoring; this is something that can wait until I want to start running tests
+(I'll leave for now, but if it ends up requiring refactoring, that's something I might look into)
+- [x] vars.dart is mostly done as of the time being; the only thing that might be added is further enums for further consistency when working w/ mapValues
 
 - [ ] Updated documentation and tests
 

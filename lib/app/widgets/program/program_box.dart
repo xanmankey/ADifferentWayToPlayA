@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:adifferentwaytoplay/app/utils/utils.dart';
 import 'package:adifferentwaytoplay/data/utils/utils.dart';
 import 'package:adifferentwaytoplay/domain/entities/program.dart';
-import 'package:adifferentwaytoplay/app/widgets/text.dart';
+import 'package:adifferentwaytoplay/app/widgets/utility/text.dart';
 import 'package:isar/isar.dart';
 
 /// A widget that goes inside a horizontal list view in the

@@ -1,6 +1,10 @@
 import 'package:adifferentwaytoplay/app/widgets/utility/text.dart';
 import 'package:flutter/material.dart';
 
+/// A custom image button widget used for option selection
+/// ```
+///
+/// ```
 class CardSelector extends StatelessWidget {
   final FileImage image;
   final String title;

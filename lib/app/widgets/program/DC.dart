@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// A widget for displaying the MIOP program.
+/// A widget for displaying the options of the DC program.
 /// Most of the heavy lifting is done by the ProgramEntry
 /// widget, but as programOptions need to be provided on a per-
 /// program basis and seeing that there is an enum linking code
@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 /// ```
 ///
 /// ```
+/*
 class MIOPProgramOptions extends StatefulWidget {
   const MIOPProgramOptions({super.key});
 
@@ -23,3 +24,4 @@ class _MIOPProgramOptionsState extends State<MIOPProgramOptions> {
     return;
   }
 }
+*/

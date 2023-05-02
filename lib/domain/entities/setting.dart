@@ -1,12 +1,13 @@
 // import 'dart:convert';
 import 'dart:convert';
 
+import 'package:adifferentwaytoplay/domain/constants.dart';
 import 'package:adifferentwaytoplay/domain/entities/gamemode.dart';
 import 'package:adifferentwaytoplay/domain/entities/program.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
 import 'package:isar/isar.dart';
 
-part 'settings.g.dart';
+part 'setting.g.dart';
 
 /// An entity for setting objects, which hold settings information
 /// and can be easily represented in a GUI
@@ -37,31 +38,25 @@ class Setting {
   String? description;
 
   @Index()
-  late bool enabled;
+  bool enabled = true;
 
   // Grouping settings is for layout purposes (specifically for cards, settings
   // that you want to encompass together inside a card)
+  // Note that the settings need to be written first,
+  // and the group data specified LATER (after first being written)
   List<Id>? group;
 
   @Enumerated(EnumType.ordinal32)
-  InputTypes? inputType;
+  SortProperties? sortProperty;
 
   @enumerated
-  late SettingsWidgets widget;
-
-  // Set true if a setting needs to be set on a per-player-basis
-  // It will be displayed as an option underneath the players program selection
-  @Index()
-  bool individual = false;
-
-  // A ready boolean is to verify if the setting has been validated
-  late bool ready;
+  late SettingsWidgets settingsWidget;
 
   // Map type isn't supported, so an embed workaround is necessary.
   // A custom setter and getter is used so values can be added and immediately
   // encoded for convenience
   @Ignore()
-  Map<String, dynamic> mapValues = {};
+  Object mapValues = {};
 
   String get values => jsonEncode(mapValues);
   set values(String json) => mapValues = jsonDecode(json);
@@ -74,7 +69,7 @@ class Setting {
 
   @override
   String toString() {
-    return '''$id: {title: $title, enabled: $enabled, values: $values,
+    return '''$id: {title: $title, enabled: $enabled, value: $values,
     description: $description}''';
   }
 

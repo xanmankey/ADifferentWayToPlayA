@@ -1,8 +1,10 @@
+import 'package:adifferentwaytoplay/app/provider/dwtp_provider.dart';
 import 'package:adifferentwaytoplay/data/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:adifferentwaytoplay/data/utils/vars.dart';
+import 'package:adifferentwaytoplay/data/utils/initial_vars.dart';
 import 'package:logging/logging.dart';
+import 'package:provider/provider.dart';
 
 // Package imports
 import 'package:adifferentwaytoplay/app/pages/home_view.dart';
@@ -52,7 +54,11 @@ void initializeLogging() {
 void main() async {
   Storage();
   initializeLogging();
-  runApp(const DWTP());
+  // Link the app to the class providing state
+  runApp(ChangeNotifierProvider<DWTPProvider>(
+    create: (_) => DWTPProvider(),
+    child: const DWTP(),
+  ));
   await enableFullScreen();
 }
 

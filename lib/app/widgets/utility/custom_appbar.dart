@@ -1,7 +1,10 @@
-// A custom scaffold for reusability
-// Also comes with an appBar
 import 'package:flutter/material.dart';
 
+/// A custom app bar for the app
+/// Used in a scaffold in most screens
+/// ```
+///
+/// ```
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   // super. just means to get it from the parent class;
   // in this case, that means get the key from the StatelessWidget class

@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 /// -
 /// -
 /// TODO: I'll need to come back to this one AFTER
+/// (or just drop the user customization here)
 class AppSettings extends StatefulWidget {
   const AppSettings({super.key});
 

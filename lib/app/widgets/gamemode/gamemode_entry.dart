@@ -1,5 +1,6 @@
+import 'package:adifferentwaytoplay/app/widgets/utility/text.dart';
 import 'package:adifferentwaytoplay/data/utils/utils.dart';
-import 'package:adifferentwaytoplay/data/utils/vars.dart';
+import 'package:adifferentwaytoplay/data/utils/initial_vars.dart';
 import 'package:flutter/material.dart';
 
 import 'package:adifferentwaytoplay/domain/entities/gamemode.dart';
@@ -45,6 +46,24 @@ class _GamemodeEntryState extends State<GamemodeEntry> {
             await storage.updateGamemodes([widget.gamemode]);
           },
         ),
+        Row(
+          children: [
+            (widget.gamemode.teams == true)
+                ? const TextWidget(
+                    text: "TEAMS",
+                  )
+                : (widget.gamemode.teams == false)
+                    ? const TextWidget(
+                        text: "SOLO",
+                      )
+                    : const TextWidget(
+                        text: "RANDOM",
+                      ),
+            TextWidget(text: '${widget.gamemode.timesPlayed}'),
+          ],
+        ),
+        // The toWidget() func needs to take the mapValues from a gamemode
+        // and turn it into widgets
         widget.gamemode.gamemodeOptions.toWidget(),
       ],
     );

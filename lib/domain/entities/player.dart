@@ -64,7 +64,6 @@ class Player {
     return {
       "index": gamepad.value?.index,
       "program": program.value?.abbreviation,
-      "programValues": program.value?.mapValues,
       "team": team.value?.name,
     };
   }

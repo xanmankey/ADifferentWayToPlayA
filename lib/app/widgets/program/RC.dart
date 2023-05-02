@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// A widget for displaying the MIOP program.
+/// A widget for displaying the options of the RC program.
 /// Most of the heavy lifting is done by the ProgramEntry
 /// widget, but as programOptions need to be provided on a per-
 /// program basis and seeing that there is an enum linking code

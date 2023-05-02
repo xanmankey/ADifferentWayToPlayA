@@ -1,4 +1,4 @@
-import 'package:adifferentwaytoplay/data/utils/vars.dart';
+import 'package:adifferentwaytoplay/data/utils/initial_vars.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
 import 'package:flython/flython.dart';
 import 'package:isar/isar.dart';
@@ -722,29 +722,4 @@ class ProgramRunner extends Flython {
     return output;
   }
 }
-
-
-/// An abstract class for determining the layout of the settings associated
-/// with a particular gamemode or program
-/// 
-abstract class Layout {
-  // Unimplemented methods
-  List<> columnLayout(SortType sort);
-
-  List<> rowLayout(SortType sort);
-
-  List<> gamepadLayout(); 
-}
 */
-
-/// A LayoutType is selected for a graphic.
-/// Based on that layout type, a specific layout is implemented
-/// for the GUI
-enum LayoutTypes {
-  columns,
-  rows,
-  gamepad;
-}
-
-// THESE SEEM LIKE AN UNNECESSARY LIMITATION ON ISAR
-// ISAR SUPPORTS SO MANY SORTING OPTIONS; WHY WOULD I KNOWINGLY LIMIT THEM?

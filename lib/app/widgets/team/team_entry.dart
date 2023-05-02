@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:adifferentwaytoplay/data/utils/utils.dart';
 import 'package:adifferentwaytoplay/domain/entities/team.dart';
-import 'package:adifferentwaytoplay/app/widgets/text.dart';
+import 'package:adifferentwaytoplay/app/widgets/utility/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:file_picker/file_picker.dart';

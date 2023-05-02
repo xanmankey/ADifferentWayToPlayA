@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'settings.dart';
+part of 'setting.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator
@@ -32,37 +32,27 @@ const SettingSchema = CollectionSchema(
       name: r'group',
       type: IsarType.longList,
     ),
-    r'individual': PropertySchema(
+    r'settingsWidget': PropertySchema(
       id: 3,
-      name: r'individual',
-      type: IsarType.bool,
+      name: r'settingsWidget',
+      type: IsarType.byte,
+      enumMap: _SettingsettingsWidgetEnumValueMap,
     ),
-    r'inputType': PropertySchema(
+    r'sortProperty': PropertySchema(
       id: 4,
-      name: r'inputType',
+      name: r'sortProperty',
       type: IsarType.int,
-      enumMap: _SettinginputTypeEnumValueMap,
-    ),
-    r'ready': PropertySchema(
-      id: 5,
-      name: r'ready',
-      type: IsarType.bool,
+      enumMap: _SettingsortPropertyEnumValueMap,
     ),
     r'title': PropertySchema(
-      id: 6,
+      id: 5,
       name: r'title',
       type: IsarType.string,
     ),
     r'values': PropertySchema(
-      id: 7,
+      id: 6,
       name: r'values',
       type: IsarType.string,
-    ),
-    r'widget': PropertySchema(
-      id: 8,
-      name: r'widget',
-      type: IsarType.byte,
-      enumMap: _SettingwidgetEnumValueMap,
     )
   },
   estimateSize: _settingEstimateSize,
@@ -92,19 +82,6 @@ const SettingSchema = CollectionSchema(
       properties: [
         IndexPropertySchema(
           name: r'enabled',
-          type: IndexType.value,
-          caseSensitive: false,
-        )
-      ],
-    ),
-    r'individual': IndexSchema(
-      id: -7315766375308436363,
-      name: r'individual',
-      unique: false,
-      replace: false,
-      properties: [
-        IndexPropertySchema(
-          name: r'individual',
           type: IndexType.value,
           caseSensitive: false,
         )
@@ -166,12 +143,10 @@ void _settingSerialize(
   writer.writeString(offsets[0], object.description);
   writer.writeBool(offsets[1], object.enabled);
   writer.writeLongList(offsets[2], object.group);
-  writer.writeBool(offsets[3], object.individual);
-  writer.writeInt(offsets[4], object.inputType?.index);
-  writer.writeBool(offsets[5], object.ready);
-  writer.writeString(offsets[6], object.title);
-  writer.writeString(offsets[7], object.values);
-  writer.writeByte(offsets[8], object.widget.index);
+  writer.writeByte(offsets[3], object.settingsWidget.index);
+  writer.writeInt(offsets[4], object.sortProperty?.index);
+  writer.writeString(offsets[5], object.title);
+  writer.writeString(offsets[6], object.values);
 }
 
 Setting _settingDeserialize(
@@ -185,15 +160,13 @@ Setting _settingDeserialize(
   object.enabled = reader.readBool(offsets[1]);
   object.group = reader.readLongList(offsets[2]);
   object.id = id;
-  object.individual = reader.readBool(offsets[3]);
-  object.inputType =
-      _SettinginputTypeValueEnumMap[reader.readIntOrNull(offsets[4])];
-  object.ready = reader.readBool(offsets[5]);
-  object.title = reader.readString(offsets[6]);
-  object.values = reader.readString(offsets[7]);
-  object.widget =
-      _SettingwidgetValueEnumMap[reader.readByteOrNull(offsets[8])] ??
+  object.settingsWidget =
+      _SettingsettingsWidgetValueEnumMap[reader.readByteOrNull(offsets[3])] ??
           SettingsWidgets.checkbox;
+  object.sortProperty =
+      _SettingsortPropertyValueEnumMap[reader.readIntOrNull(offsets[4])];
+  object.title = reader.readString(offsets[5]);
+  object.values = reader.readString(offsets[6]);
   return object;
 }
 
@@ -211,54 +184,50 @@ P _settingDeserializeProp<P>(
     case 2:
       return (reader.readLongList(offset)) as P;
     case 3:
-      return (reader.readBool(offset)) as P;
+      return (_SettingsettingsWidgetValueEnumMap[
+              reader.readByteOrNull(offset)] ??
+          SettingsWidgets.checkbox) as P;
     case 4:
-      return (_SettinginputTypeValueEnumMap[reader.readIntOrNull(offset)]) as P;
+      return (_SettingsortPropertyValueEnumMap[reader.readIntOrNull(offset)])
+          as P;
     case 5:
-      return (reader.readBool(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 6:
       return (reader.readString(offset)) as P;
-    case 7:
-      return (reader.readString(offset)) as P;
-    case 8:
-      return (_SettingwidgetValueEnumMap[reader.readByteOrNull(offset)] ??
-          SettingsWidgets.checkbox) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
-const _SettinginputTypeEnumValueMap = {
-  'button': 0,
-  'trigger': 1,
-  'stick': 2,
-};
-const _SettinginputTypeValueEnumMap = {
-  0: InputTypes.button,
-  1: InputTypes.trigger,
-  2: InputTypes.stick,
-};
-const _SettingwidgetEnumValueMap = {
+const _SettingsettingsWidgetEnumValueMap = {
   'checkbox': 0,
   'card': 1,
   'numField': 2,
   'inputsDropdown': 3,
   'inputTypesDropdown': 4,
-  'filtersDropdown': 5,
-  'devicesDropdown': 6,
-  'layoutDropdown': 7,
-  'textField': 8,
+  'boolDropdown': 5,
+  'filtersDropdown': 6,
+  'textField': 7,
 };
-const _SettingwidgetValueEnumMap = {
+const _SettingsettingsWidgetValueEnumMap = {
   0: SettingsWidgets.checkbox,
   1: SettingsWidgets.card,
   2: SettingsWidgets.numField,
   3: SettingsWidgets.inputsDropdown,
   4: SettingsWidgets.inputTypesDropdown,
-  5: SettingsWidgets.filtersDropdown,
-  6: SettingsWidgets.devicesDropdown,
-  7: SettingsWidgets.layoutDropdown,
-  8: SettingsWidgets.textField,
+  5: SettingsWidgets.boolDropdown,
+  6: SettingsWidgets.filtersDropdown,
+  7: SettingsWidgets.textField,
+};
+const _SettingsortPropertyEnumValueMap = {
+  'button': 0,
+  'trigger': 1,
+  'stick': 2,
+};
+const _SettingsortPropertyValueEnumMap = {
+  0: SortProperties.button,
+  1: SortProperties.trigger,
+  2: SortProperties.stick,
 };
 
 Id _settingGetId(Setting object) {
@@ -286,14 +255,6 @@ extension SettingQueryWhereSort on QueryBuilder<Setting, Setting, QWhere> {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         const IndexWhereClause.any(indexName: r'enabled'),
-      );
-    });
-  }
-
-  QueryBuilder<Setting, Setting, QAfterWhere> anyIndividual() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        const IndexWhereClause.any(indexName: r'individual'),
       );
     });
   }
@@ -448,51 +409,6 @@ extension SettingQueryWhere on QueryBuilder<Setting, Setting, QWhereClause> {
               indexName: r'enabled',
               lower: [],
               upper: [enabled],
-              includeUpper: false,
-            ));
-      }
-    });
-  }
-
-  QueryBuilder<Setting, Setting, QAfterWhereClause> individualEqualTo(
-      bool individual) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'individual',
-        value: [individual],
-      ));
-    });
-  }
-
-  QueryBuilder<Setting, Setting, QAfterWhereClause> individualNotEqualTo(
-      bool individual) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'individual',
-              lower: [],
-              upper: [individual],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'individual',
-              lower: [individual],
-              includeLower: false,
-              upper: [],
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'individual',
-              lower: [individual],
-              includeLower: false,
-              upper: [],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'individual',
-              lower: [],
-              upper: [individual],
               includeUpper: false,
             ));
       }
@@ -864,77 +780,52 @@ extension SettingQueryFilter
     });
   }
 
-  QueryBuilder<Setting, Setting, QAfterFilterCondition> individualEqualTo(
-      bool value) {
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> settingsWidgetEqualTo(
+      SettingsWidgets value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'individual',
+        property: r'settingsWidget',
         value: value,
       ));
     });
   }
 
-  QueryBuilder<Setting, Setting, QAfterFilterCondition> inputTypeIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'inputType',
-      ));
-    });
-  }
-
-  QueryBuilder<Setting, Setting, QAfterFilterCondition> inputTypeIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'inputType',
-      ));
-    });
-  }
-
-  QueryBuilder<Setting, Setting, QAfterFilterCondition> inputTypeEqualTo(
-      InputTypes? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'inputType',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Setting, Setting, QAfterFilterCondition> inputTypeGreaterThan(
-    InputTypes? value, {
+  QueryBuilder<Setting, Setting, QAfterFilterCondition>
+      settingsWidgetGreaterThan(
+    SettingsWidgets value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'inputType',
+        property: r'settingsWidget',
         value: value,
       ));
     });
   }
 
-  QueryBuilder<Setting, Setting, QAfterFilterCondition> inputTypeLessThan(
-    InputTypes? value, {
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> settingsWidgetLessThan(
+    SettingsWidgets value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'inputType',
+        property: r'settingsWidget',
         value: value,
       ));
     });
   }
 
-  QueryBuilder<Setting, Setting, QAfterFilterCondition> inputTypeBetween(
-    InputTypes? lower,
-    InputTypes? upper, {
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> settingsWidgetBetween(
+    SettingsWidgets lower,
+    SettingsWidgets upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'inputType',
+        property: r'settingsWidget',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -943,12 +834,72 @@ extension SettingQueryFilter
     });
   }
 
-  QueryBuilder<Setting, Setting, QAfterFilterCondition> readyEqualTo(
-      bool value) {
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> sortPropertyIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'sortProperty',
+      ));
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterFilterCondition>
+      sortPropertyIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'sortProperty',
+      ));
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> sortPropertyEqualTo(
+      SortProperties? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'ready',
+        property: r'sortProperty',
         value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> sortPropertyGreaterThan(
+    SortProperties? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'sortProperty',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> sortPropertyLessThan(
+    SortProperties? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'sortProperty',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> sortPropertyBetween(
+    SortProperties? lower,
+    SortProperties? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'sortProperty',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -1212,59 +1163,6 @@ extension SettingQueryFilter
       ));
     });
   }
-
-  QueryBuilder<Setting, Setting, QAfterFilterCondition> widgetEqualTo(
-      SettingsWidgets value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'widget',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Setting, Setting, QAfterFilterCondition> widgetGreaterThan(
-    SettingsWidgets value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'widget',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Setting, Setting, QAfterFilterCondition> widgetLessThan(
-    SettingsWidgets value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'widget',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Setting, Setting, QAfterFilterCondition> widgetBetween(
-    SettingsWidgets lower,
-    SettingsWidgets upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'widget',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
 }
 
 extension SettingQueryObject
@@ -1324,39 +1222,27 @@ extension SettingQuerySortBy on QueryBuilder<Setting, Setting, QSortBy> {
     });
   }
 
-  QueryBuilder<Setting, Setting, QAfterSortBy> sortByIndividual() {
+  QueryBuilder<Setting, Setting, QAfterSortBy> sortBySettingsWidget() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'individual', Sort.asc);
+      return query.addSortBy(r'settingsWidget', Sort.asc);
     });
   }
 
-  QueryBuilder<Setting, Setting, QAfterSortBy> sortByIndividualDesc() {
+  QueryBuilder<Setting, Setting, QAfterSortBy> sortBySettingsWidgetDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'individual', Sort.desc);
+      return query.addSortBy(r'settingsWidget', Sort.desc);
     });
   }
 
-  QueryBuilder<Setting, Setting, QAfterSortBy> sortByInputType() {
+  QueryBuilder<Setting, Setting, QAfterSortBy> sortBySortProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'inputType', Sort.asc);
+      return query.addSortBy(r'sortProperty', Sort.asc);
     });
   }
 
-  QueryBuilder<Setting, Setting, QAfterSortBy> sortByInputTypeDesc() {
+  QueryBuilder<Setting, Setting, QAfterSortBy> sortBySortPropertyDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'inputType', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Setting, Setting, QAfterSortBy> sortByReady() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'ready', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Setting, Setting, QAfterSortBy> sortByReadyDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'ready', Sort.desc);
+      return query.addSortBy(r'sortProperty', Sort.desc);
     });
   }
 
@@ -1381,18 +1267,6 @@ extension SettingQuerySortBy on QueryBuilder<Setting, Setting, QSortBy> {
   QueryBuilder<Setting, Setting, QAfterSortBy> sortByValuesDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'values', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Setting, Setting, QAfterSortBy> sortByWidget() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'widget', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Setting, Setting, QAfterSortBy> sortByWidgetDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'widget', Sort.desc);
     });
   }
 }
@@ -1435,39 +1309,27 @@ extension SettingQuerySortThenBy
     });
   }
 
-  QueryBuilder<Setting, Setting, QAfterSortBy> thenByIndividual() {
+  QueryBuilder<Setting, Setting, QAfterSortBy> thenBySettingsWidget() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'individual', Sort.asc);
+      return query.addSortBy(r'settingsWidget', Sort.asc);
     });
   }
 
-  QueryBuilder<Setting, Setting, QAfterSortBy> thenByIndividualDesc() {
+  QueryBuilder<Setting, Setting, QAfterSortBy> thenBySettingsWidgetDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'individual', Sort.desc);
+      return query.addSortBy(r'settingsWidget', Sort.desc);
     });
   }
 
-  QueryBuilder<Setting, Setting, QAfterSortBy> thenByInputType() {
+  QueryBuilder<Setting, Setting, QAfterSortBy> thenBySortProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'inputType', Sort.asc);
+      return query.addSortBy(r'sortProperty', Sort.asc);
     });
   }
 
-  QueryBuilder<Setting, Setting, QAfterSortBy> thenByInputTypeDesc() {
+  QueryBuilder<Setting, Setting, QAfterSortBy> thenBySortPropertyDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'inputType', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Setting, Setting, QAfterSortBy> thenByReady() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'ready', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Setting, Setting, QAfterSortBy> thenByReadyDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'ready', Sort.desc);
+      return query.addSortBy(r'sortProperty', Sort.desc);
     });
   }
 
@@ -1494,18 +1356,6 @@ extension SettingQuerySortThenBy
       return query.addSortBy(r'values', Sort.desc);
     });
   }
-
-  QueryBuilder<Setting, Setting, QAfterSortBy> thenByWidget() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'widget', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Setting, Setting, QAfterSortBy> thenByWidgetDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'widget', Sort.desc);
-    });
-  }
 }
 
 extension SettingQueryWhereDistinct
@@ -1529,21 +1379,15 @@ extension SettingQueryWhereDistinct
     });
   }
 
-  QueryBuilder<Setting, Setting, QDistinct> distinctByIndividual() {
+  QueryBuilder<Setting, Setting, QDistinct> distinctBySettingsWidget() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'individual');
+      return query.addDistinctBy(r'settingsWidget');
     });
   }
 
-  QueryBuilder<Setting, Setting, QDistinct> distinctByInputType() {
+  QueryBuilder<Setting, Setting, QDistinct> distinctBySortProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'inputType');
-    });
-  }
-
-  QueryBuilder<Setting, Setting, QDistinct> distinctByReady() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'ready');
+      return query.addDistinctBy(r'sortProperty');
     });
   }
 
@@ -1558,12 +1402,6 @@ extension SettingQueryWhereDistinct
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'values', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<Setting, Setting, QDistinct> distinctByWidget() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'widget');
     });
   }
 }
@@ -1594,21 +1432,17 @@ extension SettingQueryProperty
     });
   }
 
-  QueryBuilder<Setting, bool, QQueryOperations> individualProperty() {
+  QueryBuilder<Setting, SettingsWidgets, QQueryOperations>
+      settingsWidgetProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'individual');
+      return query.addPropertyName(r'settingsWidget');
     });
   }
 
-  QueryBuilder<Setting, InputTypes?, QQueryOperations> inputTypeProperty() {
+  QueryBuilder<Setting, SortProperties?, QQueryOperations>
+      sortPropertyProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'inputType');
-    });
-  }
-
-  QueryBuilder<Setting, bool, QQueryOperations> readyProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'ready');
+      return query.addPropertyName(r'sortProperty');
     });
   }
 
@@ -1621,12 +1455,6 @@ extension SettingQueryProperty
   QueryBuilder<Setting, String, QQueryOperations> valuesProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'values');
-    });
-  }
-
-  QueryBuilder<Setting, SettingsWidgets, QQueryOperations> widgetProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'widget');
     });
   }
 }

@@ -6,7 +6,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:file_picker/file_picker.dart';
 
 import 'package:adifferentwaytoplay/domain/entities/character.dart';
-import 'package:adifferentwaytoplay/app/widgets/text.dart';
+import 'package:adifferentwaytoplay/app/widgets/utility/text.dart';
 
 /// A stateful widget for displaying a character in PageView format as
 /// specified by DWTP_view.dart. Doubles as a character creator if one

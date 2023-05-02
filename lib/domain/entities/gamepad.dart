@@ -8,7 +8,7 @@ part 'gamepad.g.dart';
 /// An entity for gamepad objects, which hold controller information
 ///
 /// ```Gamepad()
-/// ..index = 1
+/// ..index = 0
 /// ..connected = true
 /// ..color = Colors.red;```
 ///

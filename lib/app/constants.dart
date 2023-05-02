@@ -1,4 +1,8 @@
 // A static class for easy-access routing
+import 'package:adifferentwaytoplay/app/widgets/gamemode/free_for_all.dart';
+import 'package:adifferentwaytoplay/app/widgets/gamemode/team_competition.dart';
+import 'package:adifferentwaytoplay/domain/entities/gamemode.dart';
+import 'package:adifferentwaytoplay/domain/entities/program.dart';
 import 'package:flutter/material.dart';
 
 class Pages {
@@ -16,6 +20,7 @@ class Pages {
   static String victory = '/victory';
 }
 
+/*
 /// An enum containing predefined gamemodeOptions
 /// If you define your own gamemode, you will need to recognize
 /// your gamemodeOptions Widget here
@@ -24,20 +29,20 @@ class Pages {
 /// ```
 enum GamemodeOptions {
   freeForAllOptions,
-  teamCompetitionOptions,
-  randomChaosOptions,
-  customGameOptions;
+  teamCompetitionOptions;
+  // randomChaosOptions,
+  // customGameOptions;
 
-  Widget toWidget() {
+  Widget toWidget(Gamemode gamemode) {
     switch (this) {
       case freeForAllOptions:
-        return FreeForAllGamemodeOptions();
+        return FreeForAllGamemodeOptions(gamemode: gamemode);
       case teamCompetitionOptions:
-        return TeamCompetitionGamemodeOptions();
-      case randomChaosOptions:
-        return RandomChaosGamemodeOptions();
-      case customGameOptions:
-        return CustomGameGamemodeOptions();
+        return TeamCompetitionGamemodeOptions(gamemode: gamemode);
+      // case randomChaosOptions:
+      //   return RandomChaosGamemodeOptions();
+      // case customGameOptions:
+      //   return CustomGameGamemodeOptions();
       default:
         return Container();
     }
@@ -51,29 +56,30 @@ enum GamemodeOptions {
 ///
 /// ```
 enum ProgramOptions {
-  dcOptions,
+  // dcOptions,
   tcOptions,
   fcOptions,
   rcOptions,
   miopOptions;
 
-  Widget toWidget() {
+  Widget toWidget(Program program) {
     switch (this) {
-      case dcOptions:
-        return DCProgramOptions();
+      // case dcOptions:
+      //   return DCProgramOptions();
       case tcOptions:
-        return TCProgramOptions();
+        return TCProgramOptions(program: program);
       case fcOptions:
-        return FCProgramOptions();
+        return FCProgramOptions(program: program);
       case rcOptions:
-        return RCProgramOptions();
+        return RCProgramOptions(program: program);
       case miopOptions:
-        return MIOPProgramOptions();
+        return MIOPProgramOptions(program: program);
       default:
         return Container();
     }
   }
 }
+*/
 
 // A static class for UI constants
 class UIConstants {}

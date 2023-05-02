@@ -1,8 +1,10 @@
-// For handling repetitive text
-
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
+/// A custom text widget for the app
+/// ```
+///
+/// ```
 class TextWidget extends StatelessWidget {
   final String text;
   final Color? color;

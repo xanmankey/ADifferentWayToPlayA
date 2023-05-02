@@ -1,5 +1,5 @@
 import 'package:adifferentwaytoplay/app/pages/exception_view.dart';
-import 'package:adifferentwaytoplay/app/utils/constants.dart';
+import 'package:adifferentwaytoplay/app/constants.dart';
 import 'package:adifferentwaytoplay/app/utils/exposed_types.dart';
 import 'package:adifferentwaytoplay/app/widgets/character/character_entry.dart';
 import 'package:adifferentwaytoplay/app/widgets/utility/custom_appbar.dart';

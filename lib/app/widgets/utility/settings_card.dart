@@ -4,7 +4,7 @@ import 'package:adifferentwaytoplay/app/utils/utils.dart';
 import 'package:adifferentwaytoplay/app/widgets/utility/DWTP_dialog.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:adifferentwaytoplay/app/widgets/text.dart';
+import 'package:adifferentwaytoplay/app/widgets/utility/text.dart';
 import 'package:adifferentwaytoplay/app/widgets/utility/DWTP_context_menu.dart';
 
 // This goes inside a horizontal ListView
@@ -30,11 +30,11 @@ class _SettingsCardState extends State<SettingsCard> {
                   dialogSettings: widget.dialogSettings,
                 ))),
         child: Card(
-          color: widget.setting.enabled
-              ? inputTypeColor(widget.setting.inputType)
+          color: (widget.setting.enabled)
+              ? settingColor(widget.setting.sortProperty ?? '')
               : Colors.grey,
           child: TextWidget(
-            text: widget.setting.title,
+            text: widget.setting.name,
           ),
         ),
       ),

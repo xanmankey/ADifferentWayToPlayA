@@ -1,9 +1,8 @@
 // import 'dart:convert';
 import 'dart:convert';
 
-import 'package:adifferentwaytoplay/app/utils/constants.dart';
 import 'package:adifferentwaytoplay/domain/entities/player.dart';
-import 'package:adifferentwaytoplay/domain/utils/utils.dart';
+import 'package:adifferentwaytoplay/domain/entities/setting.dart';
 import 'package:isar/isar.dart';
 
 part 'program.g.dart';
@@ -48,18 +47,10 @@ class Program {
 
   String? description;
 
-  @enumerated
-  late ProgramOptions programOptions;
+  // @enumerated
+  // late ProgramOptions programOptions;
 
-  /// mapValues is a {key:value} dict. for writing dynamic data
-  /// Object is used (at the cost of the safety of static typing)
-  /// so the value can potentially be anything and can
-  /// be cast by the user accordingly
-  @Ignore()
-  Map<String, Setting> mapValues = {};
-
-  String get values => jsonEncode(mapValues);
-  set values(String json) => mapValues = jsonDecode(json);
+  var settings = IsarLinks<Setting>();
 
   @Backlink(to: 'program')
   var player = IsarLink<Player>();
@@ -67,7 +58,7 @@ class Program {
   @override
   String toString() {
     return '''$id: {name: $name, image: $image, abbreviation: $abbreviation,
-    description: $description, mapValues: ${mapValues.toString()}}''';
+    description: $description, settings: ${settings.toString()}}''';
   }
 
   /*

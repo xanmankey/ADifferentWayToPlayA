@@ -1,10 +1,9 @@
-// A widget for structuring entries in the character gallery
 import 'dart:convert';
 
 import 'package:adifferentwaytoplay/app/utils/utils.dart';
 import 'package:adifferentwaytoplay/app/widgets/utility/DWTP_dropdown.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
-import 'package:adifferentwaytoplay/app/widgets/text.dart';
+import 'package:adifferentwaytoplay/app/widgets/utility/text.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:adifferentwaytoplay/data/utils/utils.dart';
@@ -23,15 +22,9 @@ class _SettingsDialogState extends State<SettingsDialog> {
   final TextEditingController descriptionController = TextEditingController();
   late Storage storage;
 
-  Setting inputTypesDropdown =
-      createSettings([SettingsWidgets.inputTypesDropdown])[
-          SettingsWidgets.inputTypesDropdown]!;
-  Setting checkboxDropdown =
-      createSettings([SettingsWidgets.checkbox])[SettingsWidgets.checkbox]!;
-
   @override
   void initState() {
-    titleController.text = widget.cardSetting.title;
+    titleController.text = widget.cardSetting.name;
     descriptionController.text = widget.cardSetting.description ?? '';
     super.initState();
   }
@@ -55,22 +48,20 @@ class _SettingsDialogState extends State<SettingsDialog> {
           for (Widget widget
               in generateSettingsWidgets(widget.dialogSettings ?? []))
             widget,
-          SettingsDropdown(
-              setting: inputTypesDropdown, items: Items.inputTypes),
-          IconButton(
-            iconSize: 36,
-            icon: const Icon(Icons.delete),
-            onPressed: () async {
-              setState(() async {
-                await storage.deleteSettings([
-                  for (Setting setting in [
-                    widget.cardSetting
-                  ]..addAll(widget.dialogSettings ?? []))
-                    setting.id
-                ]);
-              });
-            },
-          ),
+          // IconButton(
+          //   iconSize: 36,
+          //   icon: const Icon(Icons.delete),
+          //   onPressed: () async {
+          //     setState(() async {
+          //       await storage.deleteSettings([
+          //         for (Setting setting in [
+          //           widget.cardSetting
+          //         ]..addAll(widget.dialogSettings ?? []))
+          //           setting.id
+          //       ]);
+          //     });
+          //   },
+          // ),
         ],
       ),
     );
