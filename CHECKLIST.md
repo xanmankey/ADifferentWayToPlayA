@@ -5,6 +5,9 @@ GOAL
 - Save the project through simplification and organization
 - What this project really needs is testing and usage; for that a first version needs to be finished and usable, and it can be refactored from there
 
+CURRENT TODO
+- Figure out what to do about the updateSettingsValues and deleteSettings function parameters in the utility functions now that I've transitioned back to an isar setup (I should be able to write directly from each, but it's too late and I might screw up rn)
+
 PRIORITY TODO
 - [ ] How can I move forward without a solid plan for controller-style navigation? GitHub seems to suggest a plugin for the WinRT API, but I can't find information about this...
 

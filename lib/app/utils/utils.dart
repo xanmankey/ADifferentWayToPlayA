@@ -1,5 +1,6 @@
 import 'package:adifferentwaytoplay/app/widgets/utility/settings_checkbox.dart';
 import 'package:adifferentwaytoplay/domain/constants.dart';
+import 'package:adifferentwaytoplay/domain/entities/setting.dart';
 import 'package:flutter/material.dart';
 
 import 'package:adifferentwaytoplay/app/widgets/utility/settings_dropdown.dart';
@@ -8,13 +9,13 @@ import 'package:adifferentwaytoplay/domain/utils/utils.dart';
 
 /// A function for returning a Color associated with the type of input;
 /// uses the xbox controller colorscheme
-Color settingColor(String sortProperty) {
+Color settingColor(SortProperties? sortProperty) {
   switch (sortProperty) {
-    case 'button':
+    case SortProperties.button:
       return Colors.red;
-    case 'trigger':
+    case SortProperties.trigger:
       return Colors.green;
-    case 'stick':
+    case SortProperties.stick:
       return Colors.yellow;
     default:
       return Colors.blue;

@@ -1,8 +1,7 @@
 // A context menu for right-clicking SettingsWidgets
 import 'package:adifferentwaytoplay/app/widgets/utility/text.dart';
 import 'package:adifferentwaytoplay/domain/constants.dart';
-import 'package:adifferentwaytoplay/domain/utils/utils.dart';
-import 'package:adifferentwaytoplay/domain/utils/utils.dart';
+import 'package:adifferentwaytoplay/domain/entities/setting.dart';
 import 'package:native_context_menu/native_context_menu.dart' as NCM;
 import 'package:flutter/material.dart';
 import 'package:adifferentwaytoplay/data/utils/utils.dart';
@@ -36,7 +35,7 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
 
   @override
   void initState() {
-    titleController.text = widget.setting.name;
+    titleController.text = widget.setting.title;
     descriptionController.text = widget.setting.description ?? '';
     super.initState();
   }
@@ -55,7 +54,7 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
                     )),
               );
               setState(() {
-                widget.setting.name = titleController.text;
+                widget.setting.title = titleController.text;
               });
               widget.updateSettingValue(title: titleController.text);
             }),
@@ -69,7 +68,7 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
                     )),
               );
               setState(() {
-                widget.setting.name = descriptionController.text;
+                widget.setting.title = descriptionController.text;
               });
               widget.updateSettingValue(
                   description: descriptionController.text);
@@ -104,7 +103,7 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
               title: InputTypes.button.toString(),
               onSelected: () {
                 setState(() {
-                  widget.setting.sortProperty = InputTypes.button.toString();
+                  widget.setting.sortProperty = SortProperties.button;
                 });
               },
             ),
@@ -112,7 +111,7 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
               title: InputTypes.trigger.toString(),
               onSelected: () {
                 setState(() {
-                  widget.setting.sortProperty = InputTypes.trigger.toString();
+                  widget.setting.sortProperty = SortProperties.trigger;
                 });
               },
             ),
@@ -120,7 +119,7 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
               title: InputTypes.stick.toString(),
               onSelected: () {
                 setState(() {
-                  widget.setting.sortProperty = InputTypes.stick.toString();
+                  widget.setting.sortProperty = SortProperties.stick;
                 });
               },
             ),

@@ -2,9 +2,8 @@ import 'dart:convert';
 
 import 'package:adifferentwaytoplay/app/utils/utils.dart';
 import 'package:adifferentwaytoplay/app/widgets/utility/DWTP_dropdown.dart';
-import 'package:adifferentwaytoplay/domain/utils/utils.dart';
+import 'package:adifferentwaytoplay/domain/entities/setting.dart';
 import 'package:adifferentwaytoplay/app/widgets/utility/text.dart';
-import 'package:adifferentwaytoplay/domain/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:adifferentwaytoplay/data/utils/utils.dart';
 
@@ -24,7 +23,7 @@ class _SettingsDialogState extends State<SettingsDialog> {
 
   @override
   void initState() {
-    titleController.text = widget.cardSetting.name;
+    titleController.text = widget.cardSetting.title;
     descriptionController.text = widget.cardSetting.description ?? '';
     super.initState();
   }

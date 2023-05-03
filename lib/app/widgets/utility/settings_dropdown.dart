@@ -2,9 +2,8 @@ import 'package:adifferentwaytoplay/app/utils/utils.dart';
 import 'package:adifferentwaytoplay/app/widgets/utility/settings_context_menu.dart';
 import 'package:adifferentwaytoplay/app/widgets/utility/text.dart';
 import 'package:adifferentwaytoplay/domain/constants.dart';
-import 'package:adifferentwaytoplay/domain/utils/utils.dart';
+import 'package:adifferentwaytoplay/domain/entities/setting.dart';
 import 'package:flutter/material.dart';
-import 'package:adifferentwaytoplay/domain/utils/utils.dart';
 
 class SettingsDropdown extends StatefulWidget {
   Setting setting;
@@ -30,7 +29,7 @@ class _SettingsDropdownState extends State<SettingsDropdown> {
       settingsWidget: DropdownButton(
           items: populateDropdown(widget.items),
           value: currentValue,
-          dropdownColor: settingColor(widget.setting.sortProperty ?? ''),
+          dropdownColor: settingColor(widget.setting.sortProperty),
           hint: TextWidget(text: widget.setting.description ?? ''),
           onChanged: (widget.setting.enabled)
               ? (value) {
@@ -40,6 +39,8 @@ class _SettingsDropdownState extends State<SettingsDropdown> {
                   widget.updateSettingValue(value.toString());
                 }
               : null),
+        updateSettingValue: ,
+        deleteSetting: ,
     );
   }
 }

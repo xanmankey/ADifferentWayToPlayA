@@ -1,4 +1,5 @@
 import 'package:adifferentwaytoplay/domain/constants.dart';
+import 'package:adifferentwaytoplay/domain/entities/setting.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
 
 /// The ColorVars class with some constants that mirror the primary
@@ -58,45 +59,66 @@ class ColorVars {
 const String RANDOM = "Random";
 
 /// Utility function for quickly generating tcSettings
-Map<String, Setting> tcSettingsValues(double time, bool hold, String input) {
-  return {
-    "time": Setting(
-      name: "time",
-      description: "The length of the press",
-      value: time,
-      settingsWidget: SettingsWidgets.numField,
-    ),
-    "hold": Setting(
-      name: "hold",
-      description:
-          "Whether to hold the input or not. Time has no impact if true.",
-      value: hold,
-      settingsWidget: SettingsWidgets.boolDropdown,
-    ),
-    "input": Setting(
-      name: "input",
-      value: input,
-      settingsWidget: SettingsWidgets.inputsDropdown,
-    )
-  };
+List<Setting> generateTCSettings(
+    String settingTitle,
+    String settingDescription,
+    bool enabled,
+    SortProperties sortProperty,
+    double time,
+    bool hold,
+    String input) {
+  return [
+    Setting()
+      ..title = settingTitle
+      ..description = settingDescription
+      ..enabled = enabled
+      ..sortProperty = sortProperty
+      ..settingsWidget = SettingsWidgets.card,
+    Setting()
+      ..title = "time"
+      ..description = "The length of the button press"
+      ..mapValues = {"time": time}
+      ..enabled = enabled
+      ..settingsWidget = SettingsWidgets.numField,
+    Setting()
+      ..title = "hold"
+      ..description =
+          "Whether to hold the input or not. Time has no impact if true."
+      ..mapValues = {"hold": hold}
+      ..enabled = enabled
+      ..settingsWidget = SettingsWidgets.checkbox,
+    Setting()
+      ..title = "input"
+      ..description = "The desired input"
+      ..mapValues = {"input": input}
+      ..enabled = enabled
+      ..settingsWidget = SettingsWidgets.inputsDropdown,
+  ];
 }
 
 /// Utility function for quickly generating fcSettings
-Map<String, Setting> fcSettingsValues(int numPresses, String input) {
-  return {
-    "filter": Setting(
-      name: "presses",
-      description:
-          "The number of inputs that you can take before the desired effect",
-      value: numPresses,
-      settingsWidget: SettingsWidgets.numField,
-    ),
-    "input": Setting(
-      name: "input",
-      value: input,
-      settingsWidget: SettingsWidgets.inputsDropdown,
-    )
-  };
+List<Setting> generateFCSettings(String settingTitle, String settingDescription,
+    SortProperties sortProperty, int numPresses, String input, bool enabled) {
+  return [
+    Setting()
+      ..title = settingTitle
+      ..description = settingDescription
+      ..sortProperty = sortProperty
+      ..settingsWidget = SettingsWidgets.card,
+    Setting()
+      ..title = "presses"
+      ..description =
+          "The number of inputs that you can take before the desired effect"
+      ..mapValues = numPresses
+      ..enabled = enabled
+      ..settingsWidget = SettingsWidgets.numField,
+    Setting()
+      ..title = "input"
+      ..description = "The desired input"
+      ..mapValues = input
+      ..enabled = enabled
+      ..settingsWidget = SettingsWidgets.inputsDropdown,
+  ];
 }
 
 // enum ProgramOptionsValues {

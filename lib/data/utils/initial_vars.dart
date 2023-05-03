@@ -97,674 +97,255 @@ class TCSettingsData {
     ..enabled = true
     ..settingsWidget = SettingsWidgets.textField;
 
-  static List<Setting> aSetting = [
-    Setting()
-      ..title = Inputs.a.toString()
-      ..description = "Presses the A button"
-      ..sortProperty = SortProperties.button
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.2}
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": false}
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"input": Inputs.a}
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> aSetting = generateTCSettings(
+    Inputs.a.toString(),
+    "Presses the A button",
+    true,
+    SortProperties.button,
+    0.2,
+    false,
+    Inputs.a.toString(),
+  );
 
-  static List<Setting> bSetting = [
-    Setting()
-      ..title = Inputs.b.toString()
-      ..description = "Presses the B button"
-      ..enabled = true
-      ..sortProperty = SortProperties.button
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.2}
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": false}
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"input": Inputs.b}
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> bSetting = generateTCSettings(
+    Inputs.b.toString(),
+    "Presses the B button",
+    true,
+    SortProperties.button,
+    0.2,
+    false,
+    Inputs.b.toString(),
+  );
 
-  static List<Setting> xSetting = [
-    Setting()
-      ..title = Inputs.x.toString()
-      ..description = "Presses the X button"
-      ..enabled = true
-      ..sortProperty = SortProperties.button
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.2}
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": false}
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"input": Inputs.x}
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> xSetting = generateTCSettings(
+    Inputs.x.toString(),
+    "Presses the X button",
+    true,
+    SortProperties.button,
+    0.2,
+    false,
+    Inputs.x.toString(),
+  );
 
-  static List<Setting> ySetting = [
-    Setting()
-      ..title = Inputs.y.toString()
-      ..description = "Presses the Y button"
-      ..enabled = true
-      ..sortProperty = SortProperties.button
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.2}
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": false}
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"input": Inputs.y}
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> ySetting = generateTCSettings(
+    Inputs.y.toString(),
+    "Presses the Y button",
+    true,
+    SortProperties.button,
+    0.2,
+    false,
+    Inputs.y.toString(),
+  );
 
-  static List<Setting> rbSetting = [
-    Setting()
-      ..title = Inputs.rb.toString()
-      ..description = "Presses the RB button"
-      ..enabled = true
-      ..sortProperty = SortProperties.button
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.2}
-      ..enabled = rbSetting[0].enabled
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": false}
-      ..enabled = rbSetting[0].enabled
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"input": Inputs.rb}
-      ..enabled = rbSetting[0].enabled
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> rbSetting = generateTCSettings(
+    Inputs.rb.toString(),
+    "Presses the RB button",
+    true,
+    SortProperties.button,
+    0.2,
+    false,
+    Inputs.rb.toString(),
+  );
 
-  static List<Setting> lbSetting = [
-    Setting()
-      ..title = Inputs.lb.toString()
-      ..description = "Presses the LB button"
-      ..enabled = true
-      ..sortProperty = SortProperties.button
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.2}
-      ..enabled = lbSetting[0].enabled
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": false}
-      ..enabled = lbSetting[0].enabled
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"input": Inputs.lb}
-      ..enabled = lbSetting[0].enabled
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> lbSetting = generateTCSettings(
+    Inputs.lb.toString(),
+    "Presses the LB button",
+    true,
+    SortProperties.button,
+    0.2,
+    false,
+    Inputs.lb.toString(),
+  );
 
-  static List<Setting> startSetting = [
-    Setting()
-      ..title = Inputs.start.toString()
-      ..description = "Presses the start button"
-      ..enabled = false
-      ..sortProperty = SortProperties.button
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.2}
-      ..enabled = startSetting[0].enabled
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": false}
-      ..enabled = startSetting[0].enabled
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"input": Inputs.start}
-      ..enabled = startSetting[0].enabled
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> startSetting = generateTCSettings(
+    Inputs.start.toString(),
+    "Presses the start button",
+    false,
+    SortProperties.button,
+    0.2,
+    false,
+    Inputs.start.toString(),
+  );
 
-  static List<Setting> selectSetting = [
-    Setting()
-      ..title = Inputs.select.toString()
-      ..description = "Presses the select button"
-      ..sortProperty = SortProperties.button
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.2}
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": false}
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"input": Inputs.select}
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> selectSetting = generateTCSettings(
+    Inputs.select.toString(),
+    "Presses the select button",
+    true,
+    SortProperties.button,
+    0.2,
+    false,
+    Inputs.select.toString(),
+  );
 
-  static List<Setting> lThumbSetting = [
-    Setting()
-      ..title = "lThumb"
-      ..description = "Presses the left thumb stick inwards"
-      ..sortProperty = SortProperties.button
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.2}
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": false}
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"input": Inputs.lThumb}
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> lThumbSetting = generateTCSettings(
+    "lThumb",
+    "Presses the left thumb stick inwards",
+    true,
+    SortProperties.button,
+    0.2,
+    false,
+    "lThumb",
+  );
 
-  static List<Setting> toggleASetting = [
-    Setting()
-      ..title = "toggleA"
-      ..description = "Hold (or stop holding) the A button"
-      ..sortProperty = SortProperties.button
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.2}
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": true}
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"input": Inputs.a}
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> toggleASetting = generateTCSettings(
+    "toggleA",
+    "Hold (or stop holding) the A button",
+    true,
+    SortProperties.button,
+    0.2,
+    true,
+    Inputs.a.toString(),
+  );
 
-  static List<Setting> toggleBSetting = [
-    Setting()
-      ..title = "toggleB"
-      ..description = "Hold (or stop holding) the B button"
-      ..sortProperty = SortProperties.button
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.2}
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": true}
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"input": Inputs.b}
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> toggleBSetting = generateTCSettings(
+    "toggleB",
+    "Hold (or stop holding) the B button",
+    true,
+    SortProperties.button,
+    0.2,
+    true,
+    Inputs.b.toString(),
+  );
 
-  static List<Setting> toggleXSetting = [
-    Setting()
-      ..title = "toggleX"
-      ..description = "Hold (or stop holding) the X button"
-      ..enabled = true
-      ..sortProperty = SortProperties.button
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.2}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": true}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"input": Inputs.x}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> toggleXSetting = generateTCSettings(
+    "toggleX",
+    "Hold (or stop holding) the X button",
+    true,
+    SortProperties.button,
+    0.2,
+    true,
+    Inputs.x.toString(),
+  );
 
-  static List<Setting> toggleYSetting = [
-    Setting()
-      ..title = "toggleY"
-      ..description = "Hold (or stop holding) the Y button"
-      ..enabled = true
-      ..sortProperty = SortProperties.button
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.2}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": true}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"input": Inputs.y}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> toggleYSetting = generateTCSettings(
+    "toggleY",
+    "Hold (or stop holding) the Y button",
+    true,
+    SortProperties.button,
+    0.2,
+    true,
+    Inputs.y.toString(),
+  );
 
-  static List<Setting> ltSetting = [
-    Setting()
-      ..title = "LT"
-      ..description = "Press the left trigger"
-      ..enabled = true
-      ..sortProperty = SortProperties.button
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.2}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": false}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"input": Inputs.lt}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> ltSetting = generateTCSettings(
+    "lt",
+    "Hold (or stop holding) the LT button",
+    true,
+    SortProperties.trigger,
+    0.2,
+    true,
+    Inputs.lt.toString(),
+  );
 
-  static List<Setting> rtSetting = [
-    Setting()
-      ..title = "RT"
-      ..description = "Press the left trigger"
-      ..enabled = true
-      ..sortProperty = SortProperties.button
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.2}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": false}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"input": Inputs.rt}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> rtSetting = generateTCSettings(
+    "rt",
+    "Hold (or stop holding) the RT button",
+    true,
+    SortProperties.trigger,
+    0.2,
+    true,
+    Inputs.rt.toString(),
+  );
 
-  static List<Setting> toggleLTSetting = [
-    Setting()
-      ..title = "LT"
-      ..description = "Press the left trigger"
-      ..enabled = true
-      ..sortProperty = SortProperties.button
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.2}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": true}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"input": Inputs.lt}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> toggleLTSetting = generateTCSettings(
+    "LT",
+    "Press the left trigger",
+    true,
+    SortProperties.button,
+    0.2,
+    true,
+    Inputs.lt.toString(),
+  );
 
-  static List<Setting> toggleRTSetting = [
-    Setting()
-      ..title = "toggleRT"
-      ..description = "Hold (or stop holding) the right trigger"
-      ..sortProperty = SortProperties.trigger
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.2}
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": true}
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description = "The button to press"
-      ..mapValues = {"input": Inputs.rt}
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> toggleRTSetting = generateTCSettings(
+    "toggleRT",
+    "Hold (or stop holding) the right trigger",
+    false,
+    SortProperties.trigger,
+    0.2,
+    true,
+    Inputs.rt.toString(),
+  );
 
-  static List<Setting> lightUpSetting = [
-    Setting()
-      ..title = "lightUp"
-      ..description = "Move the left stick up for a specified amount of time"
-      ..sortProperty = SortProperties.stick
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.25}
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": false}
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description = "The button to press"
-      ..mapValues = {"input": Inputs.lUp}
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> lightUpSetting = generateTCSettings(
+    "lightUp",
+    "Move the left stick up for a specified amount of time",
+    false,
+    SortProperties.stick,
+    0.25,
+    false,
+    Inputs.lUp.toString(),
+  );
 
-  static List<Setting> lightDownSetting = [
-    Setting()
-      ..title = "lightDown"
-      ..description = "Move the left stick down for a specified amount of time"
-      ..sortProperty = SortProperties.stick
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.25}
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": false}
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description = "The button to press"
-      ..mapValues = {"input": Inputs.lDown}
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> lightDownSetting = generateTCSettings(
+    "lightDown",
+    "Move the left stick down for a specified amount of time",
+    false,
+    SortProperties.stick,
+    0.25,
+    false,
+    Inputs.lDown.toString(),
+  );
 
-  static List<Setting> lightLeftSetting = [
-    Setting()
-      ..title = "lightLeft"
-      ..description = "Move the left stick left for a specified amount of time"
-      ..enabled = true
-      ..sortProperty = SortProperties.stick
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..enabled = true
-      ..mapValues = {"time": 0.25}
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": false}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"input": Inputs.lLeft}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> lightLeftSetting = generateTCSettings(
+    "lightLeft",
+    "Move the left stick left for a specified amount of time",
+    false,
+    SortProperties.stick,
+    0.25,
+    false,
+    Inputs.lLeft.toString(),
+  );
 
-  static List<Setting> lightRightSetting = [
-    Setting()
-      ..title = "lightRight"
-      ..description = "Move the left stick right for a specified amount of time"
-      ..enabled = true
-      ..sortProperty = SortProperties.stick
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..enabled = true
-      ..mapValues = {"time": 0.25}
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": false}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"input": Inputs.lRight}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> lightRightSetting = generateTCSettings(
+    "lightRight",
+    "Move the left stick right for a specified amount of time",
+    false,
+    SortProperties.stick,
+    0.25,
+    false,
+    Inputs.lRight.toString(),
+  );
 
-  static List<Setting> upSetting = [
-    Setting()
-      ..title = "up"
-      ..description =
-          "Hold (or stop holding) the left stick in the up direction"
-      ..enabled = true
-      ..sortProperty = SortProperties.stick
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..enabled = true
-      ..mapValues = {"time": 0.25}
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": true}
-      ..enabled = true
-      ..settingsWidget = SettingsWidgets.checkbox,
-  ];
+  static List<Setting> upSetting = generateTCSettings(
+    "up",
+    "Hold (or stop holding) the left stick in the up direction",
+    true,
+    SortProperties.stick,
+    0.25,
+    true,
+    Inputs.lUp.toString(),
+  );
 
-  static List<Setting> downSetting = [
-    Setting()
-      ..title = "down"
-      ..description =
-          "Hold (or stop holding) the left stick in the down direction"
-      ..enabled = true
-      ..sortProperty = SortProperties.stick
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.25}
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": true}
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Hold (or stop holding) the left stick in the down direction"
-      ..mapValues = {"input": Inputs.lDown}
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> downSetting = generateTCSettings(
+    "down",
+    "Hold (or stop holding) the left stick in the down direction",
+    true,
+    SortProperties.stick,
+    0.25,
+    true,
+    Inputs.lDown.toString(),
+  );
 
-  static List<Setting> leftSetting = [
-    Setting()
-      ..title = "left"
-      ..description =
-          "Hold (or stop holding) the left stick in the left direction"
-      ..enabled = true
-      ..sortProperty = SortProperties.stick
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.25}
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": true}
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Hold (or stop holding) the left stick in the left direction"
-      ..mapValues = {"input": Inputs.lLeft}
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> leftSetting = generateTCSettings(
+    "left",
+    "Hold (or stop holding) the left stick in the left direction",
+    true,
+    SortProperties.stick,
+    0.25,
+    true,
+    Inputs.lLeft.toString(),
+  );
 
-  static List<Setting> rightSetting = [
-    Setting()
-      ..title = "right"
-      ..description =
-          "Hold (or stop holding) the left stick in the right direction"
-      ..enabled = true
-      ..sortProperty = SortProperties.stick
-      ..settingsWidget = SettingsWidgets.card,
-    Setting()
-      ..title = "time"
-      ..description = "The length of the button press"
-      ..mapValues = {"time": 0.25}
-      ..settingsWidget = SettingsWidgets.numField,
-    Setting()
-      ..title = "hold"
-      ..description =
-          "Whether to hold the input or not. Time has no impact if true."
-      ..mapValues = {"hold": true}
-      ..settingsWidget = SettingsWidgets.checkbox,
-    Setting()
-      ..title = "input"
-      ..description =
-          "Hold (or stop holding) the left stick in the right direction"
-      ..mapValues = {"input": Inputs.lRight}
-      ..settingsWidget = SettingsWidgets.inputsDropdown,
-  ];
+  static List<Setting> rightSetting = generateTCSettings(
+    "right",
+    "Hold (or stop holding) the left stick in the right direction",
+    true,
+    SortProperties.stick,
+    0.25,
+    true,
+    Inputs.lRight.toString(),
+  );
 }
 
 // Setting TESTSetting = Setting(
@@ -775,31 +356,31 @@ class TCSettingsData {
 // );
 
 List<Setting> TCsettings = [
-  for (Setting setting in TCSettingsData.aSetting) setting,
-  for (Setting setting in TCSettingsData.bSetting) setting,
-  for (Setting setting in TCSettingsData.xSetting) setting,
-  for (Setting setting in TCSettingsData.ySetting) setting,
-  for (Setting setting in TCSettingsData.rbSetting) setting,
-  for (Setting setting in TCSettingsData.lbSetting) setting,
-  for (Setting setting in TCSettingsData.startSetting) setting,
-  for (Setting setting in TCSettingsData.selectSetting) setting,
-  for (Setting setting in TCSettingsData.lThumbSetting) setting,
-  for (Setting setting in TCSettingsData.toggleASetting) setting,
-  for (Setting setting in TCSettingsData.toggleBSetting) setting,
-  for (Setting setting in TCSettingsData.toggleXSetting) setting,
-  for (Setting setting in TCSettingsData.toggleYSetting) setting,
-  for (Setting setting in TCSettingsData.ltSetting) setting,
-  for (Setting setting in TCSettingsData.rtSetting) setting,
-  for (Setting setting in TCSettingsData.toggleLTSetting) setting,
-  for (Setting setting in TCSettingsData.toggleRTSetting) setting,
-  for (Setting setting in TCSettingsData.lightUpSetting) setting,
-  for (Setting setting in TCSettingsData.lightDownSetting) setting,
-  for (Setting setting in TCSettingsData.lightLeftSetting) setting,
-  for (Setting setting in TCSettingsData.lightRightSetting) setting,
-  for (Setting setting in TCSettingsData.upSetting) setting,
-  for (Setting setting in TCSettingsData.downSetting) setting,
-  for (Setting setting in TCSettingsData.leftSetting) setting,
-  for (Setting setting in TCSettingsData.rightSetting) setting,
+  ...TCSettingsData.aSetting,
+  ...TCSettingsData.bSetting,
+  ...TCSettingsData.xSetting,
+  ...TCSettingsData.ySetting,
+  ...TCSettingsData.rbSetting,
+  ...TCSettingsData.lbSetting,
+  ...TCSettingsData.startSetting,
+  ...TCSettingsData.selectSetting,
+  ...TCSettingsData.lThumbSetting,
+  ...TCSettingsData.toggleASetting,
+  ...TCSettingsData.toggleBSetting,
+  ...TCSettingsData.toggleXSetting,
+  ...TCSettingsData.toggleYSetting,
+  ...TCSettingsData.ltSetting,
+  ...TCSettingsData.rtSetting,
+  ...TCSettingsData.toggleLTSetting,
+  ...TCSettingsData.toggleRTSetting,
+  ...TCSettingsData.lightUpSetting,
+  ...TCSettingsData.lightDownSetting,
+  ...TCSettingsData.lightLeftSetting,
+  ...TCSettingsData.lightRightSetting,
+  ...TCSettingsData.upSetting,
+  ...TCSettingsData.downSetting,
+  ...TCSettingsData.leftSetting,
+  ...TCSettingsData.rightSetting,
 ];
 
 class RCSettingsData {
@@ -837,143 +418,158 @@ class FCSettingsData {
     ..mapValues = Filters.stop.name
     ..settingsWidget = SettingsWidgets.filtersDropdown;
 
-  static Setting aSetting = Setting()
-    ..title = Inputs.a.toString()
-    ..description =
-        "Number of alloted A presses until the desired effect occurs"
-    ..mapValues = fcSettingsValues(15, Inputs.a.toString())
-    ..sortProperty = SortProperties.button
-    ..settingsWidget = SettingsWidgets.card;
+  static List<Setting> aSetting = generateFCSettings(
+    Inputs.a.toString(),
+    "Number of alloted A presses until the desired effect occurs",
+    SortProperties.button,
+    15,
+    Inputs.a.toString(),
+    true,
+  );
 
-  static Setting bSetting = Setting()
-    ..title = Inputs.b.toString()
-    ..description =
-        "Number of alloted B presses until the desired effect occurs"
-    ..mapValues = fcSettingsValues(10, Inputs.b.toString())
-    ..sortProperty = SortProperties.button
-    ..settingsWidget = SettingsWidgets.card;
+  static List<Setting> bSetting = generateFCSettings(
+    Inputs.b.toString(),
+    "Number of alloted B presses until the desired effect occurs",
+    SortProperties.button,
+    10,
+    Inputs.b.toString(),
+    true,
+  );
 
-  static Setting xSetting = Setting()
-    ..title = Inputs.x.toString()
-    ..description =
-        "Number of alloted X presses until the desired effect occurs"
-    ..mapValues = fcSettingsValues(8, Inputs.x.toString())
-    ..sortProperty = SortProperties.button
-    ..settingsWidget = SettingsWidgets.card;
+  static List<Setting> xSetting = generateFCSettings(
+    Inputs.x.toString(),
+    "Number of alloted X presses until the desired effect occurs",
+    SortProperties.button,
+    8,
+    Inputs.x.toString(),
+    true,
+  );
 
-  static Setting ySetting = Setting()
-    ..title = Inputs.y.toString()
-    ..description =
-        "Number of alloted Y presses until the desired effect occurs"
-    ..mapValues = fcSettingsValues(8, Inputs.y.toString())
-    ..sortProperty = SortProperties.button
-    ..settingsWidget = SettingsWidgets.card;
+  static List<Setting> ySetting = generateFCSettings(
+    Inputs.y.toString(),
+    "Number of alloted Y presses until the desired effect occurs",
+    SortProperties.button,
+    8,
+    Inputs.y.toString(),
+    true,
+  );
 
-  static Setting rbSetting = Setting()
-    ..title = Inputs.rb.toString()
-    ..description =
-        "Number of alloted RB presses until the desired effect occurs"
-    ..mapValues = fcSettingsValues(7, Inputs.rb.toString())
-    ..sortProperty = SortProperties.button
-    ..settingsWidget = SettingsWidgets.card;
+  static List<Setting> rbSetting = generateFCSettings(
+    Inputs.rb.toString(),
+    "Number of alloted RB presses until the desired effect occurs",
+    SortProperties.button,
+    7,
+    Inputs.rb.toString(),
+    true,
+  );
 
-  static Setting lbSetting = Setting()
-    ..title = Inputs.lb.toString()
-    ..description =
-        "Number of alloted LB presses until the desired effect occurs"
-    ..mapValues = fcSettingsValues(7, Inputs.lb.toString())
-    ..sortProperty = SortProperties.button
-    ..settingsWidget = SettingsWidgets.card;
+  static List<Setting> lbSetting = generateFCSettings(
+    Inputs.lb.toString(),
+    "Number of alloted LB presses until the desired effect occurs",
+    SortProperties.button,
+    7,
+    Inputs.lb.toString(),
+    true,
+  );
 
-  static Setting start = Setting()
-    ..title = Inputs.start.toString()
-    ..description =
-        "Number of alloted Start presses until the desired effect occurs"
-    ..mapValues = fcSettingsValues(5, Inputs.start.toString())
-    ..sortProperty = SortProperties.button
-    ..settingsWidget = SettingsWidgets.card;
+  static List<Setting> startSetting = generateFCSettings(
+    Inputs.start.toString(),
+    "Number of alloted Start presses until the desired effect occurs",
+    SortProperties.button,
+    5,
+    Inputs.start.toString(),
+    true,
+  );
 
-  static Setting select = Setting()
-    ..title = Inputs.select.toString()
-    ..description =
-        "Number of alloted A presses until the desired effect occurs"
-    ..mapValues = fcSettingsValues(5, Inputs.select.toString())
-    ..sortProperty = SortProperties.button
-    ..settingsWidget = SettingsWidgets.card;
+  static List<Setting> selectSetting = generateFCSettings(
+    Inputs.select.toString(),
+    "Number of alloted A presses until the desired effect occurs",
+    SortProperties.button,
+    5,
+    Inputs.select.toString(),
+    true,
+  );
 
-  static Setting lthumbSetting = Setting()
-    ..title = Inputs.lThumb.toString()
-    ..description =
-        "Number of alloted Left Thumb presses until the desired effect occurs"
-    ..mapValues = fcSettingsValues(5, Inputs.lThumb.toString())
-    ..sortProperty = SortProperties.button
-    ..settingsWidget = SettingsWidgets.card;
+  static List<Setting> lThumbSetting = generateFCSettings(
+    Inputs.lThumb.toString(),
+    "Number of alloted Left Thumb presses until the desired effect occurs",
+    SortProperties.button,
+    5,
+    Inputs.lThumb.toString(),
+    true,
+  );
 
-  static Setting ltSetting = Setting()
-    ..title = Inputs.lt.toString()
-    ..description =
-        "Number of alloted Left Trigger presses until the desired effect occurs"
-    ..mapValues = fcSettingsValues(8, Inputs.lt.toString())
-    ..sortProperty = SortProperties.trigger
-    ..settingsWidget = SettingsWidgets.card;
+  static List<Setting> ltSetting = generateFCSettings(
+    Inputs.lt.toString(),
+    "Number of alloted Left Trigger presses until the desired effect occurs",
+    SortProperties.trigger,
+    8,
+    Inputs.lt.toString(),
+    true,
+  );
 
-  static Setting rtSetting = Setting()
-    ..title = Inputs.rt.toString()
-    ..description =
-        "Number of alloted RT presses until the desired effect occurs"
-    ..mapValues = fcSettingsValues(8, Inputs.rt.toString())
-    ..sortProperty = SortProperties.trigger
-    ..settingsWidget = SettingsWidgets.card;
+  static List<Setting> rtSetting = generateFCSettings(
+    Inputs.rt.toString(),
+    "Number of alloted RT presses until the desired effect occurs",
+    SortProperties.trigger,
+    8,
+    Inputs.rt.toString(),
+    true,
+  );
 
-  static Setting upSetting = Setting()
-    ..title = Inputs.lUp.toString()
-    ..description =
-        "Number of alloted Up presses until the desired effect occurs"
-    ..mapValues = fcSettingsValues(15, Inputs.lUp.toString())
-    ..sortProperty = SortProperties.stick
-    ..settingsWidget = SettingsWidgets.card;
+  static List<Setting> upSetting = generateFCSettings(
+    Inputs.lUp.toString(),
+    "Number of alloted Up presses until the desired effect occurs",
+    SortProperties.stick,
+    15,
+    Inputs.lUp.toString(),
+    true,
+  );
 
-  static Setting downSetting = Setting()
-    ..title = Inputs.lDown.toString()
-    ..description =
-        "Number of alloted Down presses until the desired effect occurs"
-    ..mapValues = fcSettingsValues(15, Inputs.lDown.toString())
-    ..sortProperty = SortProperties.stick
-    ..settingsWidget = SettingsWidgets.card;
+  static List<Setting> downSetting = generateFCSettings(
+    Inputs.lDown.toString(),
+    "Number of alloted Down presses until the desired effect occurs",
+    SortProperties.stick,
+    15,
+    Inputs.lDown.toString(),
+    true,
+  );
 
-  static Setting leftSetting = Setting()
-    ..title = Inputs.lLeft.toString()
-    ..description =
-        "Number of alloted Left presses until the desired effect occurs"
-    ..mapValues = fcSettingsValues(15, Inputs.lLeft.toString())
-    ..sortProperty = SortProperties.stick
-    ..settingsWidget = SettingsWidgets.card;
+  static List<Setting> leftSetting = generateFCSettings(
+    Inputs.lLeft.toString(),
+    "Number of alloted Left presses until the desired effect occurs",
+    SortProperties.stick,
+    15,
+    Inputs.lLeft.toString(),
+    true,
+  );
 
-  static Setting rightSetting = Setting()
-    ..title = Inputs.lRight.toString()
-    ..description =
-        "Number of alloted Right presses until the desired effect occurs"
-    ..mapValues = fcSettingsValues(15, Inputs.lRight.toString())
-    ..sortProperty = SortProperties.stick
-    ..settingsWidget = SettingsWidgets.card;
+  static List<Setting> rightSetting = generateFCSettings(
+    Inputs.lRight.toString(),
+    "Number of alloted Right presses until the desired effect occurs",
+    SortProperties.stick,
+    15,
+    Inputs.lRight.toString(),
+    true,
+  );
 }
 
 List<Setting> FCsettings = [
-  FCSettingsData.aSetting,
-  FCSettingsData.bSetting,
-  FCSettingsData.xSetting,
-  FCSettingsData.ySetting,
-  FCSettingsData.lbSetting,
-  FCSettingsData.rbSetting,
-  FCSettingsData.start,
-  FCSettingsData.select,
-  FCSettingsData.lthumbSetting,
-  FCSettingsData.ltSetting,
-  FCSettingsData.rtSetting,
-  FCSettingsData.upSetting,
-  FCSettingsData.downSetting,
-  FCSettingsData.leftSetting,
-  FCSettingsData.rightSetting,
+  ...FCSettingsData.aSetting,
+  ...FCSettingsData.bSetting,
+  ...FCSettingsData.xSetting,
+  ...FCSettingsData.ySetting,
+  ...FCSettingsData.lbSetting,
+  ...FCSettingsData.rbSetting,
+  ...FCSettingsData.startSetting,
+  ...FCSettingsData.selectSetting,
+  ...FCSettingsData.lThumbSetting,
+  ...FCSettingsData.ltSetting,
+  ...FCSettingsData.rtSetting,
+  ...FCSettingsData.upSetting,
+  ...FCSettingsData.downSetting,
+  ...FCSettingsData.leftSetting,
+  ...FCSettingsData.rightSetting,
 ];
 
 /*
