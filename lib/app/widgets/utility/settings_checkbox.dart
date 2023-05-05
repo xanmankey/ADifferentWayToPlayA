@@ -1,5 +1,6 @@
 import 'package:adifferentwaytoplay/app/utils/utils.dart';
 import 'package:adifferentwaytoplay/app/widgets/utility/text.dart';
+import 'package:adifferentwaytoplay/data/utils/utils.dart';
 import 'package:adifferentwaytoplay/domain/constants.dart';
 import 'package:adifferentwaytoplay/domain/entities/setting.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +9,10 @@ import 'package:checkbox_formfield/checkbox_formfield.dart';
 
 class SettingsCheckbox extends StatefulWidget {
   Setting setting;
-  void Function(bool?) updateSettingValue;
   bool defaultValue;
   SettingsCheckbox({
     super.key,
     required this.setting,
-    required this.updateSettingValue,
     this.defaultValue = true,
   });
 
@@ -34,16 +33,11 @@ class _SettingsCheckboxState extends State<SettingsCheckbox> {
           setState(() {
             currentValue = value!;
           });
-          widget.updateSettingValue(value);
+          widget.setting.mapValues = value!;
+          storage.updateSettings([widget.setting]);
         },
         title: TextWidget(text: widget.setting.title),
       ),
-      updateSettingValue: ({description, enabled = true, sortType, title}) {
-        // Update the setting
-      },
-      deleteSetting: (setting) {
-        // Delete the setting
-      },
     );
   }
 }

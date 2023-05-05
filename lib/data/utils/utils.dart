@@ -1,4 +1,5 @@
 import 'package:adifferentwaytoplay/data/utils/initial_vars.dart';
+import 'package:adifferentwaytoplay/domain/entities/setting.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
 import 'package:flython/flython.dart';
 import 'package:isar/isar.dart';
@@ -97,25 +98,30 @@ class Storage {
         );
         // Write initial data if the database is empty
         await isarDB.writeTxn(() async {
-          /// Note that players and gamepads aren't written,
-          /// because they haven't been initialized yet
-          // Write Characters
-          // The value of int.min just so happens to be the id of ALL my
-          // characters; what significance does that have?
-          // THE SIGNIFICANCE is that numerical values are used to replace
-          // 'null' values in Isar, so Isar.autoIncrement = null
-          print(Isar.autoIncrement);
           for (Character character in characters) {
-            print(character.id);
-            print(character.toString());
             await isarDB.characters.put(character);
           }
         });
 
-        print('progress');
         await isarDB.writeTxn(() async {
-          await isarDB.programs.put(ProgramData.TC);
-          await isarDB.programs.put(ProgramData.RC);
+          // Write Settings and Programs in tandem
+          // TC settings and program
+          for (Setting setting in TCsettings) {
+            isarDB.settings.put(setting);
+            ProgramData.TC.settings.add(setting);
+          }
+          isarDB.programs.put(ProgramData.TC);
+          // RC settings and program
+          for (Setting setting in RCsettings) {
+            isarDB.settings.put(setting);
+            ProgramData.RC.settings.add(setting);
+          }
+          isarDB.programs.put(ProgramData.RC);
+          // FC settings and program
+          for (Setting setting in FCsettings) {
+            isarDB.settings.put(setting);
+            ProgramData.FC.settings.add(setting);
+          }
           await isarDB.programs.put(ProgramData.FC);
           // MIOP program (no settings)
           await isarDB.programs.put(ProgramData.MIOP);
@@ -586,6 +592,136 @@ class Storage {
       Isar db = await isarDB;
       int numDeletedPrograms = await db.programs.deleteAll(programIds);
       return numDeletedPrograms;
+    } catch (e, stacktrace) {
+      logger.warning("Whoops, that's an error! \n $e \n $stacktrace");
+      return null;
+    }
+  }
+
+  /// Retrieve settings by title and program or gamemode
+  Future<List<Setting?>> getSetting(Map<String, dynamic> index) async {
+    try {
+      Isar db = await isarDB;
+      if (index.entries.length != 2) {
+        return [];
+      }
+      List<FilterCondition> filterConditions = [];
+      for (MapEntry<String, dynamic> entry in index.entries) {
+        switch (entry.key) {
+          case "program":
+            // TODO: as always, not sure how to access properties of THE linked value
+            filterConditions.add(
+              FilterCondition(
+                type: FilterConditionType.contains,
+                property: 'program.value.abbreviation',
+                value1: entry.value,
+                include1: true,
+                include2: false,
+                caseSensitive: false,
+              ),
+            );
+            break;
+          case "gamemode":
+            filterConditions.add(
+              FilterCondition(
+                type: FilterConditionType.contains,
+                property: 'gamemode.value.title',
+                value1: entry.value,
+                include1: true,
+                include2: false,
+                caseSensitive: false,
+              ),
+            );
+            break;
+          case "title":
+            filterConditions.add(
+              FilterCondition(
+                type: FilterConditionType.contains,
+                property: 'title',
+                value1: entry.value,
+                include1: true,
+                include2: false,
+                caseSensitive: false,
+              ),
+            );
+            break;
+          default:
+            return [];
+        }
+      }
+      return await db.settings
+          .buildQuery<Setting>(
+            filter: FilterGroup(
+                filters: filterConditions, type: FilterGroupType.and),
+          )
+          .findAll();
+    } catch (e, stacktrace) {
+      logger.warning("Whoops, that's an error! \n $e \n $stacktrace");
+      return [];
+    }
+  }
+
+  /// Returns a sorted list based on specified setting indexes
+  Future<List<Setting>> getSettingList(List<Map<String, Sort>> indexes) async {
+    try {
+      Isar db = await isarDB;
+      // Default case; sort by id
+      if (indexes.isEmpty) {
+        List<Setting> settings = await db.settings.where().findAll();
+        return settings;
+      }
+      // Building a dynamic query to execute based on the user sorting preferences
+      List<SortProperty> sortProperties = [];
+      for (Map<String, Sort> index in indexes) {
+        switch (index.entries.first.key) {
+          case "program":
+            sortProperties.add(SortProperty(
+                property: 'program.value.abbreviation',
+                sort: index.entries.first.value));
+            break;
+          case "title":
+            sortProperties.add(SortProperty(
+                property: 'title.name', sort: index.entries.first.value));
+            break;
+          case "gamemode":
+            sortProperties.add(SortProperty(
+                property: 'gamemode.value.title',
+                sort: index.entries.first.value));
+            break;
+          case "enabled":
+            sortProperties.add(SortProperty(
+                property: 'enabled', sort: index.entries.first.value));
+            break;
+        }
+      }
+      List<Setting> settings = await db.settings
+          .buildQuery<Setting>(sortBy: sortProperties)
+          .findAll();
+      return settings;
+    } catch (e, stacktrace) {
+      logger.warning("Whoops, that's an error! \n $e \n $stacktrace");
+      return [];
+    }
+  }
+
+  /// Update all given programs
+  Future<List<Setting?>?> updateSettings(List<Setting> settings) async {
+    try {
+      Isar db = await isarDB;
+      List<int> ids = await db.settings.putAll(settings);
+      return await db.settings.getAll(ids);
+    } catch (e, stacktrace) {
+      logger.warning("Whoops, that's an error! \n $e \n $stacktrace");
+      return null;
+    }
+  }
+
+  /// Deletes all programs with the selected ids
+  Future<int?> deleteSettings(List<int> settingIds) async {
+    try {
+      Isar db = await isarDB;
+      int numDeletedSettings = await db.settings.deleteAll(settingIds);
+      return numDeletedSettings;
     } catch (e, stacktrace) {
       logger.warning("Whoops, that's an error! \n $e \n $stacktrace");
       return null;

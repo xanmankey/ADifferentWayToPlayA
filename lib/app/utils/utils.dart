@@ -28,45 +28,42 @@ List<Widget> generateSettingsWidgets(List<Setting> settings) {
   for (Setting setting in settings) {
     switch (setting.settingsWidget) {
       case SettingsWidgets.checkbox:
-        widgets.add(SettingsCheckbox(setting: setting, updateSettingValue: ,));
+        widgets.add(SettingsCheckbox(setting: setting));
         break;
       case SettingsWidgets.numField:
         widgets.add(SettingsField(
           setting: setting,
           numerical: true,
-          updateSettingValue: ,
         ));
         break;
       case SettingsWidgets.textField:
         widgets.add(SettingsField(
           setting: setting,
           numerical: false,
-          updateSettingValue: ,
         ));
         break;
       case SettingsWidgets.inputTypesDropdown:
         widgets.add(SettingsDropdown(
           setting: setting,
           items: Items.inputTypes,
-          updateSettingValue: ,
         ));
         break;
       case SettingsWidgets.inputsDropdown:
         widgets.add(SettingsDropdown(
           setting: setting,
           items: Items.inputs,
-          updateSettingValue: ,
         ));
         break;
       case SettingsWidgets.boolDropdown:
-        widgets.add(
-            SettingsDropdown(setting: setting, items: Items.booleans, updateSettingValue: ,));
+        widgets.add(SettingsDropdown(
+          setting: setting,
+          items: Items.booleans,
+        ));
         break;
       case SettingsWidgets.filtersDropdown:
         widgets.add(SettingsDropdown(
           setting: setting,
           items: Items.filters,
-          updateSettingValue: ,
         ));
         break;
       case SettingsWidgets.card:

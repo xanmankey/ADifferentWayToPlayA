@@ -9,20 +9,11 @@ import 'package:adifferentwaytoplay/data/utils/utils.dart';
 class SettingsContextMenu extends StatefulWidget {
   Setting setting;
   Widget settingsWidget;
-  void Function({
-    String? title,
-    String? description,
-    bool enabled,
-    String? sortType,
-  }) updateSettingValue;
-  void Function(Setting setting) deleteSetting;
 
   SettingsContextMenu({
     super.key,
     required this.setting,
     required this.settingsWidget,
-    required this.updateSettingValue,
-    required this.deleteSetting,
   });
 
   @override
@@ -56,7 +47,7 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
               setState(() {
                 widget.setting.title = titleController.text;
               });
-              widget.updateSettingValue(title: titleController.text);
+              storage.updateSettings([widget.setting]);
             }),
         NCM.MenuItem(
             title: "Description",
@@ -70,8 +61,7 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
               setState(() {
                 widget.setting.title = descriptionController.text;
               });
-              widget.updateSettingValue(
-                  description: descriptionController.text);
+              storage.updateSettings([widget.setting]);
             }),
         NCM.MenuItem(
           title: "Disable/Enable",
@@ -82,7 +72,7 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
                 setState(() {
                   widget.setting.enabled = true;
                 });
-                widget.updateSettingValue(enabled: true);
+                storage.updateSettings([widget.setting]);
               },
             ),
             NCM.MenuItem(
@@ -91,7 +81,7 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
                 setState(() {
                   widget.setting.enabled = false;
                 });
-                widget.updateSettingValue(enabled: false);
+                storage.updateSettings([widget.setting]);
               },
             ),
           ],
@@ -143,7 +133,7 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
                         text: "Are you sure you want to delete this setting?"),
                     content: IconButton(
                       onPressed: () {
-                        widget.deleteSetting(widget.setting);
+                        storage.deleteSettings([widget.setting.id]);
                         Navigator.pop(context);
                       },
                       icon: const Icon(Icons.delete),

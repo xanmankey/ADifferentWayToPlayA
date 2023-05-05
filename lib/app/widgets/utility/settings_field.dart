@@ -1,4 +1,6 @@
 import 'package:adifferentwaytoplay/app/utils/utils.dart';
+import 'package:adifferentwaytoplay/data/utils/utils.dart';
+import 'package:adifferentwaytoplay/domain/entities/setting.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
@@ -13,11 +15,9 @@ import 'package:adifferentwaytoplay/app/widgets/utility/DWTP_context_menu.dart';
 class SettingsField extends StatefulWidget {
   Setting setting;
   bool numerical;
-  void Function(String) updateSettingValue;
   SettingsField({
     super.key,
     required this.setting,
-    required this.updateSettingValue,
     this.numerical = false,
   });
 
@@ -30,7 +30,8 @@ class _SettingsFieldState extends State<SettingsField> {
   late Color fieldColor;
   @override
   void initState() {
-    fieldColor = settingColor(widget.setting.sortProperty ?? '');
+    fieldColor = settingColor(widget.setting.sortProperty);
+    controller.text = widget.setting.mapValues.toString();
     super.initState();
   }
 
@@ -47,8 +48,10 @@ class _SettingsFieldState extends State<SettingsField> {
         keyboardType:
             (widget.numerical) ? TextInputType.number : TextInputType.text,
         onSubmitted: (value) {
-          // Updates the setting value in the respective program, character, etc
-          widget.updateSettingValue(value);
+          // Update the setting value
+          widget.setting.mapValues = value;
+          // Write the setting value
+          storage.updateSettings([widget.setting]);
         },
       ),
     );
