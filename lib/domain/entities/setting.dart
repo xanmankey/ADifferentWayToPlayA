@@ -40,6 +40,15 @@ class Setting {
   @Index()
   bool enabled = true;
 
+  // For settings that are individualized based on the player
+  @Index()
+  bool individual = false;
+
+  // An index for ensuring that DWTP won't start until the value of individual settings
+  // are set correctly
+  @Index()
+  bool ready = false;
+
   // Grouping settings is for layout purposes (specifically for cards, settings
   // that you want to encompass together inside a card)
   // Note that the settings need to be written first,

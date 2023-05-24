@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:adifferentwaytoplay/app/constants.dart';
 import 'package:adifferentwaytoplay/app/widgets/utility/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:adifferentwaytoplay/app/widgets/utility/card_selector.dart';
@@ -49,7 +50,7 @@ class Home extends StatelessWidget {
               ),
               padding: 5,
               onTap: () {
-                Navigator.pushNamed(context, "/programs");
+                Navigator.pushNamed(context, Pages.programs);
               },
             ),
           ),
@@ -68,7 +69,7 @@ class Home extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15.0),
                 ),
                 padding: 5,
-                onTap: () => Navigator.pushNamed(context, '/characters'),
+                onTap: () => Navigator.pushNamed(context, Pages.characters),
               ),
             ),
             const Padding(
@@ -84,12 +85,12 @@ class Home extends StatelessWidget {
                 text: "Gamemodes",
                 color: Colors.white,
               ),
-              onPressed: () => Navigator.pushNamed(context, '/gamemodes'),
+              onPressed: () => Navigator.pushNamed(context, Pages.gamemodes),
             ),
             const Padding(
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 60)),
             IconButton(
-              onPressed: () => Navigator.pushNamed(context, 'settings'),
+              onPressed: () => Navigator.pushNamed(context, Pages.appSettings),
               icon: const Icon(Icons.arrow_right_rounded),
             ),
             SizedBox(
@@ -102,7 +103,7 @@ class Home extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15.0),
                 ),
                 padding: 50,
-                onTap: () => Navigator.pushNamed(context, '/teams'),
+                onTap: () => Navigator.pushNamed(context, Pages.teams),
               ),
             ),
           ],
@@ -121,7 +122,7 @@ class Home extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               padding: 50,
-              onTap: () => Navigator.pushNamed(context, '/play'),
+              onTap: () => Navigator.pushNamed(context, Pages.dwtp),
             ),
           ),
         ),

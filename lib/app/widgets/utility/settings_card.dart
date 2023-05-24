@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:adifferentwaytoplay/app/utils/utils.dart';
-import 'package:adifferentwaytoplay/app/widgets/utility/DWTP_dialog.dart';
+import 'package:adifferentwaytoplay/app/widgets/utility/settings_context_menu.dart';
+import 'package:adifferentwaytoplay/app/widgets/utility/settings_dialog.dart';
 import 'package:adifferentwaytoplay/domain/entities/setting.dart';
 import 'package:flutter/material.dart';
 import 'package:adifferentwaytoplay/app/widgets/utility/text.dart';
-import 'package:adifferentwaytoplay/app/widgets/utility/DWTP_context_menu.dart';
 
 // This goes inside a horizontal ListView
 class SettingsCard extends StatefulWidget {

@@ -37,11 +37,12 @@ import 'package:adifferentwaytoplay/app/constants.dart';
 /// }
 /// ```
 ///
-class ExceptionWidget extends StatelessWidget {
+class ExceptionPage extends StatelessWidget {
   String? stacktrace;
   String error;
-  ExceptionWidget({super.key, required this.error, this.stacktrace});
+  ExceptionPage({super.key, required this.error, this.stacktrace});
 
+  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,4 +65,15 @@ class ExceptionWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+/// A function for rendering exception widgets
+Widget renderException(
+  BuildContext context,
+  String error,
+  String? stacktrace,
+) {
+  Navigator.of(context).pushNamed(Pages.exception,
+      arguments: {"error": error, "stacktrace": stacktrace});
+  return Container();
 }

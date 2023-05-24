@@ -53,7 +53,7 @@ class Program {
   var settings = IsarLinks<Setting>();
 
   @Backlink(to: 'program')
-  var player = IsarLink<Player>();
+  var player = IsarLinks<Player>();
 
   @override
   String toString() {

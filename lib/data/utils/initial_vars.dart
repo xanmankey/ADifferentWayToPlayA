@@ -1227,7 +1227,7 @@ class GamemodeData {
         ..mapValues = 50
         ..settingsWidget = SettingsWidgets.numField,
       Setting()
-        ..title = GamemodeOptionsValues.score.toString()
+        ..title = GamemodeOptionsValues.weightedPrograms.toString()
         ..mapValues = true
         ..settingsWidget = SettingsWidgets.boolDropdown,
     ]);
@@ -1241,7 +1241,7 @@ class GamemodeData {
         ..mapValues = 40
         ..settingsWidget = SettingsWidgets.numField,
       Setting()
-        ..title = GamemodeOptionsValues.score.toString()
+        ..title = GamemodeOptionsValues.weightedPrograms.toString()
         ..mapValues = true
         ..settingsWidget = SettingsWidgets.boolDropdown,
     ]);
@@ -1298,15 +1298,15 @@ class GamepadData {
   static Gamepad gamepad1 = Gamepad()
     ..connected = true
     ..index = 1
-    ..color = PlayerColors.p1.toColor();
+    ..color = PlayerColors.p1.enumToColor();
   static Gamepad gamepad2 = Gamepad()
     ..connected = true
     ..index = 2
-    ..color = PlayerColors.p2.toColor();
+    ..color = PlayerColors.p2.enumToColor();
   static Gamepad gamepad3 = Gamepad()
     ..connected = true
     ..index = 3
-    ..color = PlayerColors.p3.toColor();
+    ..color = PlayerColors.p3.enumToColor();
   // static Gamepad TESTGamepad = Gamepad()
   //   ..connected = false
   //   ..index = 4

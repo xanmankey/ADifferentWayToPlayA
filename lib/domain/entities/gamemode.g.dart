@@ -17,18 +17,23 @@ const GamemodeSchema = CollectionSchema(
   name: r'Gamemode',
   id: -743387943824840136,
   properties: {
-    r'name': PropertySchema(
+    r'image': PropertySchema(
       id: 0,
+      name: r'image',
+      type: IsarType.string,
+    ),
+    r'name': PropertySchema(
+      id: 1,
       name: r'name',
       type: IsarType.string,
     ),
     r'teams': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'teams',
       type: IsarType.bool,
     ),
     r'timesPlayed': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'timesPlayed',
       type: IsarType.long,
     )
@@ -106,6 +111,7 @@ int _gamemodeEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.image.length * 3;
   bytesCount += 3 + object.name.length * 3;
   return bytesCount;
 }
@@ -116,9 +122,10 @@ void _gamemodeSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.name);
-  writer.writeBool(offsets[1], object.teams);
-  writer.writeLong(offsets[2], object.timesPlayed);
+  writer.writeString(offsets[0], object.image);
+  writer.writeString(offsets[1], object.name);
+  writer.writeBool(offsets[2], object.teams);
+  writer.writeLong(offsets[3], object.timesPlayed);
 }
 
 Gamemode _gamemodeDeserialize(
@@ -129,9 +136,10 @@ Gamemode _gamemodeDeserialize(
 ) {
   final object = Gamemode();
   object.id = id;
-  object.name = reader.readString(offsets[0]);
-  object.teams = reader.readBoolOrNull(offsets[1]);
-  object.timesPlayed = reader.readLong(offsets[2]);
+  object.image = reader.readString(offsets[0]);
+  object.name = reader.readString(offsets[1]);
+  object.teams = reader.readBoolOrNull(offsets[2]);
+  object.timesPlayed = reader.readLong(offsets[3]);
   return object;
 }
 
@@ -145,8 +153,10 @@ P _gamemodeDeserializeProp<P>(
     case 0:
       return (reader.readString(offset)) as P;
     case 1:
-      return (reader.readBoolOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 2:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 3:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -565,6 +575,136 @@ extension GamemodeQueryFilter
     });
   }
 
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> imageEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'image',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> imageGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'image',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> imageLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'image',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> imageBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'image',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> imageStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'image',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> imageEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'image',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> imageContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'image',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> imageMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'image',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> imageIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'image',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> imageIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'image',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> nameEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -898,6 +1038,18 @@ extension GamemodeQueryLinks
 }
 
 extension GamemodeQuerySortBy on QueryBuilder<Gamemode, Gamemode, QSortBy> {
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> sortByImage() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'image', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> sortByImageDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'image', Sort.desc);
+    });
+  }
+
   QueryBuilder<Gamemode, Gamemode, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -949,6 +1101,18 @@ extension GamemodeQuerySortThenBy
     });
   }
 
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> thenByImage() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'image', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> thenByImageDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'image', Sort.desc);
+    });
+  }
+
   QueryBuilder<Gamemode, Gamemode, QAfterSortBy> thenByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -988,6 +1152,13 @@ extension GamemodeQuerySortThenBy
 
 extension GamemodeQueryWhereDistinct
     on QueryBuilder<Gamemode, Gamemode, QDistinct> {
+  QueryBuilder<Gamemode, Gamemode, QDistinct> distinctByImage(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'image', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Gamemode, Gamemode, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1013,6 +1184,12 @@ extension GamemodeQueryProperty
   QueryBuilder<Gamemode, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<Gamemode, String, QQueryOperations> imageProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'image');
     });
   }
 

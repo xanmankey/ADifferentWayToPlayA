@@ -36,20 +36,17 @@ class Team {
   late int color;
 
   @Index()
-  int score = 0;
-
-  @Index()
   int matchesPlayed = 0;
 
   @Index()
   int matchesWon = 0;
 
   @Backlink(to: 'team')
-  var player = IsarLink<Player>();
+  var player = IsarLinks<Player>();
 
   @override
   String toString() {
-    return '''$id: {name: $name, logo: $logo, score: $score, description: $description, color: $color, 
+    return '''$id: {name: $name, logo: $logo, description: $description, color: $color, 
     matchesPlayed: $matchesPlayed, matchesWon: $matchesWon}''';
   }
 

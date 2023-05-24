@@ -1,3 +1,4 @@
+import 'package:adifferentwaytoplay/app/constants.dart';
 import 'package:flutter/material.dart';
 
 /// A custom app bar for the app
@@ -24,7 +25,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       backgroundColor: Colors.black,
       leading: IconButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/home');
+          Navigator.pushNamed(context, Pages.home);
         },
         icon: const Icon(Icons.house),
       ),

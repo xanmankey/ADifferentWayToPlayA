@@ -61,7 +61,7 @@ class Character {
   int matchesWon = 0;
 
   @Backlink(to: 'character')
-  final player = IsarLink<Player>();
+  final player = IsarLinks<Player>();
 
   @override
   String toString() {

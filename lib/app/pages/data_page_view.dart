@@ -155,7 +155,7 @@ class _DWTPListViewState extends State<DWTPListView> {
             ),
           );
         } else if (snapshot.hasError) {
-          return ExceptionWidget(error: snapshot.error.toString());
+          return ExceptionPage(error: snapshot.error.toString());
         } else {
           return const Scaffold(
               appBar: CustomAppBar(), body: CircularProgressIndicator());

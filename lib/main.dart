@@ -1,8 +1,12 @@
+import 'package:adifferentwaytoplay/app/pages/data_page_view.dart';
+import 'package:adifferentwaytoplay/app/pages/input_results_view.dart';
 import 'package:adifferentwaytoplay/app/provider/dwtp_provider.dart';
+import 'package:adifferentwaytoplay/app/utils/exposed_types.dart';
 import 'package:adifferentwaytoplay/data/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:adifferentwaytoplay/data/utils/initial_vars.dart';
+import 'package:adifferentwaytoplay/app/constants.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +15,7 @@ import 'package:adifferentwaytoplay/app/pages/home_view.dart';
 import 'package:adifferentwaytoplay/app/pages/DWTP_view.dart';
 import 'package:adifferentwaytoplay/app/pages/exception_view.dart';
 import 'package:adifferentwaytoplay/app/pages/victory_view.dart';
+import 'package:xinput_gamepad/xinput_gamepad.dart';
 
 // Import utilites
 // import 'package:adifferentwaytoplay/utilities/vars.dart';
@@ -54,6 +59,7 @@ void initializeLogging() {
 void main() async {
   Storage();
   initializeLogging();
+  XInputManager.enableXInput();
   // Link the app to the class providing state
   runApp(ChangeNotifierProvider<DWTPProvider>(
     create: (_) => DWTPProvider(),
@@ -83,19 +89,69 @@ class DWTP extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       navigatorKey: navigatorKey,
-      initialRoute: "/home",
+      initialRoute: Pages.home,
       routes: {
-        "/home": (context) => const Home(),
-        // "/victory": (context) => Victory(),
-        // "/exception": (context) => const ExceptionWidget(),
-        // '/DWTP': (context) => const GamemodeView(),
-        // '/programs': (context) => ProgramListPage(),
-        // '/program': (context) => const ProgramView(),
-        // '/characters': (context) => const CharacterListView(),
-        // '/character': (context) => const CharacterView(),
-        // '/teams': (context) => const TeamListView(),
-        // '/team': (context) => const TeamView(),
+        Pages.home: (context) => const Home(),
+        Pages.exception: (context) => ExceptionPage(
+              error: (ModalRoute.of(context)!.settings.arguments!
+                  as Map<String, String>)["error"]!,
+              stacktrace: (ModalRoute.of(context)!.settings.arguments!
+                  as Map<String, String?>)["stacktrace"]!,
+            ),
+        Pages.programs: (context) => DWTPListView(
+              exposedDataTypes: const DataTypes.programType(),
+            ),
+        Pages.characters: (context) => DWTPListView(
+              exposedDataTypes: const DataTypes.characterType(),
+            ),
+        Pages.teams: (context) => DWTPListView(
+              exposedDataTypes: const DataTypes.teamType(),
+            ),
+        Pages.gamemodes: (context) => DWTPListView(
+              exposedDataTypes: const DataTypes.gamemodeType(),
+            ),
+        Pages.dwtp: (context) => const DWTP(),
+        Pages.resultsInput: (context) => const ResultsInputView(),
+        Pages.victory: (context) => const Victory(),
       },
     );
   }
 }
+
+/*
+// TESTING AREA
+import 'package:flutter/material.dart';
+
+void main() => runApp(const PageViewExampleApp());
+
+class PageViewExampleApp extends StatelessWidget {
+  const PageViewExampleApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('PageView Sample')),
+        body: const PageViewExample(),
+      ),
+    );
+  }
+}
+
+class PageViewExample extends StatelessWidget {
+  const PageViewExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final PageController controller = PageController();
+    return PageView.builder(
+
+        /// [PageView.scrollDirection] defaults to [Axis.horizontal].
+        /// Use [Axis.vertical] to scroll vertically.
+        controller: controller,
+        itemBuilder: (context, index) {
+          return Text("$index page!");
+        });
+  }
+}
+*/

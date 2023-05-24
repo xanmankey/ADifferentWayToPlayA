@@ -1,6 +1,6 @@
 import 'package:adifferentwaytoplay/app/widgets/utility/text.dart';
 import 'package:adifferentwaytoplay/data/utils/utils.dart';
-import 'package:adifferentwaytoplay/data/utils/initial_vars.dart';
+import 'package:adifferentwaytoplay/domain/entities/setting.dart';
 import 'package:flutter/material.dart';
 
 import 'package:adifferentwaytoplay/domain/entities/gamemode.dart';
@@ -8,7 +8,7 @@ import 'package:adifferentwaytoplay/domain/utils/utils.dart';
 import 'package:adifferentwaytoplay/app/utils/utils.dart';
 
 /// A stateful widget for displaying a gamemode in PageView format as
-/// specified by DWTP_view.dart. Doubles as a gamemode editor via the UI.
+/// specified by DWTP_view.dart
 /// ```
 ///
 /// ```
@@ -62,9 +62,10 @@ class _GamemodeEntryState extends State<GamemodeEntry> {
             TextWidget(text: '${widget.gamemode.timesPlayed}'),
           ],
         ),
-        // The toWidget() func needs to take the mapValues from a gamemode
-        // and turn it into widgets
-        widget.gamemode.gamemodeOptions.toWidget(),
+        // Generate and render desired settingsWidgets
+        for (Widget widget
+            in generateSettingsWidgets(widget.gamemode.settings.toList()))
+          widget
       ],
     );
   }

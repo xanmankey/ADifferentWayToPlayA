@@ -1,23 +1,21 @@
 // A static class for easy-access routing
-import 'package:adifferentwaytoplay/app/widgets/gamemode/free_for_all.dart';
-import 'package:adifferentwaytoplay/app/widgets/gamemode/team_competition.dart';
 import 'package:adifferentwaytoplay/domain/entities/gamemode.dart';
 import 'package:adifferentwaytoplay/domain/entities/program.dart';
 import 'package:flutter/material.dart';
 
 class Pages {
   static String home = '/home';
-  static String gamemodeSelection = '/gamemodeSelection';
-  static String programSelection = '/programSelection';
-  static String miop = '/MIOP';
-  static String tc = '/TC';
-  static String fc = '/FC';
-  static String rc = '/RC';
-  static String dc = '/DC';
-  static String playerSelection = '/playerSelection';
-  static String tournamentSelection = '/tournamentSelection';
-  static String tournamentBracket = '/tournamentBracket';
+  static String appSettings = '/appSettings';
+  static String exception = '/exception';
+  static String gamemodes = '/gamemodes';
+  static String programs = '/programs';
+  static String characters = '/characters';
+  static String teams = '/teams';
+  static String dwtp = '/dwtp';
   static String victory = '/victory';
+  static String resultsInput = "/resultsInput";
+  // static String tournamentSelection = '/tournamentSelection';
+  // static String tournamentBracket = '/tournamentBracket';
 }
 
 /*

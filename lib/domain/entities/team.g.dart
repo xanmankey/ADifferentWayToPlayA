@@ -46,11 +46,6 @@ const TeamSchema = CollectionSchema(
       id: 5,
       name: r'name',
       type: IsarType.string,
-    ),
-    r'score': PropertySchema(
-      id: 6,
-      name: r'score',
-      type: IsarType.long,
     )
   },
   estimateSize: _teamEstimateSize,
@@ -80,19 +75,6 @@ const TeamSchema = CollectionSchema(
       properties: [
         IndexPropertySchema(
           name: r'color',
-          type: IndexType.value,
-          caseSensitive: false,
-        )
-      ],
-    ),
-    r'score': IndexSchema(
-      id: -359542572601593437,
-      name: r'score',
-      unique: false,
-      replace: false,
-      properties: [
-        IndexPropertySchema(
-          name: r'score',
           type: IndexType.value,
           caseSensitive: false,
         )
@@ -130,7 +112,7 @@ const TeamSchema = CollectionSchema(
       id: 5142083483174173681,
       name: r'player',
       target: r'Player',
-      single: true,
+      single: false,
       linkName: r'team',
     )
   },
@@ -170,7 +152,6 @@ void _teamSerialize(
   writer.writeLong(offsets[3], object.matchesPlayed);
   writer.writeLong(offsets[4], object.matchesWon);
   writer.writeString(offsets[5], object.name);
-  writer.writeLong(offsets[6], object.score);
 }
 
 Team _teamDeserialize(
@@ -187,7 +168,6 @@ Team _teamDeserialize(
   object.matchesPlayed = reader.readLong(offsets[3]);
   object.matchesWon = reader.readLong(offsets[4]);
   object.name = reader.readString(offsets[5]);
-  object.score = reader.readLong(offsets[6]);
   return object;
 }
 
@@ -210,8 +190,6 @@ P _teamDeserializeProp<P>(
       return (reader.readLong(offset)) as P;
     case 5:
       return (reader.readString(offset)) as P;
-    case 6:
-      return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -295,14 +273,6 @@ extension TeamQueryWhereSort on QueryBuilder<Team, Team, QWhere> {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         const IndexWhereClause.any(indexName: r'color'),
-      );
-    });
-  }
-
-  QueryBuilder<Team, Team, QAfterWhere> anyScore() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        const IndexWhereClause.any(indexName: r'score'),
       );
     });
   }
@@ -516,94 +486,6 @@ extension TeamQueryWhere on QueryBuilder<Team, Team, QWhereClause> {
         lower: [lowerColor],
         includeLower: includeLower,
         upper: [upperColor],
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<Team, Team, QAfterWhereClause> scoreEqualTo(int score) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'score',
-        value: [score],
-      ));
-    });
-  }
-
-  QueryBuilder<Team, Team, QAfterWhereClause> scoreNotEqualTo(int score) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'score',
-              lower: [],
-              upper: [score],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'score',
-              lower: [score],
-              includeLower: false,
-              upper: [],
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'score',
-              lower: [score],
-              includeLower: false,
-              upper: [],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'score',
-              lower: [],
-              upper: [score],
-              includeUpper: false,
-            ));
-      }
-    });
-  }
-
-  QueryBuilder<Team, Team, QAfterWhereClause> scoreGreaterThan(
-    int score, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'score',
-        lower: [score],
-        includeLower: include,
-        upper: [],
-      ));
-    });
-  }
-
-  QueryBuilder<Team, Team, QAfterWhereClause> scoreLessThan(
-    int score, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'score',
-        lower: [],
-        upper: [score],
-        includeUpper: include,
-      ));
-    });
-  }
-
-  QueryBuilder<Team, Team, QAfterWhereClause> scoreBetween(
-    int lowerScore,
-    int upperScore, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'score',
-        lower: [lowerScore],
-        includeLower: includeLower,
-        upper: [upperScore],
         includeUpper: includeUpper,
       ));
     });
@@ -1401,58 +1283,6 @@ extension TeamQueryFilter on QueryBuilder<Team, Team, QFilterCondition> {
       ));
     });
   }
-
-  QueryBuilder<Team, Team, QAfterFilterCondition> scoreEqualTo(int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'score',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Team, Team, QAfterFilterCondition> scoreGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'score',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Team, Team, QAfterFilterCondition> scoreLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'score',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Team, Team, QAfterFilterCondition> scoreBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'score',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
 }
 
 extension TeamQueryObject on QueryBuilder<Team, Team, QFilterCondition> {}
@@ -1465,9 +1295,52 @@ extension TeamQueryLinks on QueryBuilder<Team, Team, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Team, Team, QAfterFilterCondition> playerIsNull() {
+  QueryBuilder<Team, Team, QAfterFilterCondition> playerLengthEqualTo(
+      int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'player', length, true, length, true);
+    });
+  }
+
+  QueryBuilder<Team, Team, QAfterFilterCondition> playerIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'player', 0, true, 0, true);
+    });
+  }
+
+  QueryBuilder<Team, Team, QAfterFilterCondition> playerIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'player', 0, false, 999999, true);
+    });
+  }
+
+  QueryBuilder<Team, Team, QAfterFilterCondition> playerLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'player', 0, true, length, include);
+    });
+  }
+
+  QueryBuilder<Team, Team, QAfterFilterCondition> playerLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'player', length, include, 999999, true);
+    });
+  }
+
+  QueryBuilder<Team, Team, QAfterFilterCondition> playerLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(
+          r'player', lower, includeLower, upper, includeUpper);
     });
   }
 }
@@ -1542,18 +1415,6 @@ extension TeamQuerySortBy on QueryBuilder<Team, Team, QSortBy> {
   QueryBuilder<Team, Team, QAfterSortBy> sortByNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Team, Team, QAfterSortBy> sortByScore() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'score', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Team, Team, QAfterSortBy> sortByScoreDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'score', Sort.desc);
     });
   }
 }
@@ -1642,18 +1503,6 @@ extension TeamQuerySortThenBy on QueryBuilder<Team, Team, QSortThenBy> {
       return query.addSortBy(r'name', Sort.desc);
     });
   }
-
-  QueryBuilder<Team, Team, QAfterSortBy> thenByScore() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'score', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Team, Team, QAfterSortBy> thenByScoreDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'score', Sort.desc);
-    });
-  }
 }
 
 extension TeamQueryWhereDistinct on QueryBuilder<Team, Team, QDistinct> {
@@ -1693,12 +1542,6 @@ extension TeamQueryWhereDistinct on QueryBuilder<Team, Team, QDistinct> {
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<Team, Team, QDistinct> distinctByScore() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'score');
     });
   }
 }
@@ -1743,12 +1586,6 @@ extension TeamQueryProperty on QueryBuilder<Team, Team, QQueryProperty> {
   QueryBuilder<Team, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
-    });
-  }
-
-  QueryBuilder<Team, int, QQueryOperations> scoreProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'score');
     });
   }
 }

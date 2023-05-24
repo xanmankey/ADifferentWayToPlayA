@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:adifferentwaytoplay/app/pages/exception_view.dart';
+import 'package:adifferentwaytoplay/app/utils/utils.dart';
 import 'package:adifferentwaytoplay/app/widgets/utility/text.dart';
 import 'package:adifferentwaytoplay/data/utils/utils.dart';
 import 'package:adifferentwaytoplay/domain/entities/program.dart';
@@ -102,7 +103,9 @@ class _ProgramEntryState extends State<ProgramEntry> {
             ),
           ],
         ),
-        widget.program.programOptions.toWidget(),
+        for (Widget widget
+            in generateSettingsWidgets(widget.program.settings.toList()))
+          widget
       ],
     );
 
@@ -112,7 +115,11 @@ class _ProgramEntryState extends State<ProgramEntry> {
             builder: (context, snapshot) => (snapshot.hasData)
                 ? programEntryBuildCode
                 : (snapshot.hasError)
-                    ? ExceptionWidget(error: snapshot.error.toString())
+                    ? renderException(
+                        context,
+                        snapshot.error.toString(),
+                        snapshot.stackTrace.toString(),
+                      )
                     : const CircularProgressIndicator(),
           )
         : programEntryBuildCode;

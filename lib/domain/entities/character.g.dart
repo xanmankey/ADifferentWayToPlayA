@@ -140,7 +140,7 @@ const CharacterSchema = CollectionSchema(
       id: -5121079739277691024,
       name: r'player',
       target: r'Player',
-      single: true,
+      single: false,
       linkName: r'character',
     )
   },
@@ -1888,9 +1888,54 @@ extension CharacterQueryLinks
     });
   }
 
-  QueryBuilder<Character, Character, QAfterFilterCondition> playerIsNull() {
+  QueryBuilder<Character, Character, QAfterFilterCondition> playerLengthEqualTo(
+      int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'player', length, true, length, true);
+    });
+  }
+
+  QueryBuilder<Character, Character, QAfterFilterCondition> playerIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'player', 0, true, 0, true);
+    });
+  }
+
+  QueryBuilder<Character, Character, QAfterFilterCondition> playerIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'player', 0, false, 999999, true);
+    });
+  }
+
+  QueryBuilder<Character, Character, QAfterFilterCondition>
+      playerLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'player', 0, true, length, include);
+    });
+  }
+
+  QueryBuilder<Character, Character, QAfterFilterCondition>
+      playerLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'player', length, include, 999999, true);
+    });
+  }
+
+  QueryBuilder<Character, Character, QAfterFilterCondition> playerLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(
+          r'player', lower, includeLower, upper, includeUpper);
     });
   }
 }

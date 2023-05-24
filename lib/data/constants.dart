@@ -155,7 +155,7 @@ enum PlayerColors {
   p3,
   p4;
 
-  int toColor() {
+  int enumToColor() {
     switch (this) {
       case PlayerColors.p1:
         return ColorVars.yellow;
@@ -164,6 +164,21 @@ enum PlayerColors {
       case PlayerColors.p3:
         return ColorVars.green;
       case PlayerColors.p4:
+        return ColorVars.red;
+      default:
+        return ColorVars.white;
+    }
+  }
+
+  static int indexToColor(int index) {
+    switch (index) {
+      case 0:
+        return ColorVars.yellow;
+      case 1:
+        return ColorVars.blue;
+      case 2:
+        return ColorVars.green;
+      case 3:
         return ColorVars.red;
       default:
         return ColorVars.white;

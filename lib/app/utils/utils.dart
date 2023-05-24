@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:adifferentwaytoplay/app/widgets/utility/settings_dropdown.dart';
 import 'package:adifferentwaytoplay/app/widgets/utility/settings_field.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
+import 'package:logging/logging.dart';
 
 /// A function for returning a Color associated with the type of input;
 /// uses the xbox controller colorscheme
@@ -72,3 +73,5 @@ List<Widget> generateSettingsWidgets(List<Setting> settings) {
   }
   return widgets;
 }
+
+Logger logger = Logger("App Logger");

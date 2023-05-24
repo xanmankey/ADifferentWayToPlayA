@@ -60,6 +60,7 @@ dependencies:
   checkbox_formfield: ^0.2.0
   dartusbhid: ^0.1.4
   freezed: ^2.3.2
+  event: ^2.1.2
 
 dev_dependencies:
   flutter_test:

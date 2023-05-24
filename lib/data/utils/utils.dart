@@ -1,7 +1,6 @@
 import 'package:adifferentwaytoplay/data/utils/initial_vars.dart';
 import 'package:adifferentwaytoplay/domain/entities/setting.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
-import 'package:flython/flython.dart';
 import 'package:isar/isar.dart';
 import 'dart:io';
 import 'package:adifferentwaytoplay/domain/entities/gamepad.dart';
@@ -743,11 +742,6 @@ class Storage {
           return await db.teams
               .filter()
               .colorEqualTo(index.entries.first.value)
-              .findAll();
-        case "score":
-          return await db.teams
-              .filter()
-              .scoreEqualTo(index.entries.first.value)
               .findAll();
         default:
           return [];

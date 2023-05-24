@@ -90,6 +90,20 @@ enum Scripts {
         return "";
     }
   }
+
+  static Scripts? toScript(String abbreviation) {
+    abbreviation = abbreviation.toUpperCase();
+    switch (abbreviation) {
+      case "MIOP":
+        return Scripts.miop;
+      case "TC":
+        return Scripts.tc;
+      case "RC":
+        return Scripts.rc;
+      case "FC":
+        return Scripts.fc;
+    }
+  }
 }
 
 /// InputTypes enum; defines the major parts of a
@@ -386,8 +400,19 @@ enum Items {
   filters,
   booleans;
 
-  final Iterable inputsIterable = Inputs.iterator;
-  final Iterable inputTypesIterable = InputTypes.iterator;
-  final Iterable filtersIterable = Filters.iterator;
-  final Iterable booleanIterable = [true, false];
+  Iterable get inputsIterable {
+    return Inputs.values;
+  }
+
+  Iterable get inputTypesIterable {
+    return InputTypes.values;
+  }
+
+  Iterable get filtersIterable {
+    return Filters.values;
+  }
+
+  Iterable get booleanIterable {
+    return [true, false];
+  }
 }

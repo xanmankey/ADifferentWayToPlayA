@@ -31,6 +31,8 @@ class Gamemode {
   @Index()
   late bool? teams;
 
+  late String image;
+
   // @enumerated
   // late GamemodeOptions gamemodeOptions;
 
