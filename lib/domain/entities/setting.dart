@@ -44,6 +44,10 @@ class Setting {
   @Index()
   bool individual = false;
 
+  // If a setting is a setting for the app itself or related to a different entity
+  @Index()
+  bool app = false;
+
   // An index for ensuring that DWTP won't start until the value of individual settings
   // are set correctly
   @Index()

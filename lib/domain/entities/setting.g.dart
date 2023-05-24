@@ -17,50 +17,55 @@ const SettingSchema = CollectionSchema(
   name: r'Setting',
   id: 2542600759502230801,
   properties: {
-    r'description': PropertySchema(
+    r'app': PropertySchema(
       id: 0,
+      name: r'app',
+      type: IsarType.bool,
+    ),
+    r'description': PropertySchema(
+      id: 1,
       name: r'description',
       type: IsarType.string,
     ),
     r'enabled': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'enabled',
       type: IsarType.bool,
     ),
     r'group': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'group',
       type: IsarType.longList,
     ),
     r'individual': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'individual',
       type: IsarType.bool,
     ),
     r'ready': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'ready',
       type: IsarType.bool,
     ),
     r'settingsWidget': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'settingsWidget',
       type: IsarType.byte,
       enumMap: _SettingsettingsWidgetEnumValueMap,
     ),
     r'sortProperty': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'sortProperty',
       type: IsarType.int,
       enumMap: _SettingsortPropertyEnumValueMap,
     ),
     r'title': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'title',
       type: IsarType.string,
     ),
     r'values': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'values',
       type: IsarType.string,
     )
@@ -105,6 +110,19 @@ const SettingSchema = CollectionSchema(
       properties: [
         IndexPropertySchema(
           name: r'individual',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
+    ),
+    r'app': IndexSchema(
+      id: 6875997123822733088,
+      name: r'app',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'app',
           type: IndexType.value,
           caseSensitive: false,
         )
@@ -176,15 +194,16 @@ void _settingSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.description);
-  writer.writeBool(offsets[1], object.enabled);
-  writer.writeLongList(offsets[2], object.group);
-  writer.writeBool(offsets[3], object.individual);
-  writer.writeBool(offsets[4], object.ready);
-  writer.writeByte(offsets[5], object.settingsWidget.index);
-  writer.writeInt(offsets[6], object.sortProperty?.index);
-  writer.writeString(offsets[7], object.title);
-  writer.writeString(offsets[8], object.values);
+  writer.writeBool(offsets[0], object.app);
+  writer.writeString(offsets[1], object.description);
+  writer.writeBool(offsets[2], object.enabled);
+  writer.writeLongList(offsets[3], object.group);
+  writer.writeBool(offsets[4], object.individual);
+  writer.writeBool(offsets[5], object.ready);
+  writer.writeByte(offsets[6], object.settingsWidget.index);
+  writer.writeInt(offsets[7], object.sortProperty?.index);
+  writer.writeString(offsets[8], object.title);
+  writer.writeString(offsets[9], object.values);
 }
 
 Setting _settingDeserialize(
@@ -194,19 +213,20 @@ Setting _settingDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Setting();
-  object.description = reader.readStringOrNull(offsets[0]);
-  object.enabled = reader.readBool(offsets[1]);
-  object.group = reader.readLongList(offsets[2]);
+  object.app = reader.readBool(offsets[0]);
+  object.description = reader.readStringOrNull(offsets[1]);
+  object.enabled = reader.readBool(offsets[2]);
+  object.group = reader.readLongList(offsets[3]);
   object.id = id;
-  object.individual = reader.readBool(offsets[3]);
-  object.ready = reader.readBool(offsets[4]);
+  object.individual = reader.readBool(offsets[4]);
+  object.ready = reader.readBool(offsets[5]);
   object.settingsWidget =
-      _SettingsettingsWidgetValueEnumMap[reader.readByteOrNull(offsets[5])] ??
+      _SettingsettingsWidgetValueEnumMap[reader.readByteOrNull(offsets[6])] ??
           SettingsWidgets.checkbox;
   object.sortProperty =
-      _SettingsortPropertyValueEnumMap[reader.readIntOrNull(offsets[6])];
-  object.title = reader.readString(offsets[7]);
-  object.values = reader.readString(offsets[8]);
+      _SettingsortPropertyValueEnumMap[reader.readIntOrNull(offsets[7])];
+  object.title = reader.readString(offsets[8]);
+  object.values = reader.readString(offsets[9]);
   return object;
 }
 
@@ -218,25 +238,27 @@ P _settingDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 1:
-      return (reader.readBool(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 2:
-      return (reader.readLongList(offset)) as P;
-    case 3:
       return (reader.readBool(offset)) as P;
+    case 3:
+      return (reader.readLongList(offset)) as P;
     case 4:
       return (reader.readBool(offset)) as P;
     case 5:
+      return (reader.readBool(offset)) as P;
+    case 6:
       return (_SettingsettingsWidgetValueEnumMap[
               reader.readByteOrNull(offset)] ??
           SettingsWidgets.checkbox) as P;
-    case 6:
+    case 7:
       return (_SettingsortPropertyValueEnumMap[reader.readIntOrNull(offset)])
           as P;
-    case 7:
-      return (reader.readString(offset)) as P;
     case 8:
+      return (reader.readString(offset)) as P;
+    case 9:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -307,6 +329,14 @@ extension SettingQueryWhereSort on QueryBuilder<Setting, Setting, QWhere> {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         const IndexWhereClause.any(indexName: r'individual'),
+      );
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterWhere> anyApp() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'app'),
       );
     });
   }
@@ -520,6 +550,49 @@ extension SettingQueryWhere on QueryBuilder<Setting, Setting, QWhereClause> {
     });
   }
 
+  QueryBuilder<Setting, Setting, QAfterWhereClause> appEqualTo(bool app) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'app',
+        value: [app],
+      ));
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterWhereClause> appNotEqualTo(bool app) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'app',
+              lower: [],
+              upper: [app],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'app',
+              lower: [app],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'app',
+              lower: [app],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'app',
+              lower: [],
+              upper: [app],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
   QueryBuilder<Setting, Setting, QAfterWhereClause> readyEqualTo(bool ready) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
@@ -567,6 +640,15 @@ extension SettingQueryWhere on QueryBuilder<Setting, Setting, QWhereClause> {
 
 extension SettingQueryFilter
     on QueryBuilder<Setting, Setting, QFilterCondition> {
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> appEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'app',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<Setting, Setting, QAfterFilterCondition> descriptionIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1367,6 +1449,18 @@ extension SettingQueryLinks
 }
 
 extension SettingQuerySortBy on QueryBuilder<Setting, Setting, QSortBy> {
+  QueryBuilder<Setting, Setting, QAfterSortBy> sortByApp() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'app', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterSortBy> sortByAppDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'app', Sort.desc);
+    });
+  }
+
   QueryBuilder<Setting, Setting, QAfterSortBy> sortByDescription() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.asc);
@@ -1466,6 +1560,18 @@ extension SettingQuerySortBy on QueryBuilder<Setting, Setting, QSortBy> {
 
 extension SettingQuerySortThenBy
     on QueryBuilder<Setting, Setting, QSortThenBy> {
+  QueryBuilder<Setting, Setting, QAfterSortBy> thenByApp() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'app', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterSortBy> thenByAppDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'app', Sort.desc);
+    });
+  }
+
   QueryBuilder<Setting, Setting, QAfterSortBy> thenByDescription() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.asc);
@@ -1577,6 +1683,12 @@ extension SettingQuerySortThenBy
 
 extension SettingQueryWhereDistinct
     on QueryBuilder<Setting, Setting, QDistinct> {
+  QueryBuilder<Setting, Setting, QDistinct> distinctByApp() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'app');
+    });
+  }
+
   QueryBuilder<Setting, Setting, QDistinct> distinctByDescription(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1640,6 +1752,12 @@ extension SettingQueryProperty
   QueryBuilder<Setting, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<Setting, bool, QQueryOperations> appProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'app');
     });
   }
 

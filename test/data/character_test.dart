@@ -9,6 +9,7 @@ import 'package:test/test.dart';
 // and root out any errors early on in the process (TDD)
 void main() async {
   // Initialize storage (which will initialize data)
+  Isar isarDB = await storage.openDB();
   // Character tests
   group("Retrieve character by index: ", () {
     test('name', (() async {
@@ -72,43 +73,53 @@ void main() async {
       );
     }));
   });
-  // Note the order of the following tests:
-  // Insert -> Update -> Delete so as to preserve the original database structure
+  // Note that whenever the database is written to, storage.openDB() is called to reset changes
   group("CRUD new character: ", () {
     test('create', (() async {
       expect(
         await storage.updateCharacters([CharacterData.TESTCharacter]),
         [CharacterData.TESTCharacter],
       );
+      isarDB = await storage.openDB();
     }));
-    // test('update', (() async {
-    //   expect(
-    //     await storage.updateCharacters([CharacterData.TESTCharacter2]),
-    //     CharacterData.TESTCharacter2,
-    //   );
-    // }));
+    test('update', (() async {
+      await storage.updateCharacters([CharacterData.TESTCharacterUpdate]);
+      expect(
+        await storage.getCharacter({"name": "testCharacter"}),
+        [CharacterData.TESTCharacterUpdate],
+      );
+      isarDB = await storage.openDB();
+    }));
     test('delete', (() async {
       expect(
         await storage.deleteCharacters([CharacterData.TESTCharacter.id]),
         1,
       );
+      isarDB = await storage.openDB();
     }));
   });
   group("CRUD multiple new characters: ", () {
     test('create', (() async {
       expect(
         await storage.updateCharacters(
-            [CharacterData.TESTCharacter, CharacterData.TESTCharacter2]),
-        [CharacterData.TESTCharacter, CharacterData.TESTCharacter2],
+            [CharacterData.TESTCharacter, CharacterData.TESTCharacterUpdate]),
+        [CharacterData.TESTCharacter, CharacterData.TESTCharacterUpdate],
       );
+      isarDB = await storage.openDB();
     }));
-    // test('update', (() async {
-    //   expect(
-    //     await db.query("Characters",
-    //         where: "name = ?", whereArgs: [Params.validCharacterName]),
-    //     Character(),
-    //   );
-    // }));
+    test('update', (() async {
+      await storage.updateCharacters([
+        CharacterData.TESTCharacterUpdate,
+        CharacterData.TESTCharacterUpdate2
+      ]);
+      expect(
+        await storage.getCharacter({"name": "testCharacter2"}),
+        [
+          CharacterData.TESTCharacterUpdate2,
+        ],
+      );
+      isarDB = await storage.openDB();
+    }));
     test('delete', (() async {
       expect(
         await storage.deleteCharacters([
@@ -117,6 +128,7 @@ void main() async {
         ]),
         2,
       );
+      isarDB = await storage.openDB();
     }));
   });
   group("Invalid: ", (() {

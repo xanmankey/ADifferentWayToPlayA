@@ -10,7 +10,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   // super. just means to get it from the parent class;
   // in this case, that means get the key from the StatelessWidget class
   // which is an issue
-  const CustomAppBar({
+  CustomAppBar({
     Key? key,
   });
 
@@ -19,7 +19,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? route = Navigator.defaultRouteName;
+    var route = ModalRoute.of(context);
     return AppBar(
       key: key,
       backgroundColor: Colors.black,
@@ -34,18 +34,32 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         children: [
           IconButton(
             onPressed: () {
-              if (Navigator.canPop(context)) {
-                Navigator.pop(context);
-              }
+              Navigator.pushNamed(context, Pages.appSettings);
             },
-            icon: const Icon(Icons.arrow_back),
+            icon: const Icon(Icons.settings),
           ),
-          IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, route);
-            },
-            icon: const Icon(Icons.arrow_forward),
-          ),
+          (route?.settings.name != Pages.home)
+              ? IconButton(
+                  onPressed: () {
+                    if (Navigator.canPop(context)) {
+                      Navigator.pop(context);
+                    }
+                  },
+                  icon: const Icon(Icons.arrow_back),
+                )
+              : Container(),
+          // (nextRoute != null)
+          //     ? IconButton(
+          //         onPressed: () {
+          //           Navigator.pushNamed(context, nextRoute!.name!,
+          //               arguments: nextRoute!.arguments);
+          //         },
+          //         icon: const Icon(Icons.arrow_forward),
+          //       )
+          //     : const IconButton(
+          //         onPressed: null,
+          //         icon: Icon(Icons.arrow_forward),
+          //       ),
         ],
       ),
     );

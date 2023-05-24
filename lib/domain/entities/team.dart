@@ -22,7 +22,7 @@ part 'team.g.dart';
 class Team {
   Id id = Isar.autoIncrement;
 
-  @Index(unique: true, caseSensitive: false)
+  @Index(unique: true, caseSensitive: false, replace: true)
   late String name;
 
   late String logo;

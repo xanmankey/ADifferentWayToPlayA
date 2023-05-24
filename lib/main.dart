@@ -1,7 +1,10 @@
+import 'package:adifferentwaytoplay/app/pages/app_settings.dart';
 import 'package:adifferentwaytoplay/app/pages/data_page_view.dart';
 import 'package:adifferentwaytoplay/app/pages/input_results_view.dart';
+import 'package:adifferentwaytoplay/app/provider/app_settings_provider.dart';
 import 'package:adifferentwaytoplay/app/provider/dwtp_provider.dart';
 import 'package:adifferentwaytoplay/app/utils/exposed_types.dart';
+import 'package:adifferentwaytoplay/app/widgets/utility/custom_appbar.dart';
 import 'package:adifferentwaytoplay/data/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
@@ -31,16 +34,19 @@ Future<void> enableFullScreen() async {
   await windowManager.ensureInitialized();
 
   // Use it only after calling `hiddenWindowAtLaunch`
-  // TODO: I probably want to add resizing constraints AFTER the FULL GUI IS MADE
   WindowOptions windowOptions = const WindowOptions(
     backgroundColor: Colors.white,
     skipTaskbar: false,
     titleBarStyle: TitleBarStyle.normal,
   );
+
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.focus();
+    await windowManager.setMaximizable(true);
+    await windowManager.setMinimizable(true);
     await windowManager.maximize();
+    await windowManager.setTitleBarStyle(TitleBarStyle.normal);
   });
   return;
 }
@@ -50,7 +56,7 @@ void initializeLogging() {
   Logger.root.onRecord.listen((record) {
     dynamic e = record.error;
     String m = e.toString();
-    print(
+    debugPrint(
         '${record.loggerName}: ${record.level.name}: ${record.message} ${m != 'null' ? m : ''}');
   });
   Logger.root.info("Logger initialized.");
@@ -61,8 +67,17 @@ void main() async {
   initializeLogging();
   XInputManager.enableXInput();
   // Link the app to the class providing state
-  runApp(ChangeNotifierProvider<DWTPProvider>(
-    create: (_) => DWTPProvider(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<DWTPProvider>(
+        create: (context) => DWTPProvider(),
+        child: const DWTP(),
+      ),
+      ChangeNotifierProvider<AppSettingsProvider>(
+        create: (context) => AppSettingsProvider(),
+        child: const AppSettings(),
+      )
+    ],
     child: const DWTP(),
   ));
   await enableFullScreen();
@@ -75,44 +90,44 @@ class DWTP extends StatelessWidget {
   // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      // navigatorObservers: <RouteObserver<ModalRoute<void>>>[routeObserver],
-      theme: ThemeData(
-        // This is the theme of your application.
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      navigatorKey: navigatorKey,
-      initialRoute: Pages.home,
-      routes: {
-        Pages.home: (context) => const Home(),
-        Pages.exception: (context) => ExceptionPage(
-              error: (ModalRoute.of(context)!.settings.arguments!
-                  as Map<String, String>)["error"]!,
-              stacktrace: (ModalRoute.of(context)!.settings.arguments!
-                  as Map<String, String?>)["stacktrace"]!,
-            ),
-        Pages.programs: (context) => DWTPListView(
-              exposedDataTypes: const DataTypes.programType(),
-            ),
-        Pages.characters: (context) => DWTPListView(
-              exposedDataTypes: const DataTypes.characterType(),
-            ),
-        Pages.teams: (context) => DWTPListView(
-              exposedDataTypes: const DataTypes.teamType(),
-            ),
-        Pages.gamemodes: (context) => DWTPListView(
-              exposedDataTypes: const DataTypes.gamemodeType(),
-            ),
-        Pages.dwtp: (context) => const DWTP(),
-        Pages.resultsInput: (context) => const ResultsInputView(),
-        Pages.victory: (context) => const Victory(),
+    return Consumer<AppSettingsProvider>(
+      builder: (context, value, child) {
+        return MaterialApp(
+          theme: (value.theme == Themes.dark)
+              ? ThemeData.dark()
+              : (value.theme == Themes.light)
+                  ? ThemeData.light()
+                  : ThemeData(
+                      primarySwatch: Colors.blue,
+                    ),
+          navigatorKey: navigatorKey,
+          initialRoute: Pages.home,
+          routes: {
+            Pages.home: (context) => const Home(),
+            Pages.exception: (context) => ExceptionPage(
+                  error: (ModalRoute.of(context)!.settings.arguments!
+                      as Map<String, String>)["error"]!,
+                  stacktrace: (ModalRoute.of(context)!.settings.arguments!
+                      as Map<String, String?>)["stacktrace"]!,
+                ),
+            Pages.programs: (context) => DWTPListView(
+                  exposedDataTypes: const DataTypes.programType(),
+                ),
+            Pages.characters: (context) => DWTPListView(
+                  exposedDataTypes: const DataTypes.characterType(),
+                ),
+            Pages.teams: (context) => DWTPListView(
+                  exposedDataTypes: const DataTypes.teamType(),
+                ),
+            Pages.gamemodes: (context) => DWTPListView(
+                  exposedDataTypes: const DataTypes.gamemodeType(),
+                ),
+            Pages.dwtpSetup: (context) => const DWTPSetup(),
+            Pages.resultsInput: (context) => const ResultsInputView(),
+            Pages.victory: (context) => const Victory(),
+            Pages.appSettings: (context) => const AppSettings(),
+          },
+        );
       },
     );
   }

@@ -129,7 +129,7 @@ class _DWTPListViewState extends State<DWTPListView> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Scaffold(
-            appBar: const CustomAppBar(),
+            appBar: CustomAppBar(),
             body: PageView.builder(
               itemBuilder: (context, index) {
                 return widget.exposedDataTypes.when(
@@ -157,8 +157,8 @@ class _DWTPListViewState extends State<DWTPListView> {
         } else if (snapshot.hasError) {
           return ExceptionPage(error: snapshot.error.toString());
         } else {
-          return const Scaffold(
-              appBar: CustomAppBar(), body: CircularProgressIndicator());
+          return Scaffold(
+              appBar: CustomAppBar(), body: const CircularProgressIndicator());
         }
       },
     );

@@ -33,7 +33,7 @@ class Program {
   @Index()
   late bool enabled;
 
-  @Index(unique: true)
+  @Index(unique: true, replace: true)
   late String name;
 
   late String image;

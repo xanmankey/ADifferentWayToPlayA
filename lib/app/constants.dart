@@ -11,7 +11,7 @@ class Pages {
   static String programs = '/programs';
   static String characters = '/characters';
   static String teams = '/teams';
-  static String dwtp = '/dwtp';
+  static String dwtpSetup = '/dwtp';
   static String victory = '/victory';
   static String resultsInput = "/resultsInput";
   // static String tournamentSelection = '/tournamentSelection';
@@ -110,4 +110,23 @@ class Assets {
   static String john = "$imagePath/john.jpg";
   static String ptSign = "$imagePath/pythagoreanTheorumSign.png";
   static String qfSign = "$imagePath/quadraticFormulaSign.png";
+}
+
+enum Themes {
+  blue,
+  dark,
+  light;
+
+  static Themes toTheme(String theme) {
+    switch (theme) {
+      case "blue":
+        return Themes.blue;
+      case "dark":
+        return Themes.dark;
+      case "light":
+        return Themes.light;
+      default:
+        return Themes.dark;
+    }
+  }
 }

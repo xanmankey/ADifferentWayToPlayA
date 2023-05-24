@@ -2,10 +2,10 @@
 > If I approach this, code that I haven't examined in a while, without a plan, it's like trying to find a friend when you only know the city they live in. I have to approach this carefully and intelligently, with psuedocode and planning playing pivotal roles in the development process!
 
 TODAY GOALS
-- Figure out updated implementation with players and gamepads now handled in provider; handle writing player data
-- Finish implementing main.dart
-- Run, debug (I'm sure everything will break), explore w/ Terry
-- Consider how to call scripts from dart?
+- TESTS!!! Once tests are done, then I can rework Provider and fix the stuff that needs to be fixed, but the tests should make the whole work experience a lot nicer
+- Rework Provider
+- Run, debug (I'm sure everything will break); writing tests should honestly be your debugging though
+- Explore Python w/ Terry
 - Rework freezed + FutureBuilders? A lot of this has too much complexity to manage IMO
 
 CURRENT TODO

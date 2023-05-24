@@ -22,7 +22,7 @@ class Gamemode {
 
   var players = IsarLinks<Player>();
 
-  @Index(unique: true, caseSensitive: false)
+  @Index(unique: true, caseSensitive: false, replace: true)
   late String name;
 
   @Index()

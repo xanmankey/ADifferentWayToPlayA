@@ -1,6 +1,7 @@
 import 'package:adifferentwaytoplay/data/utils/initial_vars.dart';
 import 'package:adifferentwaytoplay/domain/entities/setting.dart';
 import 'package:adifferentwaytoplay/domain/utils/utils.dart';
+import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'dart:io';
 import 'package:adifferentwaytoplay/domain/entities/gamepad.dart';
@@ -34,10 +35,14 @@ class Storage {
             PlayerSchema,
             ProgramSchema,
             TeamSchema,
+            SettingSchema,
           ],
           name: "test",
           inspector: true,
         );
+        // Clear the test collection to prevent any Isar errors and ensure
+        // correct data is used every time
+        await isarDB.clear();
         // Write test data if the database is empty
         await isarDB.writeTxn(() async {
           /// Default mock data is used for gamepads and players
@@ -61,6 +66,10 @@ class Storage {
           for (Gamemode gamemode in gamemodes) {
             isarDB.gamemodes.put(gamemode);
           }
+          // Write app settings
+          for (Setting setting in appSettings) {
+            isarDB.settings.put(setting);
+          }
           // Write Players
           int i = 0;
           for (Player player in testPlayers) {
@@ -80,9 +89,8 @@ class Storage {
       }
       return Future.value(Isar.getInstance("test"));
     } else {
+      // Create collection
       if (Isar.instanceNames.isEmpty) {
-        // Create collection
-        // TODO: disable inspection once app is completed
         Isar isarDB = await Isar.open(
           [
             CharacterSchema,
@@ -91,49 +99,60 @@ class Storage {
             PlayerSchema,
             ProgramSchema,
             TeamSchema,
+            SettingSchema,
           ],
           name: "real",
+          // TODO: disable inspection once app is completed
           inspector: true,
         );
-        // Write initial data if the database is empty
-        await isarDB.writeTxn(() async {
-          for (Character character in characters) {
-            await isarDB.characters.put(character);
-          }
-        });
+        // Test query to check if the database is empty
+        // NOTE: If you ever need to clear the db for any reason, uncomment the following line
+        // await isarDB.clear();
+        if (isarDB.characters.where().anyAge().findAllSync().isEmpty) {
+          // Write initial data if the database is empty
+          await isarDB.writeTxn(() async {
+            for (Character character in characters) {
+              await isarDB.characters.put(character);
+            }
+          });
 
-        await isarDB.writeTxn(() async {
-          // Write Settings and Programs in tandem
-          // TC settings and program
-          for (Setting setting in TCsettings) {
-            isarDB.settings.put(setting);
-            ProgramData.TC.settings.add(setting);
-          }
-          isarDB.programs.put(ProgramData.TC);
-          // RC settings and program
-          for (Setting setting in RCsettings) {
-            isarDB.settings.put(setting);
-            ProgramData.RC.settings.add(setting);
-          }
-          isarDB.programs.put(ProgramData.RC);
-          // FC settings and program
-          for (Setting setting in FCsettings) {
-            isarDB.settings.put(setting);
-            ProgramData.FC.settings.add(setting);
-          }
-          await isarDB.programs.put(ProgramData.FC);
-          // MIOP program (no settings)
-          await isarDB.programs.put(ProgramData.MIOP);
-          // Write Teams
-          for (Team team in teams) {
-            await isarDB.teams.put(team);
-          }
-          // Write Gamemode
-          for (Gamemode gamemode in gamemodes) {
-            await isarDB.gamemodes.put(gamemode);
-          }
-        });
-        return isarDB;
+          await isarDB.writeTxn(() async {
+            // Write Settings and Programs in tandem
+            // TC settings and program
+            for (Setting setting in TCsettings) {
+              isarDB.settings.put(setting);
+              ProgramData.TC.settings.add(setting);
+            }
+            isarDB.programs.put(ProgramData.TC);
+            // RC settings and program
+            for (Setting setting in RCsettings) {
+              isarDB.settings.put(setting);
+              ProgramData.RC.settings.add(setting);
+            }
+            isarDB.programs.put(ProgramData.RC);
+            // FC settings and program
+            for (Setting setting in FCsettings) {
+              isarDB.settings.put(setting);
+              ProgramData.FC.settings.add(setting);
+            }
+            await isarDB.programs.put(ProgramData.FC);
+            // MIOP program (no settings)
+            await isarDB.programs.put(ProgramData.MIOP);
+            // Write Teams
+            for (Team team in teams) {
+              await isarDB.teams.put(team);
+            }
+            // Write app settings
+            for (Setting setting in appSettings) {
+              isarDB.settings.put(setting);
+            }
+            // Write Gamemode
+            for (Gamemode gamemode in gamemodes) {
+              await isarDB.gamemodes.put(gamemode);
+            }
+          });
+          return isarDB;
+        }
       }
       return Future.value(Isar.getInstance("real"));
     }

@@ -36,7 +36,7 @@ class Character {
   Id id = Isar.autoIncrement;
 
   // Sort Characters by names alphabetically
-  @Index(unique: true, caseSensitive: false)
+  @Index(unique: true, caseSensitive: false, replace: true)
   late String name;
 
   late String image;

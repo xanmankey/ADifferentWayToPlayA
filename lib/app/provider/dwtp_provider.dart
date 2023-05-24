@@ -26,7 +26,7 @@ class DWTPProvider with ChangeNotifier {
   int _numPlayers = 0;
   // Note that provider is an acceptable solution for handling cursor state,
   // but handling button inputs needs to be handled on a case-by-case basis
-  List<Tuple2<int, int>> _cursors = [Tuple2(0, 0)];
+  List<Tuple2<int, int>> _cursors = [const Tuple2(0, 0)];
 
   Gamemode get gamemode => _gamemode;
   List<Gamepad> get gamepads => _gamepads;

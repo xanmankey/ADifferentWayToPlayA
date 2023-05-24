@@ -18,7 +18,7 @@ class Victory extends StatelessWidget {
       Map<String, Team> arguments =
           ModalRoute.of(context)!.settings.arguments! as Map<String, Team>;
       return Scaffold(
-        appBar: const CustomAppBar(),
+        appBar: CustomAppBar(),
         body: Stack(
           children: [
             TeamColumn(
@@ -35,7 +35,7 @@ class Victory extends StatelessWidget {
     Map<String, Player> arguments =
         ModalRoute.of(context)!.settings.arguments! as Map<String, Player>;
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: CustomAppBar(),
       body: Stack(
         children: [
           CharacterColumn(

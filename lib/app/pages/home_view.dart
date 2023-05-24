@@ -14,7 +14,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: CustomAppBar(),
       body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         // ALL of these will be layed out as the BUTTONS ON A CONTROLLER
         // Programs (Y button)
@@ -73,18 +73,14 @@ class Home extends StatelessWidget {
               ),
             ),
             const Padding(
-                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 60)),
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 40)),
             // Start and Select buttons
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 shape: const StadiumBorder(),
-                foregroundColor: Colors.black,
-                surfaceTintColor: Colors.white,
+                backgroundColor: Colors.black,
               ),
-              child: const TextWidget(
-                text: "Gamemodes",
-                color: Colors.white,
-              ),
+              child: Container(),
               onPressed: () => Navigator.pushNamed(context, Pages.gamemodes),
             ),
             const Padding(
@@ -92,9 +88,14 @@ class Home extends StatelessWidget {
             IconButton(
               onPressed: () => Navigator.pushNamed(context, Pages.appSettings),
               icon: const Icon(Icons.arrow_right_rounded),
+              iconSize:
+                  (MediaQuery.of(context).size.width / 12).roundToDouble(),
+              splashRadius:
+                  (MediaQuery.of(context).size.width / 36).roundToDouble(),
             ),
             SizedBox(
               height: 100,
+              width: 400,
               child: CardSelector(
                 image: FileImage(File("assets/images/teams.png")),
                 title: "Teams",
@@ -102,7 +103,7 @@ class Home extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
                 ),
-                padding: 50,
+                padding: 20,
                 onTap: () => Navigator.pushNamed(context, Pages.teams),
               ),
             ),
@@ -116,13 +117,13 @@ class Home extends StatelessWidget {
             width: 350,
             child: CardSelector(
               image: FileImage(File("assets/images/tournament.png")),
-              title: "Play",
+              title: "DWTP",
               color: Colors.green,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              padding: 50,
-              onTap: () => Navigator.pushNamed(context, Pages.dwtp),
+              padding: 15,
+              onTap: () => Navigator.pushNamed(context, Pages.dwtpSetup),
             ),
           ),
         ),

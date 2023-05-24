@@ -36,7 +36,7 @@ class _ResultsInputViewState extends State<ResultsInputView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: CustomAppBar(),
       body: Column(
         children: [
           ReorderableListView(
@@ -110,7 +110,7 @@ class _ResultsInputViewState extends State<ResultsInputView> {
                   }
                 }
               } else {
-                Navigator.pushNamed(context, Pages.dwtp);
+                Navigator.pushNamed(context, Pages.dwtpSetup);
               }
             },
             child: const TextWidget(text: "Submit Results"),

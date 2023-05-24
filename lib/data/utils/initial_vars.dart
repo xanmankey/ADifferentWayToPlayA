@@ -1111,6 +1111,18 @@ Map<String, Setting> DCsettings = [
 ];
 */
 
+class DWTPSettings {
+  static Setting theme = Setting()
+    ..title = 'theme'
+    ..description = 'The theme of the app'
+    ..settingsWidget = SettingsWidgets.boolDropdown
+    ..app = true;
+}
+
+List<Setting> appSettings = [
+  DWTPSettings.theme,
+];
+
 class CharacterData {
   static Character appleKid = Character()
     ..image = 'assets/images/appleKid.png'
@@ -1196,12 +1208,28 @@ class CharacterData {
     ..description = """testCharacter is a big fan of development builds"""
     ..color = ColorVars.yellow;
 
+  static Character TESTCharacterUpdate = Character()
+    ..image = 'assets/images/imageNoExist.png'
+    ..name = 'testCharacter'
+    ..hit = 'Development'
+    ..miss = 'Production'
+    ..description = """testCharacterUpdate likes things newer things"""
+    ..color = ColorVars.yellow;
+
   static Character TESTCharacter2 = Character()
     ..image = 'assets/images/imageNoExist.png'
     ..name = 'testCharacter2'
     ..hit = 'Development'
     ..miss = 'Production'
-    ..description = """testCharacter2 likes to double check things"""
+    ..description = """testCharacter2 thinks he's cutting edge"""
+    ..color = ColorVars.yellow;
+
+  static Character TESTCharacterUpdate2 = Character()
+    ..image = 'assets/images/imageNoExist.png'
+    ..name = 'testCharacter2'
+    ..hit = 'Development'
+    ..miss = 'Production'
+    ..description = """testCharacterUpdate2 likes only the newest things"""
     ..color = ColorVars.yellow;
 }
 

@@ -30,14 +30,14 @@ import 'package:provider/provider.dart';
 // TODO:
 // Player data is written in the readyButton onPressed method
 //
-class DWTP extends StatefulWidget {
-  const DWTP({super.key});
+class DWTPSetup extends StatefulWidget {
+  const DWTPSetup({super.key});
 
   @override
-  State<DWTP> createState() => _DWTPState();
+  State<DWTPSetup> createState() => _DWTPSetupState();
 }
 
-class _DWTPState extends State<DWTP> {
+class _DWTPSetupState extends State<DWTPSetup> {
   late Timer timer;
 
   @override
@@ -65,7 +65,7 @@ class _DWTPState extends State<DWTP> {
                   brightness: Brightness.dark,
                 ),
                 child: Scaffold(
-                  appBar: const CustomAppBar(),
+                  appBar: CustomAppBar(),
                   body: Stack(
                     alignment: Alignment.center,
                     children: [
@@ -102,7 +102,7 @@ class _DWTPState extends State<DWTP> {
             // if so, stack the ready button on top
             : (value.ready)
                 ? Scaffold(
-                    appBar: const CustomAppBar(),
+                    appBar: CustomAppBar(),
                     body: Stack(
                       alignment: Alignment.center,
                       children: [
@@ -126,7 +126,7 @@ class _DWTPState extends State<DWTP> {
                     ))
                 // Else just act normally
                 : Scaffold(
-                    appBar: const CustomAppBar(),
+                    appBar: CustomAppBar(),
                     body: GridView.builder(
                       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                           maxCrossAxisExtent: value.numPlayers as double),
