@@ -47,7 +47,7 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
               setState(() {
                 widget.setting.title = titleController.text;
               });
-              storage.updateSettings([widget.setting]);
+              await storage.isarDB.settings.put(widget.setting);
             }),
         NCM.MenuItem(
             title: "Description",
@@ -61,27 +61,27 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
               setState(() {
                 widget.setting.title = descriptionController.text;
               });
-              storage.updateSettings([widget.setting]);
+              await storage.isarDB.settings.put(widget.setting);
             }),
         NCM.MenuItem(
           title: "Disable/Enable",
           items: [
             NCM.MenuItem(
               title: "Enable",
-              onSelected: () {
+              onSelected: () async {
                 setState(() {
                   widget.setting.enabled = true;
                 });
-                storage.updateSettings([widget.setting]);
+                await storage.isarDB.settings.put(widget.setting);
               },
             ),
             NCM.MenuItem(
               title: "Disable",
-              onSelected: () {
+              onSelected: () async {
                 setState(() {
                   widget.setting.enabled = false;
                 });
-                storage.updateSettings([widget.setting]);
+                await storage.isarDB.settings.put(widget.setting);
               },
             ),
           ],
@@ -132,8 +132,8 @@ class _SettingsContextMenuState extends State<SettingsContextMenu> {
                     title: const TextWidget(
                         text: "Are you sure you want to delete this setting?"),
                     content: IconButton(
-                      onPressed: () {
-                        storage.deleteSettings([widget.setting.id]);
+                      onPressed: () async {
+                        storage.isarDB.settings.deleteSync(widget.setting.id);
                         Navigator.pop(context);
                       },
                       icon: const Icon(Icons.delete),

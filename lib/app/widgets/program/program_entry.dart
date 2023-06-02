@@ -36,14 +36,14 @@ class _ProgramEntryState extends State<ProgramEntry> {
       scriptController.text = widget.program.script;
     } else {
       widget.program.enabled = false;
-      programFuture = storage.updatePrograms([widget.program]);
+      storage.isarDB.programs.putSync(widget.program);
     }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget programEntryBuildCode = Column(
+    return Column(
       children: [
         TextField(
           controller: titleController,
@@ -55,7 +55,7 @@ class _ProgramEntryState extends State<ProgramEntry> {
           ),
           onEditingComplete: () async {
             widget.program.name = titleController.text;
-            await storage.updatePrograms([widget.program]);
+            await storage.isarDB.programs.put(widget.program);
           },
         ),
         TextField(
@@ -70,7 +70,7 @@ class _ProgramEntryState extends State<ProgramEntry> {
           ),
           onEditingComplete: () async {
             widget.program.description = descriptionController.text;
-            await storage.updatePrograms([widget.program]);
+            await storage.isarDB.programs.put(widget.program);
           },
         ),
         GestureDetector(
@@ -82,7 +82,7 @@ class _ProgramEntryState extends State<ProgramEntry> {
               setState(() {
                 widget.program.image = result.files.single.path!;
               });
-              await storage.updatePrograms([widget.program]);
+              await storage.isarDB.programs.put(widget.program);
             }
           },
         ),
@@ -97,7 +97,7 @@ class _ProgramEntryState extends State<ProgramEntry> {
                   setState(() {
                     widget.program.script = result.files.single.path!;
                   });
-                  await storage.updatePrograms([widget.program]);
+                  await storage.isarDB.programs.put(widget.program);
                 }
               },
             ),
@@ -108,20 +108,5 @@ class _ProgramEntryState extends State<ProgramEntry> {
           widget
       ],
     );
-
-    return (programFuture != null)
-        ? FutureBuilder(
-            future: programFuture,
-            builder: (context, snapshot) => (snapshot.hasData)
-                ? programEntryBuildCode
-                : (snapshot.hasError)
-                    ? renderException(
-                        context,
-                        snapshot.error.toString(),
-                        snapshot.stackTrace.toString(),
-                      )
-                    : const CircularProgressIndicator(),
-          )
-        : programEntryBuildCode;
   }
 }

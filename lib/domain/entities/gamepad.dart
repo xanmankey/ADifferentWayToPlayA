@@ -37,6 +37,18 @@ class Gamepad {
     return '''$index: {connected: $connected, color: $color}''';
   }
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return (other is Gamepad &&
+        index == other.index &&
+        connected == other.connected &&
+        color == other.color);
+  }
+
+  @override
+  int get hashCode => index.hashCode;
+
   // Constructor
   /* 
   Gamepad({required this.index, required this.color, this.connected = true});

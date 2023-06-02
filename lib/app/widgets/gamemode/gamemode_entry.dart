@@ -43,7 +43,7 @@ class _GamemodeEntryState extends State<GamemodeEntry> {
           ),
           onEditingComplete: () async {
             widget.gamemode.name = titleController.text;
-            await storage.updateGamemodes([widget.gamemode]);
+            await storage.isarDB.gamemodes.put(widget.gamemode);
           },
         ),
         Row(

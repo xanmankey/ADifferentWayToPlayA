@@ -1,3 +1,0 @@
-- Finish TDD based off vars.dart; test objects can be used for update and delete
-- Add an exception listener for the GUI that can be accessed in data to pass 
-error and stacktrace information

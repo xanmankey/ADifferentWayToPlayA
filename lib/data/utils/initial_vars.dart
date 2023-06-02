@@ -26,6 +26,7 @@ import 'package:adifferentwaytoplay/data/constants.dart';
 class ProgramData {
   static Program MIOP = Program()
     ..image = "assets/images/MIOP.png"
+    ..script = "assets/scripts/miop.py"
     ..description =
         "Bringing the principles of democracy to video games in an all new way!"
     ..name = "Multiple Inputs One Port (MIOP)"
@@ -33,24 +34,27 @@ class ProgramData {
     ..score = 6;
   static Program TC = Program()
     ..image = "assets/images/TC.png"
+    ..script = "assets/scripts/tc.py"
     ..description = "'Couldn't have said it better myself'"
     ..name = "Text Commands (TC)"
     ..abbreviation = "TC"
-    ..settings.addAll(TCsettings)
+    // ..settings.addAll(TCsettings)
     ..score = 8;
   static Program RC = Program()
     ..image = "assets/images/RC.png"
+    ..script = "assets/scripts/rc.py"
     ..description = "'For when up feels like down'"
     ..name = "Randomized Controls (RC)"
     ..abbreviation = "RC"
-    ..settings.addAll(RCsettings)
+    // ..settings.addAll(RCsettings)
     ..score = 4;
   static Program FC = Program()
     ..image = "assets/images/FC.png"
+    ..script = "assets/scripts/fc.py"
     ..description = "'I've always been a one-press kind of guy'"
     ..name = "Filtered Controls (FC)"
     ..abbreviation = "FC"
-    ..settings.addAll(FCsettings)
+    // ..settings.addAll(FCsettings)
     ..score = 7;
   /*
   static Program DC = Program()
@@ -74,9 +78,9 @@ class ProgramData {
 }
 
 List<Program> programs = [
-  ProgramData.MIOP,
-  ProgramData.TC,
   ProgramData.RC,
+  ProgramData.TC,
+  ProgramData.MIOP,
   ProgramData.FC,
   // ProgramData.DC,
 ];
@@ -570,6 +574,13 @@ List<Setting> FCsettings = [
   ...FCSettingsData.downSetting,
   ...FCSettingsData.leftSetting,
   ...FCSettingsData.rightSetting,
+];
+
+List<List<Setting>> programSettings = [
+  FCsettings,
+  RCsettings,
+  TCsettings,
+  // DCsettings
 ];
 
 /*
@@ -1128,6 +1139,7 @@ class CharacterData {
     ..image = 'assets/images/appleKid.png'
     ..name = 'appleKid'
     ..hit = 'Apple inc.'
+    ..age = 11
     ..miss = 'Instruction manuals'
     ..description = """appleKid is an avid apple-enthusiast, 
           touting his inventiveness and ingenuity as a result of sustained apple consumption"""
@@ -1136,6 +1148,7 @@ class CharacterData {
   static Character bananaKid = Character()
     ..image = 'assets/images/bananaKid.jpg'
     ..name = 'bananaKid'
+    ..age = 8
     ..hit = 'Banana laffy taffy'
     ..miss = 'Politics'
     ..description =
@@ -1146,6 +1159,7 @@ class CharacterData {
   static Character gunlessGuy = Character()
     ..image = 'assets/images/gunlessGuy.png'
     ..name = 'gunlessGuy'
+    ..age = 28
     ..hit = 'Peace'
     ..miss = 'Violence'
     ..description =
@@ -1156,6 +1170,7 @@ class CharacterData {
   static Character dinofish = Character()
     ..image = 'assets/images/dinofish.png'
     ..name = 'dinofish'
+    ..age = 164999999
     ..hit = 'Ressurection'
     ..miss = 'Fossils'
     ..description =
@@ -1166,6 +1181,7 @@ class CharacterData {
   static Character john = Character()
     ..image = 'assets/images/hiMyNameIsJohn.jpg'
     ..name = 'John'
+    ..age = 36
     ..hit = 'John'
     ..miss = 'Not john'
     ..description = """John is well-known across the world for being John"""
@@ -1174,6 +1190,7 @@ class CharacterData {
   static Character refrigeratorExhibitionGuy = Character()
     ..image = 'assets/images/refrigeratorExhibitionGuy.png'
     ..name = 'refigeratorExhibitionGuy'
+    ..age = 32
     ..hit = 'Refrigerators'
     ..miss = 'Ovens'
     ..description = """If you want to buy a refrigerator, the refrigerator 
@@ -1184,6 +1201,7 @@ class CharacterData {
   static Character signPythagoreonTheorum = Character()
     ..image = 'assets/images/pythagoreanTheorumSign.png'
     ..name = 'signOfThePythagoreanTheorum'
+    ..age = 2500
     ..hit = 'Triangles'
     ..miss = 'Quadratics'
     ..description = """signOfThePythagoreanTheorum is great at seeing 
@@ -1193,6 +1211,7 @@ class CharacterData {
   static Character signQuadraticFormula = Character()
     ..image = 'assets/images/quadraticFormulaSign.png'
     ..name = 'signOfTheQuadraticFormula'
+    ..age = 429
     ..hit = 'Quadratics'
     ..miss = 'Triangles'
     ..description =
@@ -1209,12 +1228,12 @@ class CharacterData {
     ..color = ColorVars.yellow;
 
   static Character TESTCharacterUpdate = Character()
-    ..image = 'assets/images/imageNoExist.png'
-    ..name = 'testCharacter'
-    ..hit = 'Development'
-    ..miss = 'Production'
-    ..description = """testCharacterUpdate likes things newer things"""
-    ..color = ColorVars.yellow;
+    ..image = 'assets/images/appleKid.png'
+    ..name = 'appleKid'
+    ..hit = 'Apple inc.'
+    ..miss = 'Instruction manuals'
+    ..description = """Not actually appleKid lol"""
+    ..color = ColorVars.red;
 
   static Character TESTCharacter2 = Character()
     ..image = 'assets/images/imageNoExist.png'
@@ -1225,11 +1244,11 @@ class CharacterData {
     ..color = ColorVars.yellow;
 
   static Character TESTCharacterUpdate2 = Character()
-    ..image = 'assets/images/imageNoExist.png'
-    ..name = 'testCharacter2'
-    ..hit = 'Development'
-    ..miss = 'Production'
-    ..description = """testCharacterUpdate2 likes only the newest things"""
+    ..image = 'assets/images/bananaKid.jpg'
+    ..name = 'bananaKid'
+    ..hit = 'Banana laffy taffy'
+    ..miss = 'Politics'
+    ..description = """Not actually bananakid lol"""
     ..color = ColorVars.yellow;
 }
 
@@ -1248,31 +1267,31 @@ class GamemodeData {
   static Gamemode freeForAll = Gamemode()
     ..name = "Free For All"
     ..teams = false
-    ..timesPlayed = 0
-    ..settings.addAll([
-      Setting()
-        ..title = GamemodeOptionsValues.score.toString()
-        ..mapValues = 50
-        ..settingsWidget = SettingsWidgets.numField,
-      Setting()
-        ..title = GamemodeOptionsValues.weightedPrograms.toString()
-        ..mapValues = true
-        ..settingsWidget = SettingsWidgets.boolDropdown,
-    ]);
+    ..timesPlayed = 0;
+  // ..settings.addAll([
+  //   Setting()
+  //     ..title = GamemodeOptionsValues.score.toString()
+  //     ..mapValues = 50
+  //     ..settingsWidget = SettingsWidgets.numField,
+  //   Setting()
+  //     ..title = GamemodeOptionsValues.weightedPrograms.toString()
+  //     ..mapValues = true
+  //     ..settingsWidget = SettingsWidgets.boolDropdown,
+  // ]);
   static Gamemode tagBattle = Gamemode()
     ..name = "Tag Battle"
     ..teams = true
-    ..timesPlayed = 0
-    ..settings.addAll([
-      Setting()
-        ..title = GamemodeOptionsValues.score.toString()
-        ..mapValues = 40
-        ..settingsWidget = SettingsWidgets.numField,
-      Setting()
-        ..title = GamemodeOptionsValues.weightedPrograms.toString()
-        ..mapValues = true
-        ..settingsWidget = SettingsWidgets.boolDropdown,
-    ]);
+    ..timesPlayed = 0;
+  // ..settings.addAll([
+  //   Setting()
+  //     ..title = GamemodeOptionsValues.score.toString()
+  //     ..mapValues = 40
+  //     ..settingsWidget = SettingsWidgets.numField,
+  //   Setting()
+  //     ..title = GamemodeOptionsValues.weightedPrograms.toString()
+  //     ..mapValues = true
+  //     ..settingsWidget = SettingsWidgets.boolDropdown,
+  // ]);
   // static Gamemode TESTGamemode = Gamemode()
   //   ..name = "Test Gamemode"
   //   ..teams = false
@@ -1335,6 +1354,10 @@ class GamepadData {
     ..connected = true
     ..index = 3
     ..color = PlayerColors.p3.enumToColor();
+  static Gamepad gamepad4 = Gamepad()
+    ..connected = true
+    ..index = 4
+    ..color = PlayerColors.p4.enumToColor();
   // static Gamepad TESTGamepad = Gamepad()
   //   ..connected = false
   //   ..index = 4
@@ -1349,20 +1372,62 @@ List<Gamepad> testGamepads = [
   GamepadData.gamepad1,
   GamepadData.gamepad2,
   GamepadData.gamepad3,
+  GamepadData.gamepad4,
 ];
 
 class PlayerData {
-  static Player player1 = Player()..color = ColorVars.red;
-  static Player player2 = Player()..color = ColorVars.blue;
-  static Player player3 = Player()..color = ColorVars.green;
-  // static Player TESTPlayer = Player()..color = ColorVars.yellow;
-  // static Player TESTPlayer2 = Player()..color = ColorVars.pink;
+  /// NOTE that you can't assign IsarLinks UNTIL that data has been written
+  /// to the database; that's why for testing player objects are written last,
+  /// because they are reliant on a variety of other linked data
+  static Player p1T1 = Player()
+    ..color = PlayerColors.p1.enumToColor()
+    ..character.value = characters[0]
+    ..gamepad.value = testGamepads[0]
+    ..program.value = programs[0]
+    ..gamemode.value = GamemodeData.tagBattle
+    ..team.value = teams[0];
+  static Player p2T1 = Player()
+    ..color = PlayerColors.p2.enumToColor()
+    ..character.value = characters[1]
+    ..gamepad.value = testGamepads[1]
+    ..program.value = programs[0]
+    ..gamemode.value = GamemodeData.tagBattle
+    ..team.value = teams[0];
+  static Player p3T2 = Player()
+    ..color = PlayerColors.p3.enumToColor()
+    ..character.value = characters[4]
+    ..gamepad.value = testGamepads[2]
+    ..program.value = programs[0]
+    ..gamemode.value = GamemodeData.tagBattle
+    ..team.value = teams[1];
+  static Player p4T2 = Player()
+    ..color = PlayerColors.p4.enumToColor()
+    ..character.value = characters[3]
+    ..gamepad.value = testGamepads[3]
+    ..program.value = programs[0]
+    ..gamemode.value = GamemodeData.tagBattle
+    ..team.value = teams[1];
+  static Player p1Solo = Player()
+    ..color = PlayerColors.p1.enumToColor()
+    ..character.value = characters[3]
+    ..gamepad.value = testGamepads[0]
+    ..program.value = programs[0]
+    ..gamemode.value = GamemodeData.freeForAll;
+  static Player p2Solo = Player()
+    ..color = PlayerColors.p2.enumToColor()
+    ..character.value = characters[2]
+    ..gamepad.value = testGamepads[1]
+    ..program.value = programs[0]
+    ..gamemode.value = GamemodeData.freeForAll;
 }
 
 List<Player> testPlayers = [
   // Player color defaults to white, but is overwritten in the following order
   // team -> gamepad -> player
-  PlayerData.player1,
-  PlayerData.player2,
-  PlayerData.player3,
+  PlayerData.p1T1,
+  PlayerData.p2T1,
+  PlayerData.p3T2,
+  PlayerData.p4T2,
+  PlayerData.p1Solo,
+  PlayerData.p2Solo,
 ];

@@ -81,7 +81,7 @@ class _DWTPSetupState extends State<DWTPSetup> {
                             gridDelegate:
                                 SliverGridDelegateWithMaxCrossAxisExtent(
                                     maxCrossAxisExtent:
-                                        value.numPlayers as double),
+                                        value.numPlayers.toDouble()),
                             itemBuilder: (context, index) {
                               return PlayerColumn(
                                 gamemode: value.gamemode,
@@ -112,7 +112,7 @@ class _DWTPSetupState extends State<DWTPSetup> {
                           gridDelegate:
                               SliverGridDelegateWithMaxCrossAxisExtent(
                                   maxCrossAxisExtent:
-                                      value.numPlayers as double),
+                                      value.numPlayers.toDouble()),
                           itemBuilder: (context, index) {
                             return PlayerColumn(
                               gamemode: value.gamemode,
@@ -129,7 +129,7 @@ class _DWTPSetupState extends State<DWTPSetup> {
                     appBar: CustomAppBar(),
                     body: GridView.builder(
                       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: value.numPlayers as double),
+                          maxCrossAxisExtent: value.numPlayers.toDouble()),
                       itemBuilder: (context, index) {
                         return PlayerColumn(
                           gamemode: value.gamemode,

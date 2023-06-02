@@ -1,8 +1,10 @@
 import 'package:adifferentwaytoplay/app/pages/exception_view.dart';
+import 'package:adifferentwaytoplay/app/provider/dwtp_provider.dart';
 import 'package:adifferentwaytoplay/app/widgets/utility/text.dart';
 import 'package:adifferentwaytoplay/data/utils/utils.dart';
 import 'package:adifferentwaytoplay/domain/entities/gamemode.dart';
 import 'package:adifferentwaytoplay/domain/entities/player.dart';
+import 'package:adifferentwaytoplay/domain/entities/program.dart';
 import 'package:adifferentwaytoplay/domain/entities/setting.dart';
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
@@ -30,50 +32,37 @@ class PlayerReadyButton extends StatefulWidget {
 }
 
 class _PlayerReadyButtonState extends State<PlayerReadyButton> {
-  late Future<List<Setting?>> individualSettings;
+  late List<Setting> individualSettings;
 
   @override
   void initState() {
-    individualSettings = storage.getSetting({
-      'program.abbreviation': widget.player.program.value!.abbreviation,
-      "individual": true,
-    });
+    individualSettings = storage.isarDB.settings
+        .where()
+        .individualEqualTo(true)
+        .filter()
+        .program((program) => program
+            .abbreviationEqualTo(widget.player.program.value!.abbreviation))
+        .findAllSync();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: individualSettings,
-      initialData: const [],
-      builder: (context, snapshot) {
-        return (snapshot.hasData)
-            ? CheckboxListTile(
-                title: const Text("Ready up"),
-                value: widget.ready,
-                onChanged: (value) async {
-                  // Check if the player is allowed to ready up
-                  // Simply get all individual settings and check if they are defined or not
-                  // Check if the setting is filled out
-                  if ((snapshot.data! as List<Setting>)
-                      .every((element) => element.ready == true)) {
-                    setState(() {
-                      widget.player.ready = true;
-                    });
-                    await storage.updatePlayers([widget.player]);
-                    await checkReady();
-                  }
-                  // Otherwise return null
-                  return;
-                },
-              )
-            : (snapshot.hasError)
-                ? renderException(
-                    context,
-                    snapshot.error.toString(),
-                    snapshot.stackTrace.toString(),
-                  )
-                : Container();
+    return CheckboxListTile(
+      title: const Text("Ready up"),
+      value: widget.ready,
+      onChanged: (value) {
+        // Check if the player is allowed to ready up
+        // Simply get all individual settings and check if they are defined or not
+        // Check if the setting is filled out
+        if ((individualSettings).every((element) => element.ready == true)) {
+          setState(() {
+            widget.player.ready = true;
+          });
+          checkReady();
+        }
+        // Otherwise return null
+        return;
       },
     );
   }
@@ -81,11 +70,8 @@ class _PlayerReadyButtonState extends State<PlayerReadyButton> {
 
 /// Checks if all the players are ready; if yes, sends a changeNotifier
 /// to trigger the ready_button
-Future<bool> checkReady() async {
-  List<Player> players = await storage.getPlayerList([
-    {"gamepad.index": Sort.asc}
-  ]);
-  if (players.every((element) => element.ready)) {
+bool checkReady() {
+  if (dwtpProvider.players.every((element) => element.ready)) {
     return true;
   }
   return false;

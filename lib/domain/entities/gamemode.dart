@@ -31,7 +31,7 @@ class Gamemode {
   @Index()
   late bool? teams;
 
-  late String image;
+  String? image;
 
   // @enumerated
   // late GamemodeOptions gamemodeOptions;
@@ -44,6 +44,19 @@ class Gamemode {
   String toString() {
     return '''$id: {name: $name, timesPlayed: $timesPlayed, settings: ${settings.toString()}}''';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return (other is Gamemode &&
+        name == other.name &&
+        image == other.image &&
+        timesPlayed == other.timesPlayed &&
+        teams == other.teams);
+  }
+
+  @override
+  int get hashCode => name.hashCode;
 
   /* 
   Gamemode({

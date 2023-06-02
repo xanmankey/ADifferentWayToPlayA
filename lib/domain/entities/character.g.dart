@@ -32,33 +32,38 @@ const CharacterSchema = CollectionSchema(
       name: r'description',
       type: IsarType.string,
     ),
-    r'hit': PropertySchema(
+    r'hashCode': PropertySchema(
       id: 3,
+      name: r'hashCode',
+      type: IsarType.long,
+    ),
+    r'hit': PropertySchema(
+      id: 4,
       name: r'hit',
       type: IsarType.string,
     ),
     r'image': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'image',
       type: IsarType.string,
     ),
     r'matchesPlayed': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'matchesPlayed',
       type: IsarType.long,
     ),
     r'matchesWon': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'matchesWon',
       type: IsarType.long,
     ),
     r'miss': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'miss',
       type: IsarType.string,
     ),
     r'name': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'name',
       type: IsarType.string,
     )
@@ -73,7 +78,7 @@ const CharacterSchema = CollectionSchema(
       id: 879695947855722453,
       name: r'name',
       unique: true,
-      replace: false,
+      replace: true,
       properties: [
         IndexPropertySchema(
           name: r'name',
@@ -189,12 +194,13 @@ void _characterSerialize(
   writer.writeLong(offsets[0], object.age);
   writer.writeLong(offsets[1], object.color);
   writer.writeString(offsets[2], object.description);
-  writer.writeString(offsets[3], object.hit);
-  writer.writeString(offsets[4], object.image);
-  writer.writeLong(offsets[5], object.matchesPlayed);
-  writer.writeLong(offsets[6], object.matchesWon);
-  writer.writeString(offsets[7], object.miss);
-  writer.writeString(offsets[8], object.name);
+  writer.writeLong(offsets[3], object.hashCode);
+  writer.writeString(offsets[4], object.hit);
+  writer.writeString(offsets[5], object.image);
+  writer.writeLong(offsets[6], object.matchesPlayed);
+  writer.writeLong(offsets[7], object.matchesWon);
+  writer.writeString(offsets[8], object.miss);
+  writer.writeString(offsets[9], object.name);
 }
 
 Character _characterDeserialize(
@@ -207,13 +213,13 @@ Character _characterDeserialize(
   object.age = reader.readLongOrNull(offsets[0]);
   object.color = reader.readLongOrNull(offsets[1]);
   object.description = reader.readStringOrNull(offsets[2]);
-  object.hit = reader.readStringOrNull(offsets[3]);
+  object.hit = reader.readStringOrNull(offsets[4]);
   object.id = id;
-  object.image = reader.readString(offsets[4]);
-  object.matchesPlayed = reader.readLong(offsets[5]);
-  object.matchesWon = reader.readLong(offsets[6]);
-  object.miss = reader.readStringOrNull(offsets[7]);
-  object.name = reader.readString(offsets[8]);
+  object.image = reader.readString(offsets[5]);
+  object.matchesPlayed = reader.readLong(offsets[6]);
+  object.matchesWon = reader.readLong(offsets[7]);
+  object.miss = reader.readStringOrNull(offsets[8]);
+  object.name = reader.readString(offsets[9]);
   return object;
 }
 
@@ -231,16 +237,18 @@ P _characterDeserializeProp<P>(
     case 2:
       return (reader.readStringOrNull(offset)) as P;
     case 3:
-      return (reader.readStringOrNull(offset)) as P;
-    case 4:
-      return (reader.readString(offset)) as P;
-    case 5:
       return (reader.readLong(offset)) as P;
+    case 4:
+      return (reader.readStringOrNull(offset)) as P;
+    case 5:
+      return (reader.readString(offset)) as P;
     case 6:
       return (reader.readLong(offset)) as P;
     case 7:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 8:
+      return (reader.readStringOrNull(offset)) as P;
+    case 9:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1160,6 +1168,59 @@ extension CharacterQueryFilter
     });
   }
 
+  QueryBuilder<Character, Character, QAfterFilterCondition> hashCodeEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Character, Character, QAfterFilterCondition> hashCodeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Character, Character, QAfterFilterCondition> hashCodeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Character, Character, QAfterFilterCondition> hashCodeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hashCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Character, Character, QAfterFilterCondition> hitIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1977,6 +2038,18 @@ extension CharacterQuerySortBy on QueryBuilder<Character, Character, QSortBy> {
     });
   }
 
+  QueryBuilder<Character, Character, QAfterSortBy> sortByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Character, Character, QAfterSortBy> sortByHashCodeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.desc);
+    });
+  }
+
   QueryBuilder<Character, Character, QAfterSortBy> sortByHit() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'hit', Sort.asc);
@@ -2088,6 +2161,18 @@ extension CharacterQuerySortThenBy
     });
   }
 
+  QueryBuilder<Character, Character, QAfterSortBy> thenByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Character, Character, QAfterSortBy> thenByHashCodeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.desc);
+    });
+  }
+
   QueryBuilder<Character, Character, QAfterSortBy> thenByHit() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'hit', Sort.asc);
@@ -2194,6 +2279,12 @@ extension CharacterQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Character, Character, QDistinct> distinctByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'hashCode');
+    });
+  }
+
   QueryBuilder<Character, Character, QDistinct> distinctByHit(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -2258,6 +2349,12 @@ extension CharacterQueryProperty
   QueryBuilder<Character, String?, QQueryOperations> descriptionProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'description');
+    });
+  }
+
+  QueryBuilder<Character, int, QQueryOperations> hashCodeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'hashCode');
     });
   }
 

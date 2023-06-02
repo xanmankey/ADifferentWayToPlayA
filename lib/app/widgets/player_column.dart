@@ -68,7 +68,10 @@ class PlayerColumn extends StatefulWidget {
 }
 
 class _PlayerColumnState extends State<PlayerColumn> {
-  late Future<List<DataTypes>> data;
+  late List<Character> characters;
+  late List<Team> teams;
+  late List<Gamemode> gamemodes;
+  late List<Program> programs;
   late Player player;
   final GlobalKey _teamSelectorKey = GlobalKey();
   int teamSelectorIndex = 0;
@@ -87,11 +90,15 @@ class _PlayerColumnState extends State<PlayerColumn> {
     player = Player()
       ..ready = false
       ..score = 0
-      ..gamemode.add(widget.gamemode)
+      ..gamemode.value = widget.gamemode
       ..gamepad.value = dwtpProvider.gamepads[widget.playerIndex];
     cursor = DWTPCursor(
       player: player,
     );
+    characters = storage.isarDB.characters.where().findAllSync();
+    teams = storage.isarDB.teams.where().findAllSync();
+    gamemodes = storage.isarDB.gamemodes.where().findAllSync();
+    programs = storage.isarDB.programs.where().findAllSync();
     super.initState();
   }
 
@@ -99,250 +106,207 @@ class _PlayerColumnState extends State<PlayerColumn> {
   Widget build(BuildContext context) {
     return Consumer<DWTPProvider>(
       builder: (context, provider, child) {
-        return FutureBuilder(
-          future: widget.exposedDataTypes.when(
-            characterType: () => storage.getCharacterList([
-              {"name": Sort.asc}
-            ]),
-            gamemodeType: () => storage.getGamemodeList([
-              {"name": Sort.asc}
-            ]),
-            programType: () => storage.getProgramList([
-              {"abbreviation": Sort.asc}
-            ]),
-            teamType: () => storage.getTeamList([
-              {"name": Sort.asc}
-            ]),
-          ),
-          builder: (context, snapshot) {
-            return (snapshot.hasData)
-                ? ControllerGestureDetector(
-                    index: player.gamepad.value!.index,
-                    onSelect: (Offset cursorOffset) {
-                      // Hit test for:
-                      // Team selector
-                      final RenderBox teamSelectorBox =
-                          _teamSelectorKey.currentContext!.findRenderObject()
-                              as RenderBox;
-                      final Offset teamSelectorOffset =
-                          teamSelectorBox.localToGlobal(Offset.zero);
-                      final Size teamSelectorSize = teamSelectorBox.size;
-                      final Rect teamSelectorRect = Rect.fromLTWH(
-                        teamSelectorOffset.dx,
-                        teamSelectorOffset.dy,
-                        teamSelectorSize.width,
-                        teamSelectorSize.height,
-                      );
-                      if (teamSelectorRect.contains(cursorOffset)) {
-                        // Update state accordingly;
-                        // scroll teamSelector right or left one depending on the
-                        // x coordinate of the click
-                        if (cursorOffset.dx <
-                            (teamSelectorRect.left + teamSelectorRect.width) /
-                                2) {
-                          if (teamSelectorIndex > 0) {
-                            setState(() {
-                              teamSelectorIndex -= 1;
-                            });
-                          } else {
-                            setState(() {
-                              teamSelectorIndex =
-                                  (snapshot.data as List<Team>).length;
-                            });
-                          }
-                        } else {
-                          if (teamSelectorIndex <
-                              (snapshot.data as List<Team>).length + 1) {
-                            setState(() {
-                              teamSelectorIndex += 1;
-                            });
-                          } else {
-                            setState(() {
-                              teamSelectorIndex = 0;
-                            });
-                          }
-                        }
-                      }
-                      // Character selector
-                      final RenderBox characterSelectorBox =
-                          _characterSelectorKey.currentContext!
-                              .findRenderObject() as RenderBox;
-                      final Offset characterSelectorOffset =
-                          characterSelectorBox.localToGlobal(Offset.zero);
-                      final Size characterSelectorSize =
-                          characterSelectorBox.size;
-                      final Rect characterSelectorRect = Rect.fromLTWH(
-                        characterSelectorOffset.dx,
-                        characterSelectorOffset.dy,
-                        characterSelectorSize.width,
-                        characterSelectorSize.height,
-                      );
-                      if (characterSelectorRect.contains(cursorOffset)) {
-                        // Update state accordingly;
-                        // scroll teamSelector right or left one depending on the
-                        // x coordinate of the click
-                        if (cursorOffset.dx <
-                            (characterSelectorRect.left +
-                                    characterSelectorRect.width) /
-                                2) {
-                          if (characterSelectorIndex > 0) {
-                            setState(() {
-                              characterSelectorIndex -= 1;
-                            });
-                          } else {
-                            setState(() {
-                              characterSelectorIndex =
-                                  (snapshot.data as List<Character>).length;
-                            });
-                          }
-                        } else {
-                          if (characterSelectorIndex <
-                              (snapshot.data as List<Character>).length + 1) {
-                            setState(() {
-                              characterSelectorIndex += 1;
-                            });
-                          } else {
-                            setState(() {
-                              characterSelectorIndex = 0;
-                            });
-                          }
-                        }
-                      }
-                      // Program selector
-                      final RenderBox programSelectorBox =
-                          _programSelectorKey.currentContext!.findRenderObject()
-                              as RenderBox;
-                      final Offset programSelectorOffset =
-                          programSelectorBox.localToGlobal(Offset.zero);
-                      final Size programSelectorSize = programSelectorBox.size;
-                      final Rect programSelectorRect = Rect.fromLTWH(
-                        programSelectorOffset.dx,
-                        programSelectorOffset.dy,
-                        programSelectorSize.width,
-                        programSelectorSize.height,
-                      );
-                      if (programSelectorRect.contains(cursorOffset)) {
-                        // Update state accordingly;
-                        // scroll teamSelector right or left one depending on the
-                        // x coordinate of the click
-                        if (cursorOffset.dx <
-                            (programSelectorRect.left +
-                                    programSelectorRect.width) /
-                                2) {
-                          if (programSelectorIndex > 0) {
-                            setState(() {
-                              programSelectorIndex -= 1;
-                            });
-                          } else {
-                            setState(() {
-                              programSelectorIndex =
-                                  (snapshot.data as List<Program>).length;
-                            });
-                          }
-                        } else {
-                          if (programSelectorIndex <
-                              (snapshot.data as List<Program>).length + 1) {
-                            setState(() {
-                              programSelectorIndex += 1;
-                            });
-                          } else {
-                            setState(() {
-                              programSelectorIndex = 0;
-                            });
-                          }
-                        }
-                      }
-                      // PlayerReadyButton
-                      final RenderBox playerReadyButtonBox =
-                          _playerReadyButtonKey.currentContext!
-                              .findRenderObject() as RenderBox;
-                      final Offset playerReadyButtonOffset =
-                          playerReadyButtonBox.localToGlobal(Offset.zero);
-                      final Size playerReadyButtonSize =
-                          playerReadyButtonBox.size;
-                      final Rect playerReadyButtonRect = Rect.fromLTWH(
-                        playerReadyButtonOffset.dx,
-                        playerReadyButtonOffset.dy,
-                        playerReadyButtonSize.width,
-                        playerReadyButtonSize.height,
-                      );
-                      if (playerReadyButtonRect.contains(cursorOffset)) {
-                        if ((teamSelectorIndex != 0) &&
-                            (characterSelectorIndex != 0) &&
-                            (programSelectorIndex != 0)) {
-                          setState(() {
-                            playerReady = true;
-                          });
-                        }
-                      }
-                    },
-                    onBack: (Offset cursorOffset) {
-                      // In the case of the PlayerColumn,
-                      // hitting B only undoes the individual player ready-up button
-                      // No hit testing necessary :)
-                      setState(() {
-                        playerReady = false;
-                      });
-                      dwtpProvider.updateReady(false);
-                    },
-                    child: Column(
-                      children: [
-                        TextWidget(
-                            text: "Player ${player.gamepad.value!.index}"),
-                        (widget.gamemode.teams ?? false)
-                            ? TeamSelector(
-                                key: _teamSelectorKey,
-                                teams: snapshot.data as List<Team>,
-                                numPlayers: widget.numPlayers,
-                                playerIndex: player.gamepad.value!.index,
-                                currentTeam: (player.team.value != null)
-                                    ? (snapshot.data as List<Team>)
-                                        .indexOf(player.team.value!)
-                                    : 0,
-                              )
-                            : Container(),
-                        CharacterSelector(
-                          key: _characterSelectorKey,
-                          characters: snapshot.data as List<Character>,
-                          numPlayers: widget.numPlayers,
-                          playerIndex: player.gamepad.value!.index,
-                          currentCharacter: (player.character.value != null)
-                              ? (snapshot.data as List<Character>)
-                                  .indexOf(player.character.value!)
-                              : 0,
-                        ),
-                        ProgramSelector(
-                          key: _programSelectorKey,
-                          programs: snapshot.data as List<Program>,
-                          numPlayers: widget.numPlayers,
-                          playerIndex: player.gamepad.value!.index,
-                          currentProgram: (player.program.value != null)
-                              ? (snapshot.data as List<Program>)
-                                  .indexOf(player.program.value!)
-                              : 0,
-                        ),
-                        Row(
-                          children: [
-                            TextWidget(text: '${player.score}'),
-                            PlayerReadyButton(
-                              key: _playerReadyButtonKey,
-                              ready: playerReady,
-                              player: player,
-                              gamemode: widget.gamemode,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )
-                : (snapshot.hasError)
-                    ? renderException(
-                        context,
-                        snapshot.error.toString(),
-                        snapshot.stackTrace.toString(),
-                      )
-                    : Container();
+        return ControllerGestureDetector(
+          index: player.gamepad.value!.index,
+          onSelect: (Offset cursorOffset) {
+            // Hit test for:
+            // Team selector
+            final RenderBox teamSelectorBox = _teamSelectorKey.currentContext!
+                .findRenderObject() as RenderBox;
+            final Offset teamSelectorOffset =
+                teamSelectorBox.localToGlobal(Offset.zero);
+            final Size teamSelectorSize = teamSelectorBox.size;
+            final Rect teamSelectorRect = Rect.fromLTWH(
+              teamSelectorOffset.dx,
+              teamSelectorOffset.dy,
+              teamSelectorSize.width,
+              teamSelectorSize.height,
+            );
+            if (teamSelectorRect.contains(cursorOffset)) {
+              // Update state accordingly;
+              // scroll teamSelector right or left one depending on the
+              // x coordinate of the click
+              if (cursorOffset.dx <
+                  (teamSelectorRect.left + teamSelectorRect.width) / 2) {
+                if (teamSelectorIndex > 0) {
+                  setState(() {
+                    teamSelectorIndex -= 1;
+                  });
+                } else {
+                  setState(() {
+                    teamSelectorIndex = teams.length;
+                  });
+                }
+              } else {
+                if (teamSelectorIndex < teams.length + 1) {
+                  setState(() {
+                    teamSelectorIndex += 1;
+                  });
+                } else {
+                  setState(() {
+                    teamSelectorIndex = 0;
+                  });
+                }
+              }
+            }
+            // Character selector
+            final RenderBox characterSelectorBox =
+                _characterSelectorKey.currentContext!.findRenderObject()
+                    as RenderBox;
+            final Offset characterSelectorOffset =
+                characterSelectorBox.localToGlobal(Offset.zero);
+            final Size characterSelectorSize = characterSelectorBox.size;
+            final Rect characterSelectorRect = Rect.fromLTWH(
+              characterSelectorOffset.dx,
+              characterSelectorOffset.dy,
+              characterSelectorSize.width,
+              characterSelectorSize.height,
+            );
+            if (characterSelectorRect.contains(cursorOffset)) {
+              // Update state accordingly;
+              // scroll teamSelector right or left one depending on the
+              // x coordinate of the click
+              if (cursorOffset.dx <
+                  (characterSelectorRect.left + characterSelectorRect.width) /
+                      2) {
+                if (characterSelectorIndex > 0) {
+                  setState(() {
+                    characterSelectorIndex -= 1;
+                  });
+                } else {
+                  setState(() {
+                    characterSelectorIndex = characters.length;
+                  });
+                }
+              } else {
+                if (characterSelectorIndex < characters.length + 1) {
+                  setState(() {
+                    characterSelectorIndex += 1;
+                  });
+                } else {
+                  setState(() {
+                    characterSelectorIndex = 0;
+                  });
+                }
+              }
+            }
+            // Program selector
+            final RenderBox programSelectorBox =
+                _programSelectorKey.currentContext!.findRenderObject()
+                    as RenderBox;
+            final Offset programSelectorOffset =
+                programSelectorBox.localToGlobal(Offset.zero);
+            final Size programSelectorSize = programSelectorBox.size;
+            final Rect programSelectorRect = Rect.fromLTWH(
+              programSelectorOffset.dx,
+              programSelectorOffset.dy,
+              programSelectorSize.width,
+              programSelectorSize.height,
+            );
+            if (programSelectorRect.contains(cursorOffset)) {
+              // Update state accordingly;
+              // scroll teamSelector right or left one depending on the
+              // x coordinate of the click
+              if (cursorOffset.dx <
+                  (programSelectorRect.left + programSelectorRect.width) / 2) {
+                if (programSelectorIndex > 0) {
+                  setState(() {
+                    programSelectorIndex -= 1;
+                  });
+                } else {
+                  setState(() {
+                    programSelectorIndex = programs.length;
+                  });
+                }
+              } else {
+                if (programSelectorIndex < programs.length + 1) {
+                  setState(() {
+                    programSelectorIndex += 1;
+                  });
+                } else {
+                  setState(() {
+                    programSelectorIndex = 0;
+                  });
+                }
+              }
+            }
+            // PlayerReadyButton
+            final RenderBox playerReadyButtonBox =
+                _playerReadyButtonKey.currentContext!.findRenderObject()
+                    as RenderBox;
+            final Offset playerReadyButtonOffset =
+                playerReadyButtonBox.localToGlobal(Offset.zero);
+            final Size playerReadyButtonSize = playerReadyButtonBox.size;
+            final Rect playerReadyButtonRect = Rect.fromLTWH(
+              playerReadyButtonOffset.dx,
+              playerReadyButtonOffset.dy,
+              playerReadyButtonSize.width,
+              playerReadyButtonSize.height,
+            );
+            if (playerReadyButtonRect.contains(cursorOffset)) {
+              if ((teamSelectorIndex != 0) &&
+                  (characterSelectorIndex != 0) &&
+                  (programSelectorIndex != 0)) {
+                setState(() {
+                  playerReady = true;
+                });
+              }
+            }
           },
+          onBack: (Offset cursorOffset) {
+            // In the case of the PlayerColumn,
+            // hitting B only undoes the individual player ready-up button
+            // No hit testing necessary :)
+            setState(() {
+              playerReady = false;
+            });
+            dwtpProvider.updateReady(false);
+          },
+          child: Column(
+            children: [
+              TextWidget(text: "Player ${player.gamepad.value!.index}"),
+              (widget.gamemode.teams ?? false)
+                  ? TeamSelector(
+                      key: _teamSelectorKey,
+                      teams: teams,
+                      numPlayers: widget.numPlayers,
+                      playerIndex: player.gamepad.value!.index,
+                      currentTeam: (player.team.value != null)
+                          ? teams.indexOf(player.team.value!)
+                          : 0,
+                    )
+                  : Container(),
+              CharacterSelector(
+                key: _characterSelectorKey,
+                characters: characters,
+                numPlayers: widget.numPlayers,
+                playerIndex: player.gamepad.value!.index,
+                currentCharacter: (player.character.value != null)
+                    ? characters.indexOf(player.character.value!)
+                    : 0,
+              ),
+              ProgramSelector(
+                key: _programSelectorKey,
+                programs: programs,
+                numPlayers: widget.numPlayers,
+                playerIndex: player.gamepad.value!.index,
+                currentProgram: (player.program.value != null)
+                    ? programs.indexOf(player.program.value!)
+                    : 0,
+              ),
+              Row(
+                children: [
+                  TextWidget(text: '${player.score}'),
+                  PlayerReadyButton(
+                    key: _playerReadyButtonKey,
+                    ready: playerReady,
+                    player: player,
+                    gamemode: widget.gamemode,
+                  ),
+                ],
+              ),
+            ],
+          ),
         );
       },
     );

@@ -86,6 +86,24 @@ class Setting {
     description: $description}''';
   }
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return (other is Setting &&
+        title == other.title &&
+        individual == other.individual &&
+        app == other.app &&
+        description == other.description &&
+        enabled == other.enabled &&
+        ready == other.ready &&
+        sortProperty == other.sortProperty &&
+        settingsWidget == other.settingsWidget &&
+        values == other.values);
+  }
+
+  @override
+  int get hashCode => (title.hashCode + mapValues.hashCode);
+
   /*
   Command({
     required this.title,

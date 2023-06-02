@@ -47,11 +47,11 @@ class _SettingsFieldState extends State<SettingsField> {
         ),
         keyboardType:
             (widget.numerical) ? TextInputType.number : TextInputType.text,
-        onSubmitted: (value) {
+        onSubmitted: (value) async {
           // Update the setting value
           widget.setting.mapValues = value;
           // Write the setting value
-          storage.updateSettings([widget.setting]);
+          await storage.isarDB.settings.put(widget.setting);
         },
       ),
     );

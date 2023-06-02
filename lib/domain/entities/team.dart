@@ -42,13 +42,28 @@ class Team {
   int matchesWon = 0;
 
   @Backlink(to: 'team')
-  var player = IsarLinks<Player>();
+  var players = IsarLinks<Player>();
 
   @override
   String toString() {
     return '''$id: {name: $name, logo: $logo, description: $description, color: $color, 
     matchesPlayed: $matchesPlayed, matchesWon: $matchesWon}''';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return (other is Team &&
+        name == other.name &&
+        logo == other.logo &&
+        description == other.description &&
+        color == other.color &&
+        matchesPlayed == other.matchesPlayed &&
+        matchesWon == other.matchesWon);
+  }
+
+  @override
+  int get hashCode => name.hashCode;
 
   /*
   Team({

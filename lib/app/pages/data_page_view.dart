@@ -24,76 +24,6 @@ import 'package:isar/isar.dart';
 ///
 ///
 /// ```
-/// class DWTPListView extends StatefulWidget {
-///   DataTypes exposedDataTypes;
-///   DWTPListView({
-///     super.key,
-///     required this.exposedDataTypes,
-///   });
-///
-///   @override
-///   State<DWTPListView> createState() => _DWTPListViewState();
-/// }
-///
-/// class _DWTPListViewState extends State<DWTPListView> {
-///   late Future<List<DataTypes>> dataTypesFuture;
-///   Storage storage = Storage();
-///
-///   @override
-///   Widget build(BuildContext context) {
-///     return FutureBuilder(
-///       future: widget.exposedDataTypes.when(
-///         characterType: () => storage.getCharacterList([
-///           {"name": Sort.asc}
-///         ]),
-///         gamemodeType: () => storage.getGamemodeList([
-///           {"name": Sort.asc}
-///         ]),
-///         programType: () => storage.getProgramList([
-///           {"abbreviation": Sort.asc}
-///         ]),
-///         teamType: () => storage.getTeamList([
-///           {"name": Sort.asc}
-///         ]),
-///       ),
-///       builder: (context, snapshot) {
-///         if (snapshot.hasData) {
-///           return Scaffold(
-///             appBar: const CustomAppBar(),
-///             body: PageView.builder(
-///               itemBuilder: (context, index) {
-///                 return widget.exposedDataTypes.when(
-///                   characterType: () => [
-///                     for (Character character
-///                         in snapshot.data as List<Character>)
-///                       CharacterEntry(character: character)
-///                   ][index],
-///                   gamemodeType: () => [
-///                     for (Gamemode gamemode in snapshot.data as List<Gamemode>)
-///                       GamemodeEntry(gamemode: gamemode)
-///                   ][index],
-///                   programType: () => [
-///                     for (Program program in snapshot.data as List<Program>)
-///                       ProgramEntry(program: program)
-///                   ][index],
-///                   teamType: () => [
-///                     for (Team team in snapshot.data as List<Team>)
-///                       TeamEntry(team: team)
-///                   ][index],
-///                 );
-///               },
-///             ),
-///           );
-///         } else if (snapshot.hasError) {
-///           return ExceptionWidget(error: snapshot.error.toString());
-///         } else {
-///           return const Scaffold(
-///               appBar: CustomAppBar(), body: CircularProgressIndicator());
-///         }
-///       },
-///     );
-///   }
-/// }
 /// ```
 class DWTPListView extends StatefulWidget {
   DataTypes exposedDataTypes;
@@ -107,60 +37,43 @@ class DWTPListView extends StatefulWidget {
 }
 
 class _DWTPListViewState extends State<DWTPListView> {
-  late Future<List<DataTypes>> dataTypesFuture;
+  late List<Character> characters;
+  late List<Team> teams;
+  late List<Gamemode> gamemodes;
+  late List<Program> programs;
+
+  @override
+  void initState() {
+    characters = storage.isarDB.characters.where().findAllSync();
+    teams = storage.isarDB.teams.where().findAllSync();
+    gamemodes = storage.isarDB.gamemodes.where().findAllSync();
+    programs = storage.isarDB.programs.where().findAllSync();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: widget.exposedDataTypes.when(
-        characterType: () => storage.getCharacterList([
-          {"name": Sort.asc}
-        ]),
-        gamemodeType: () => storage.getGamemodeList([
-          {"name": Sort.asc}
-        ]),
-        programType: () => storage.getProgramList([
-          {"abbreviation": Sort.asc}
-        ]),
-        teamType: () => storage.getTeamList([
-          {"name": Sort.asc}
-        ]),
-      ),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Scaffold(
-            appBar: CustomAppBar(),
-            body: PageView.builder(
-              itemBuilder: (context, index) {
-                return widget.exposedDataTypes.when(
-                  characterType: () => [
-                    for (Character character
-                        in snapshot.data as List<Character>)
-                      CharacterEntry(character: character)
-                  ][index],
-                  gamemodeType: () => [
-                    for (Gamemode gamemode in snapshot.data as List<Gamemode>)
-                      GamemodeEntry(gamemode: gamemode)
-                  ][index],
-                  programType: () => [
-                    for (Program program in snapshot.data as List<Program>)
-                      ProgramEntry(program: program)
-                  ][index],
-                  teamType: () => [
-                    for (Team team in snapshot.data as List<Team>)
-                      TeamEntry(team: team)
-                  ][index],
-                );
-              },
-            ),
+    return Scaffold(
+      appBar: CustomAppBar(),
+      body: PageView.builder(
+        itemBuilder: (context, index) {
+          return widget.exposedDataTypes.when(
+            characterType: () => [
+              for (Character character in characters)
+                CharacterEntry(character: character)
+            ][index],
+            gamemodeType: () => [
+              for (Gamemode gamemode in gamemodes)
+                GamemodeEntry(gamemode: gamemode)
+            ][index],
+            programType: () => [
+              for (Program program in programs) ProgramEntry(program: program)
+            ][index],
+            teamType: () =>
+                [for (Team team in teams) TeamEntry(team: team)][index],
           );
-        } else if (snapshot.hasError) {
-          return ExceptionPage(error: snapshot.error.toString());
-        } else {
-          return Scaffold(
-              appBar: CustomAppBar(), body: const CircularProgressIndicator());
-        }
-      },
+        },
+      ),
     );
   }
 }

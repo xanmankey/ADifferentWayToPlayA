@@ -22,13 +22,18 @@ const PlayerSchema = CollectionSchema(
       name: r'color',
       type: IsarType.long,
     ),
-    r'ready': PropertySchema(
+    r'hashCode': PropertySchema(
       id: 1,
+      name: r'hashCode',
+      type: IsarType.long,
+    ),
+    r'ready': PropertySchema(
+      id: 2,
       name: r'ready',
       type: IsarType.bool,
     ),
     r'score': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'score',
       type: IsarType.long,
     )
@@ -108,7 +113,7 @@ const PlayerSchema = CollectionSchema(
       id: -3446427068894403473,
       name: r'gamemode',
       target: r'Gamemode',
-      single: false,
+      single: true,
       linkName: r'players',
     )
   },
@@ -135,8 +140,9 @@ void _playerSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeLong(offsets[0], object.color);
-  writer.writeBool(offsets[1], object.ready);
-  writer.writeLong(offsets[2], object.score);
+  writer.writeLong(offsets[1], object.hashCode);
+  writer.writeBool(offsets[2], object.ready);
+  writer.writeLong(offsets[3], object.score);
 }
 
 Player _playerDeserialize(
@@ -148,8 +154,8 @@ Player _playerDeserialize(
   final object = Player();
   object.color = reader.readLong(offsets[0]);
   object.id = id;
-  object.ready = reader.readBool(offsets[1]);
-  object.score = reader.readLong(offsets[2]);
+  object.ready = reader.readBool(offsets[2]);
+  object.score = reader.readLong(offsets[3]);
   return object;
 }
 
@@ -163,8 +169,10 @@ P _playerDeserializeProp<P>(
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
-      return (reader.readBool(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 2:
+      return (reader.readBool(offset)) as P;
+    case 3:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -566,6 +574,59 @@ extension PlayerQueryFilter on QueryBuilder<Player, Player, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Player, Player, QAfterFilterCondition> hashCodeEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Player, Player, QAfterFilterCondition> hashCodeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Player, Player, QAfterFilterCondition> hashCodeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Player, Player, QAfterFilterCondition> hashCodeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hashCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Player, Player, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -742,52 +803,9 @@ extension PlayerQueryLinks on QueryBuilder<Player, Player, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Player, Player, QAfterFilterCondition> gamemodeLengthEqualTo(
-      int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'gamemode', length, true, length, true);
-    });
-  }
-
-  QueryBuilder<Player, Player, QAfterFilterCondition> gamemodeIsEmpty() {
+  QueryBuilder<Player, Player, QAfterFilterCondition> gamemodeIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'gamemode', 0, true, 0, true);
-    });
-  }
-
-  QueryBuilder<Player, Player, QAfterFilterCondition> gamemodeIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'gamemode', 0, false, 999999, true);
-    });
-  }
-
-  QueryBuilder<Player, Player, QAfterFilterCondition> gamemodeLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'gamemode', 0, true, length, include);
-    });
-  }
-
-  QueryBuilder<Player, Player, QAfterFilterCondition> gamemodeLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'gamemode', length, include, 999999, true);
-    });
-  }
-
-  QueryBuilder<Player, Player, QAfterFilterCondition> gamemodeLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(
-          r'gamemode', lower, includeLower, upper, includeUpper);
     });
   }
 }
@@ -802,6 +820,18 @@ extension PlayerQuerySortBy on QueryBuilder<Player, Player, QSortBy> {
   QueryBuilder<Player, Player, QAfterSortBy> sortByColorDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'color', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Player, Player, QAfterSortBy> sortByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Player, Player, QAfterSortBy> sortByHashCodeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.desc);
     });
   }
 
@@ -840,6 +870,18 @@ extension PlayerQuerySortThenBy on QueryBuilder<Player, Player, QSortThenBy> {
   QueryBuilder<Player, Player, QAfterSortBy> thenByColorDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'color', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Player, Player, QAfterSortBy> thenByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Player, Player, QAfterSortBy> thenByHashCodeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.desc);
     });
   }
 
@@ -887,6 +929,12 @@ extension PlayerQueryWhereDistinct on QueryBuilder<Player, Player, QDistinct> {
     });
   }
 
+  QueryBuilder<Player, Player, QDistinct> distinctByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'hashCode');
+    });
+  }
+
   QueryBuilder<Player, Player, QDistinct> distinctByReady() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'ready');
@@ -910,6 +958,12 @@ extension PlayerQueryProperty on QueryBuilder<Player, Player, QQueryProperty> {
   QueryBuilder<Player, int, QQueryOperations> colorProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'color');
+    });
+  }
+
+  QueryBuilder<Player, int, QQueryOperations> hashCodeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'hashCode');
     });
   }
 

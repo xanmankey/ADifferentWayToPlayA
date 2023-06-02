@@ -17,23 +17,28 @@ const GamemodeSchema = CollectionSchema(
   name: r'Gamemode',
   id: -743387943824840136,
   properties: {
-    r'image': PropertySchema(
+    r'hashCode': PropertySchema(
       id: 0,
+      name: r'hashCode',
+      type: IsarType.long,
+    ),
+    r'image': PropertySchema(
+      id: 1,
       name: r'image',
       type: IsarType.string,
     ),
     r'name': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'name',
       type: IsarType.string,
     ),
     r'teams': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'teams',
       type: IsarType.bool,
     ),
     r'timesPlayed': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'timesPlayed',
       type: IsarType.long,
     )
@@ -48,7 +53,7 @@ const GamemodeSchema = CollectionSchema(
       id: 879695947855722453,
       name: r'name',
       unique: true,
-      replace: false,
+      replace: true,
       properties: [
         IndexPropertySchema(
           name: r'name',
@@ -111,7 +116,12 @@ int _gamemodeEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.image.length * 3;
+  {
+    final value = object.image;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   bytesCount += 3 + object.name.length * 3;
   return bytesCount;
 }
@@ -122,10 +132,11 @@ void _gamemodeSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.image);
-  writer.writeString(offsets[1], object.name);
-  writer.writeBool(offsets[2], object.teams);
-  writer.writeLong(offsets[3], object.timesPlayed);
+  writer.writeLong(offsets[0], object.hashCode);
+  writer.writeString(offsets[1], object.image);
+  writer.writeString(offsets[2], object.name);
+  writer.writeBool(offsets[3], object.teams);
+  writer.writeLong(offsets[4], object.timesPlayed);
 }
 
 Gamemode _gamemodeDeserialize(
@@ -136,10 +147,10 @@ Gamemode _gamemodeDeserialize(
 ) {
   final object = Gamemode();
   object.id = id;
-  object.image = reader.readString(offsets[0]);
-  object.name = reader.readString(offsets[1]);
-  object.teams = reader.readBoolOrNull(offsets[2]);
-  object.timesPlayed = reader.readLong(offsets[3]);
+  object.image = reader.readStringOrNull(offsets[1]);
+  object.name = reader.readString(offsets[2]);
+  object.teams = reader.readBoolOrNull(offsets[3]);
+  object.timesPlayed = reader.readLong(offsets[4]);
   return object;
 }
 
@@ -151,12 +162,14 @@ P _gamemodeDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readString(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 1:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 2:
-      return (reader.readBoolOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 3:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 4:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -523,6 +536,59 @@ extension GamemodeQueryWhere on QueryBuilder<Gamemode, Gamemode, QWhereClause> {
 
 extension GamemodeQueryFilter
     on QueryBuilder<Gamemode, Gamemode, QFilterCondition> {
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> hashCodeEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> hashCodeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> hashCodeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> hashCodeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hashCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -575,8 +641,24 @@ extension GamemodeQueryFilter
     });
   }
 
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> imageIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'image',
+      ));
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> imageIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'image',
+      ));
+    });
+  }
+
   QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> imageEqualTo(
-    String value, {
+    String? value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -589,7 +671,7 @@ extension GamemodeQueryFilter
   }
 
   QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> imageGreaterThan(
-    String value, {
+    String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -604,7 +686,7 @@ extension GamemodeQueryFilter
   }
 
   QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> imageLessThan(
-    String value, {
+    String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -619,8 +701,8 @@ extension GamemodeQueryFilter
   }
 
   QueryBuilder<Gamemode, Gamemode, QAfterFilterCondition> imageBetween(
-    String lower,
-    String upper, {
+    String? lower,
+    String? upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
@@ -1038,6 +1120,18 @@ extension GamemodeQueryLinks
 }
 
 extension GamemodeQuerySortBy on QueryBuilder<Gamemode, Gamemode, QSortBy> {
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> sortByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> sortByHashCodeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.desc);
+    });
+  }
+
   QueryBuilder<Gamemode, Gamemode, QAfterSortBy> sortByImage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'image', Sort.asc);
@@ -1089,6 +1183,18 @@ extension GamemodeQuerySortBy on QueryBuilder<Gamemode, Gamemode, QSortBy> {
 
 extension GamemodeQuerySortThenBy
     on QueryBuilder<Gamemode, Gamemode, QSortThenBy> {
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> thenByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Gamemode, Gamemode, QAfterSortBy> thenByHashCodeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.desc);
+    });
+  }
+
   QueryBuilder<Gamemode, Gamemode, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -1152,6 +1258,12 @@ extension GamemodeQuerySortThenBy
 
 extension GamemodeQueryWhereDistinct
     on QueryBuilder<Gamemode, Gamemode, QDistinct> {
+  QueryBuilder<Gamemode, Gamemode, QDistinct> distinctByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'hashCode');
+    });
+  }
+
   QueryBuilder<Gamemode, Gamemode, QDistinct> distinctByImage(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1187,7 +1299,13 @@ extension GamemodeQueryProperty
     });
   }
 
-  QueryBuilder<Gamemode, String, QQueryOperations> imageProperty() {
+  QueryBuilder<Gamemode, int, QQueryOperations> hashCodeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'hashCode');
+    });
+  }
+
+  QueryBuilder<Gamemode, String?, QQueryOperations> imageProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'image');
     });

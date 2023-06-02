@@ -117,7 +117,7 @@ String createCLIArguments(Player player, List<Team> teams) {
     'index': '${player.gamepad.value!.index}',
     'teamsEnabled': '${dwtpProvider.gamemode.teams ?? false}',
     'teams': jsonEncode({
-      for (Team team in teams) team.name: [team.player.toList()]
+      for (Team team in teams) team.name: [team.players.toList()]
     }),
   });
 }

@@ -32,23 +32,28 @@ const ProgramSchema = CollectionSchema(
       name: r'enabled',
       type: IsarType.bool,
     ),
-    r'image': PropertySchema(
+    r'hashCode': PropertySchema(
       id: 3,
+      name: r'hashCode',
+      type: IsarType.long,
+    ),
+    r'image': PropertySchema(
+      id: 4,
       name: r'image',
       type: IsarType.string,
     ),
     r'name': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'name',
       type: IsarType.string,
     ),
     r'score': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'score',
       type: IsarType.long,
     ),
     r'script': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'script',
       type: IsarType.string,
     )
@@ -89,7 +94,7 @@ const ProgramSchema = CollectionSchema(
       id: 879695947855722453,
       name: r'name',
       unique: true,
-      replace: false,
+      replace: true,
       properties: [
         IndexPropertySchema(
           name: r'name',
@@ -106,9 +111,9 @@ const ProgramSchema = CollectionSchema(
       target: r'Setting',
       single: false,
     ),
-    r'player': LinkSchema(
+    r'players': LinkSchema(
       id: -3048473050562855308,
-      name: r'player',
+      name: r'players',
       target: r'Player',
       single: false,
       linkName: r'program',
@@ -149,10 +154,11 @@ void _programSerialize(
   writer.writeString(offsets[0], object.abbreviation);
   writer.writeString(offsets[1], object.description);
   writer.writeBool(offsets[2], object.enabled);
-  writer.writeString(offsets[3], object.image);
-  writer.writeString(offsets[4], object.name);
-  writer.writeLong(offsets[5], object.score);
-  writer.writeString(offsets[6], object.script);
+  writer.writeLong(offsets[3], object.hashCode);
+  writer.writeString(offsets[4], object.image);
+  writer.writeString(offsets[5], object.name);
+  writer.writeLong(offsets[6], object.score);
+  writer.writeString(offsets[7], object.script);
 }
 
 Program _programDeserialize(
@@ -166,10 +172,10 @@ Program _programDeserialize(
   object.description = reader.readStringOrNull(offsets[1]);
   object.enabled = reader.readBool(offsets[2]);
   object.id = id;
-  object.image = reader.readString(offsets[3]);
-  object.name = reader.readString(offsets[4]);
-  object.score = reader.readLong(offsets[5]);
-  object.script = reader.readString(offsets[6]);
+  object.image = reader.readString(offsets[4]);
+  object.name = reader.readString(offsets[5]);
+  object.score = reader.readLong(offsets[6]);
+  object.script = reader.readString(offsets[7]);
   return object;
 }
 
@@ -187,12 +193,14 @@ P _programDeserializeProp<P>(
     case 2:
       return (reader.readBool(offset)) as P;
     case 3:
-      return (reader.readString(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 4:
       return (reader.readString(offset)) as P;
     case 5:
-      return (reader.readLong(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 6:
+      return (reader.readLong(offset)) as P;
+    case 7:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -204,13 +212,13 @@ Id _programGetId(Program object) {
 }
 
 List<IsarLinkBase<dynamic>> _programGetLinks(Program object) {
-  return [object.settings, object.player];
+  return [object.settings, object.players];
 }
 
 void _programAttach(IsarCollection<dynamic> col, Id id, Program object) {
   object.id = id;
   object.settings.attach(col, col.isar.collection<Setting>(), r'settings', id);
-  object.player.attach(col, col.isar.collection<Player>(), r'player', id);
+  object.players.attach(col, col.isar.collection<Player>(), r'players', id);
 }
 
 extension ProgramByIndex on IsarCollection<Program> {
@@ -827,6 +835,59 @@ extension ProgramQueryFilter
     });
   }
 
+  QueryBuilder<Program, Program, QAfterFilterCondition> hashCodeEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition> hashCodeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition> hashCodeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterFilterCondition> hashCodeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hashCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Program, Program, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1385,51 +1446,52 @@ extension ProgramQueryLinks
     });
   }
 
-  QueryBuilder<Program, Program, QAfterFilterCondition> player(
+  QueryBuilder<Program, Program, QAfterFilterCondition> players(
       FilterQuery<Player> q) {
     return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'player');
+      return query.link(q, r'players');
     });
   }
 
-  QueryBuilder<Program, Program, QAfterFilterCondition> playerLengthEqualTo(
+  QueryBuilder<Program, Program, QAfterFilterCondition> playersLengthEqualTo(
       int length) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'player', length, true, length, true);
+      return query.linkLength(r'players', length, true, length, true);
     });
   }
 
-  QueryBuilder<Program, Program, QAfterFilterCondition> playerIsEmpty() {
+  QueryBuilder<Program, Program, QAfterFilterCondition> playersIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'player', 0, true, 0, true);
+      return query.linkLength(r'players', 0, true, 0, true);
     });
   }
 
-  QueryBuilder<Program, Program, QAfterFilterCondition> playerIsNotEmpty() {
+  QueryBuilder<Program, Program, QAfterFilterCondition> playersIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'player', 0, false, 999999, true);
+      return query.linkLength(r'players', 0, false, 999999, true);
     });
   }
 
-  QueryBuilder<Program, Program, QAfterFilterCondition> playerLengthLessThan(
+  QueryBuilder<Program, Program, QAfterFilterCondition> playersLengthLessThan(
     int length, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'player', 0, true, length, include);
+      return query.linkLength(r'players', 0, true, length, include);
     });
   }
 
-  QueryBuilder<Program, Program, QAfterFilterCondition> playerLengthGreaterThan(
+  QueryBuilder<Program, Program, QAfterFilterCondition>
+      playersLengthGreaterThan(
     int length, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'player', length, include, 999999, true);
+      return query.linkLength(r'players', length, include, 999999, true);
     });
   }
 
-  QueryBuilder<Program, Program, QAfterFilterCondition> playerLengthBetween(
+  QueryBuilder<Program, Program, QAfterFilterCondition> playersLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -1437,7 +1499,7 @@ extension ProgramQueryLinks
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(
-          r'player', lower, includeLower, upper, includeUpper);
+          r'players', lower, includeLower, upper, includeUpper);
     });
   }
 }
@@ -1476,6 +1538,18 @@ extension ProgramQuerySortBy on QueryBuilder<Program, Program, QSortBy> {
   QueryBuilder<Program, Program, QAfterSortBy> sortByEnabledDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'enabled', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterSortBy> sortByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterSortBy> sortByHashCodeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.desc);
     });
   }
 
@@ -1566,6 +1640,18 @@ extension ProgramQuerySortThenBy
     });
   }
 
+  QueryBuilder<Program, Program, QAfterSortBy> thenByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Program, Program, QAfterSortBy> thenByHashCodeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.desc);
+    });
+  }
+
   QueryBuilder<Program, Program, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -1649,6 +1735,12 @@ extension ProgramQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Program, Program, QDistinct> distinctByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'hashCode');
+    });
+  }
+
   QueryBuilder<Program, Program, QDistinct> distinctByImage(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1700,6 +1792,12 @@ extension ProgramQueryProperty
   QueryBuilder<Program, bool, QQueryOperations> enabledProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'enabled');
+    });
+  }
+
+  QueryBuilder<Program, int, QQueryOperations> hashCodeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'hashCode');
     });
   }
 

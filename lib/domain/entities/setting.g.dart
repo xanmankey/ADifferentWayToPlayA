@@ -37,35 +37,40 @@ const SettingSchema = CollectionSchema(
       name: r'group',
       type: IsarType.longList,
     ),
-    r'individual': PropertySchema(
+    r'hashCode': PropertySchema(
       id: 4,
+      name: r'hashCode',
+      type: IsarType.long,
+    ),
+    r'individual': PropertySchema(
+      id: 5,
       name: r'individual',
       type: IsarType.bool,
     ),
     r'ready': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'ready',
       type: IsarType.bool,
     ),
     r'settingsWidget': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'settingsWidget',
       type: IsarType.byte,
       enumMap: _SettingsettingsWidgetEnumValueMap,
     ),
     r'sortProperty': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'sortProperty',
       type: IsarType.int,
       enumMap: _SettingsortPropertyEnumValueMap,
     ),
     r'title': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'title',
       type: IsarType.string,
     ),
     r'values': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'values',
       type: IsarType.string,
     )
@@ -198,12 +203,13 @@ void _settingSerialize(
   writer.writeString(offsets[1], object.description);
   writer.writeBool(offsets[2], object.enabled);
   writer.writeLongList(offsets[3], object.group);
-  writer.writeBool(offsets[4], object.individual);
-  writer.writeBool(offsets[5], object.ready);
-  writer.writeByte(offsets[6], object.settingsWidget.index);
-  writer.writeInt(offsets[7], object.sortProperty?.index);
-  writer.writeString(offsets[8], object.title);
-  writer.writeString(offsets[9], object.values);
+  writer.writeLong(offsets[4], object.hashCode);
+  writer.writeBool(offsets[5], object.individual);
+  writer.writeBool(offsets[6], object.ready);
+  writer.writeByte(offsets[7], object.settingsWidget.index);
+  writer.writeInt(offsets[8], object.sortProperty?.index);
+  writer.writeString(offsets[9], object.title);
+  writer.writeString(offsets[10], object.values);
 }
 
 Setting _settingDeserialize(
@@ -218,15 +224,15 @@ Setting _settingDeserialize(
   object.enabled = reader.readBool(offsets[2]);
   object.group = reader.readLongList(offsets[3]);
   object.id = id;
-  object.individual = reader.readBool(offsets[4]);
-  object.ready = reader.readBool(offsets[5]);
+  object.individual = reader.readBool(offsets[5]);
+  object.ready = reader.readBool(offsets[6]);
   object.settingsWidget =
-      _SettingsettingsWidgetValueEnumMap[reader.readByteOrNull(offsets[6])] ??
+      _SettingsettingsWidgetValueEnumMap[reader.readByteOrNull(offsets[7])] ??
           SettingsWidgets.checkbox;
   object.sortProperty =
-      _SettingsortPropertyValueEnumMap[reader.readIntOrNull(offsets[7])];
-  object.title = reader.readString(offsets[8]);
-  object.values = reader.readString(offsets[9]);
+      _SettingsortPropertyValueEnumMap[reader.readIntOrNull(offsets[8])];
+  object.title = reader.readString(offsets[9]);
+  object.values = reader.readString(offsets[10]);
   return object;
 }
 
@@ -246,19 +252,21 @@ P _settingDeserializeProp<P>(
     case 3:
       return (reader.readLongList(offset)) as P;
     case 4:
-      return (reader.readBool(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 5:
       return (reader.readBool(offset)) as P;
     case 6:
+      return (reader.readBool(offset)) as P;
+    case 7:
       return (_SettingsettingsWidgetValueEnumMap[
               reader.readByteOrNull(offset)] ??
           SettingsWidgets.checkbox) as P;
-    case 7:
+    case 8:
       return (_SettingsortPropertyValueEnumMap[reader.readIntOrNull(offset)])
           as P;
-    case 8:
-      return (reader.readString(offset)) as P;
     case 9:
+      return (reader.readString(offset)) as P;
+    case 10:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -959,6 +967,59 @@ extension SettingQueryFilter
     });
   }
 
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> hashCodeEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> hashCodeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> hashCodeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> hashCodeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hashCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Setting, Setting, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1485,6 +1546,18 @@ extension SettingQuerySortBy on QueryBuilder<Setting, Setting, QSortBy> {
     });
   }
 
+  QueryBuilder<Setting, Setting, QAfterSortBy> sortByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterSortBy> sortByHashCodeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.desc);
+    });
+  }
+
   QueryBuilder<Setting, Setting, QAfterSortBy> sortByIndividual() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'individual', Sort.asc);
@@ -1593,6 +1666,18 @@ extension SettingQuerySortThenBy
   QueryBuilder<Setting, Setting, QAfterSortBy> thenByEnabledDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'enabled', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterSortBy> thenByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterSortBy> thenByHashCodeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.desc);
     });
   }
 
@@ -1708,6 +1793,12 @@ extension SettingQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Setting, Setting, QDistinct> distinctByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'hashCode');
+    });
+  }
+
   QueryBuilder<Setting, Setting, QDistinct> distinctByIndividual() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'individual');
@@ -1776,6 +1867,12 @@ extension SettingQueryProperty
   QueryBuilder<Setting, List<int>?, QQueryOperations> groupProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'group');
+    });
+  }
+
+  QueryBuilder<Setting, int, QQueryOperations> hashCodeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'hashCode');
     });
   }
 

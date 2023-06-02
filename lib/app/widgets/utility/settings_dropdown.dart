@@ -31,12 +31,12 @@ class _SettingsDropdownState extends State<SettingsDropdown> {
           dropdownColor: settingColor(widget.setting.sortProperty),
           hint: TextWidget(text: widget.setting.description ?? ''),
           onChanged: (widget.setting.enabled)
-              ? (value) {
+              ? (value) async {
                   setState(() {
                     currentValue = value;
                   });
                   widget.setting.mapValues = currentValue;
-                  storage.updateSettings([widget.setting]);
+                  await storage.isarDB.settings.put(widget.setting);
                 }
               : null),
     );

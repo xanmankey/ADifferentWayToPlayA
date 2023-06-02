@@ -70,6 +70,24 @@ class Character {
     matchesPlayed: $matchesPlayed, matchesWon: $matchesWon}''';
   }
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return (other is Character &&
+        name == other.name &&
+        image == other.image &&
+        age == other.age &&
+        hit == other.hit &&
+        miss == other.miss &&
+        description == other.description &&
+        color == other.color &&
+        matchesPlayed == other.matchesPlayed &&
+        matchesWon == other.matchesWon);
+  }
+
+  @override
+  int get hashCode => name.hashCode;
+
   // Constructor
   // Character({
   //   required this.image,

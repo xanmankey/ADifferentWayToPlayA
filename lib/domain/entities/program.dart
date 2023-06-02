@@ -31,7 +31,7 @@ class Program {
   late String abbreviation;
 
   @Index()
-  late bool enabled;
+  bool enabled = true;
 
   @Index(unique: true, replace: true)
   late String name;
@@ -53,13 +53,29 @@ class Program {
   var settings = IsarLinks<Setting>();
 
   @Backlink(to: 'program')
-  var player = IsarLinks<Player>();
+  var players = IsarLinks<Player>();
 
   @override
   String toString() {
     return '''$id: {name: $name, image: $image, abbreviation: $abbreviation,
     description: $description, settings: ${settings.toString()}}''';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return (other is Program &&
+        abbreviation == other.abbreviation &&
+        name == other.name &&
+        script == other.script &&
+        description == other.description &&
+        enabled == other.enabled &&
+        image == other.image &&
+        score == other.score);
+  }
+
+  @override
+  int get hashCode => abbreviation.hashCode;
 
   /*
   Program({

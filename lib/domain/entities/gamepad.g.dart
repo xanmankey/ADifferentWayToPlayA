@@ -26,6 +26,11 @@ const GamepadSchema = CollectionSchema(
       id: 1,
       name: r'connected',
       type: IsarType.bool,
+    ),
+    r'hashCode': PropertySchema(
+      id: 2,
+      name: r'hashCode',
+      type: IsarType.long,
     )
   },
   estimateSize: _gamepadEstimateSize,
@@ -94,6 +99,7 @@ void _gamepadSerialize(
 ) {
   writer.writeLong(offsets[0], object.color);
   writer.writeBool(offsets[1], object.connected);
+  writer.writeLong(offsets[2], object.hashCode);
 }
 
 Gamepad _gamepadDeserialize(
@@ -120,6 +126,8 @@ P _gamepadDeserializeProp<P>(
       return (reader.readLong(offset)) as P;
     case 1:
       return (reader.readBool(offset)) as P;
+    case 2:
+      return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -427,6 +435,59 @@ extension GamepadQueryFilter
     });
   }
 
+  QueryBuilder<Gamepad, Gamepad, QAfterFilterCondition> hashCodeEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamepad, Gamepad, QAfterFilterCondition> hashCodeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamepad, Gamepad, QAfterFilterCondition> hashCodeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Gamepad, Gamepad, QAfterFilterCondition> hashCodeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hashCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Gamepad, Gamepad, QAfterFilterCondition> indexEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -523,6 +584,18 @@ extension GamepadQuerySortBy on QueryBuilder<Gamepad, Gamepad, QSortBy> {
       return query.addSortBy(r'connected', Sort.desc);
     });
   }
+
+  QueryBuilder<Gamepad, Gamepad, QAfterSortBy> sortByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Gamepad, Gamepad, QAfterSortBy> sortByHashCodeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.desc);
+    });
+  }
 }
 
 extension GamepadQuerySortThenBy
@@ -548,6 +621,18 @@ extension GamepadQuerySortThenBy
   QueryBuilder<Gamepad, Gamepad, QAfterSortBy> thenByConnectedDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'connected', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Gamepad, Gamepad, QAfterSortBy> thenByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Gamepad, Gamepad, QAfterSortBy> thenByHashCodeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.desc);
     });
   }
 
@@ -577,6 +662,12 @@ extension GamepadQueryWhereDistinct
       return query.addDistinctBy(r'connected');
     });
   }
+
+  QueryBuilder<Gamepad, Gamepad, QDistinct> distinctByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'hashCode');
+    });
+  }
 }
 
 extension GamepadQueryProperty
@@ -596,6 +687,12 @@ extension GamepadQueryProperty
   QueryBuilder<Gamepad, bool, QQueryOperations> connectedProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'connected');
+    });
+  }
+
+  QueryBuilder<Gamepad, int, QQueryOperations> hashCodeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'hashCode');
     });
   }
 }

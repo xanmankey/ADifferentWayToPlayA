@@ -45,19 +45,36 @@ class Player {
   int score = 0;
 
   @Index()
-  late bool ready;
+  bool ready = false;
 
   // Getters
   // Not really necessary because you can access these properties via isar links
   // int get index => gamepad.index;
 
   @Backlink(to: 'players')
-  var gamemode = IsarLinks<Gamemode>();
+  var gamemode = IsarLink<Gamemode>();
 
   @override
   String toString() {
     return '''$id: {score: $score, color: $color}''';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return (other is Player &&
+            score == other.score &&
+            ready == other.ready &&
+            color == other.color &&
+            gamepad.value == other.gamepad.value
+        // character.value == other.character.value &&
+        // program.value == other.program.value &&
+        // team.value == other.team.value);
+        );
+  }
+
+  @override
+  int get hashCode => gamepad.value?.index.hashCode ?? color.hashCode;
 
   // Converting to a map for running the python script
   Map<String, Object?> toMap() {

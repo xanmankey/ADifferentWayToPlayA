@@ -29,12 +29,12 @@ class _SettingsCheckboxState extends State<SettingsCheckbox> {
       settingsWidget: CheckboxListTile(
         value: currentValue,
         tileColor: settingColor(widget.setting.sortProperty),
-        onChanged: (value) {
+        onChanged: (value) async {
           setState(() {
             currentValue = value!;
           });
           widget.setting.mapValues = value!;
-          storage.updateSettings([widget.setting]);
+          await storage.isarDB.settings.put(widget.setting);
         },
         title: TextWidget(text: widget.setting.title),
       ),

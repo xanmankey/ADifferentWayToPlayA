@@ -7,6 +7,7 @@ import 'package:adifferentwaytoplay/app/utils/exposed_types.dart';
 import 'package:adifferentwaytoplay/app/widgets/utility/custom_appbar.dart';
 import 'package:adifferentwaytoplay/data/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:isar/isar.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:adifferentwaytoplay/data/utils/initial_vars.dart';
 import 'package:adifferentwaytoplay/app/constants.dart';
@@ -38,15 +39,16 @@ Future<void> enableFullScreen() async {
     backgroundColor: Colors.white,
     skipTaskbar: false,
     titleBarStyle: TitleBarStyle.normal,
+    title: "A Different Way to Play",
   );
 
   windowManager.waitUntilReadyToShow(windowOptions, () async {
-    await windowManager.show();
-    await windowManager.focus();
     await windowManager.setMaximizable(true);
     await windowManager.setMinimizable(true);
     await windowManager.maximize();
     await windowManager.setTitleBarStyle(TitleBarStyle.normal);
+    await windowManager.show();
+    await windowManager.focus();
   });
   return;
 }
@@ -63,7 +65,6 @@ void initializeLogging() {
 }
 
 void main() async {
-  Storage();
   initializeLogging();
   XInputManager.enableXInput();
   // Link the app to the class providing state

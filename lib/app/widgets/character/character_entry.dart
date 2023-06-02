@@ -60,7 +60,7 @@ class _CharacterEntryState extends State<CharacterEntry> {
           ),
           onEditingComplete: () async {
             widget.character!.name = titleController.text;
-            await storage.updateCharacters([widget.character!]);
+            await storage.isarDB.characters.put(widget.character!);
           },
         ),
         (creation)
@@ -73,7 +73,7 @@ class _CharacterEntryState extends State<CharacterEntry> {
                     setState(() {
                       widget.character!.image = result.files.single.path!;
                     });
-                    await storage.updateCharacters([widget.character!]);
+                    await storage.isarDB.characters.put(widget.character!);
                   }
                 },
               )
@@ -86,7 +86,7 @@ class _CharacterEntryState extends State<CharacterEntry> {
                     setState(() {
                       widget.character!.image = result.files.single.path!;
                     });
-                    await storage.updateCharacters([widget.character!]);
+                    await storage.isarDB.characters.put(widget.character!);
                   }
                 },
               ),
@@ -103,7 +103,7 @@ class _CharacterEntryState extends State<CharacterEntry> {
               ),
               onEditingComplete: () async {
                 widget.character!.hit = hitController.text;
-                await storage.updateCharacters([widget.character!]);
+                await storage.isarDB.characters.put(widget.character!);
               },
             ),
             TextField(
@@ -117,7 +117,7 @@ class _CharacterEntryState extends State<CharacterEntry> {
               ),
               onEditingComplete: () async {
                 widget.character!.miss = missController.text;
-                await storage.updateCharacters([widget.character!]);
+                await storage.isarDB.characters.put(widget.character!);
               },
             ),
           ],
@@ -143,7 +143,8 @@ class _CharacterEntryState extends State<CharacterEntry> {
                           : const Color(0x00FFFFFF),
                       onColorChanged: ((color) => (() async {
                             widget.character!.color = color.value;
-                            await storage.updateCharacters([widget.character!]);
+                            await storage.isarDB.characters
+                                .put(widget.character!);
                           })),
                     ),
                   ),
@@ -170,7 +171,7 @@ class _CharacterEntryState extends State<CharacterEntry> {
               ),
               onEditingComplete: () async {
                 widget.character!.age = int.parse(ageController.text);
-                await storage.updateCharacters([widget.character!]);
+                await storage.isarDB.characters.put(widget.character!);
               },
             ),
             TextWidget(
@@ -191,7 +192,7 @@ class _CharacterEntryState extends State<CharacterEntry> {
           ),
           onEditingComplete: () async {
             widget.character!.description = descriptionController.text;
-            await storage.updateCharacters([widget.character!]);
+            await storage.isarDB.characters.put(widget.character!);
           },
         ),
       ],

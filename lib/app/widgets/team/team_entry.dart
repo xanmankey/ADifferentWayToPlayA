@@ -57,7 +57,7 @@ class _TeamEntryState extends State<TeamEntry> {
           ),
           onEditingComplete: () async {
             widget.team!.name = titleController.text;
-            await storage.updateTeams([widget.team!]);
+            await storage.isarDB.teams.put(widget.team!);
           },
         ),
         (creation)
@@ -70,7 +70,7 @@ class _TeamEntryState extends State<TeamEntry> {
                     setState(() {
                       widget.team!.logo = result.files.single.path!;
                     });
-                    await storage.updateTeams([widget.team!]);
+                    await storage.isarDB.teams.put(widget.team!);
                   }
                 },
               )
@@ -85,7 +85,7 @@ class _TeamEntryState extends State<TeamEntry> {
                         widget.team!.logo = result.files.single.path!;
                       },
                     );
-                    await storage.updateTeams([widget.team!]);
+                    await storage.isarDB.teams.put(widget.team!);
                   }
                 },
               ),
@@ -110,7 +110,7 @@ class _TeamEntryState extends State<TeamEntry> {
                           : const Color(0x00FFFFFF),
                       onColorChanged: ((color) => (() async {
                             widget.team!.color = color.value;
-                            await storage.updateTeams([widget.team!]);
+                            await storage.isarDB.teams.put(widget.team!);
                           })),
                     ),
                   ),
@@ -145,7 +145,7 @@ class _TeamEntryState extends State<TeamEntry> {
               ),
               onEditingComplete: () async {
                 widget.team!.description = descriptionController.text;
-                await storage.updateTeams([widget.team!]);
+                await storage.isarDB.teams.put(widget.team!);
               },
             ),
           ],
