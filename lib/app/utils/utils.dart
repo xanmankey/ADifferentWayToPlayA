@@ -69,6 +69,8 @@ List<Widget> generateSettingsWidgets(List<Setting> settings) {
         break;
       case SettingsWidgets.card:
         break;
+      default:
+        break;
     }
   }
   return widgets;

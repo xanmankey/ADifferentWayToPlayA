@@ -100,6 +100,7 @@ class Assets {
   static String divider = "$imagePath/divider.png";
   static String tournament = "$imagePath/tournament.png";
   static String trophy = "$imagePath/trophy.png";
+  static String exception = '$imagePath/exception.jpg';
 
   static String appleKid = "$imagePath/appleKid.png";
   static String bananaKid = "$imagePath/bananaKid.jpg";

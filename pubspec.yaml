@@ -61,6 +61,7 @@ dependencies:
   dartusbhid: ^0.1.4
   freezed: ^2.3.2
   event: ^2.1.2
+  ffi: ^2.0.2
 
 dev_dependencies:
   flutter_test:

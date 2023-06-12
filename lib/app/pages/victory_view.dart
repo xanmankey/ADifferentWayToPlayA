@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:adifferentwaytoplay/app/constants.dart';
 import 'package:adifferentwaytoplay/app/provider/dwtp_provider.dart';
 import 'package:adifferentwaytoplay/app/widgets/character/character_column.dart';
 import 'package:adifferentwaytoplay/app/widgets/team/team_column.dart';
@@ -25,9 +26,7 @@ class Victory extends StatelessWidget {
               teamName: arguments['team']!.name,
               teamImageFilePath: arguments['team']!.logo,
             ),
-            Expanded(
-                child:
-                    Image(image: FileImage(File('assets/images/trophy.png')))),
+            Expanded(child: Image(image: FileImage(File(Assets.trophy)))),
           ],
         ),
       );
