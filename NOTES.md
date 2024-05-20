@@ -2,6 +2,7 @@
 
 - I'd like to combine the two below APIs in a C implementation (I could use the practice)
 - My current idea is to manipulate the XUSB_REPORT before feeding it into vigem_target_x360_update
+- I want to make it so the makefile + DWTP.c handles all of this
 
 ## ViGEm Client
 
